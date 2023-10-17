@@ -1,45 +1,48 @@
 // ==UserScript==
-// @name         🌳ChatGPTTree🌳
-// @name:zh-CN   🌳ChatGPTTree🌳
+// @name         ChatGPT ChatTree 🌳
+// @name:zh-CN   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2023.10.13.01
-// @description  A intuitive, flexible, and user-friendly tool for real-time updates and customizing conversation trees, with support for dragging, zooming, searching, and managing, making interactions with ChatGPT more convenient and personalized.
-// @description:ar   أداة بديهية ومرنة وودية للمستخدم، تحديث في الوقت الحقيقي وتخصيص شجرة الدردشة، تدعم السحب والإسقاط، التكبير/التصغير، البحث والإدارة، مما يجعل التفاعل مع ChatGPT أسهل وأكثر تخصصًا.
-// @description:bg   Интуитивен, гъвкав и потребителски приятелски инструмент, реално време обновяване и персонализиране на диалоговото дърво, поддържа плъзгане и пускане, мащабиране, търсене и управление, което прави взаимодействието с ChatGPT по-лесно и персонализирано.
-// @description:cs   Intuitivní, flexibilní a uživatelsky přívětivý nástroj, aktualizace v reálném čase a přizpůsobení stromu dialogu, podpora táhnutí a přetažení, zoom, vyhledávání a správa, činí interakci s ChatGPT snadnější a personalizovanější.
-// @description:da   En intuitiv, fleksibel og brugervenlig værktøj, realtidsopdatering og tilpasning af dialogtræ, understøtter træk og slip, zoom, søgning og styring, gør interaktion med ChatGPT lettere og mere personlig.
-// @description:de   Ein intuitives, flexibles und benutzerfreundliches Werkzeug, Echtzeit-Aktualisierung und Anpassung des Dialogbaums, unterstützt Drag & Drop, Zoom, Suche und Verwaltung, macht die Interaktion mit ChatGPT einfacher und individueller.
-// @description:el   Ένα εύχρηστο, ευέλικτο και φιλικό προς τον χρήστη εργαλείο, ενημέρωση σε πραγματικό χρόνο και προσαρμογή του δέντρου διαλόγου, υποστηρίζει τη μεταφορά και απόθεση, το ζουμ, την αναζήτηση και τη διαχείριση, καθιστώντας την αλληλεπίδραση με το ChatGPT πιο εύκολη και προσαρμοσμένη.
-// @description:en   An intuitive, flexible, and user-friendly tool, real-time updating and customization of the dialog tree, supports drag-and-drop, zoom, search, and management, making interaction with ChatGPT more convenient and personalized.
-// @description:eo   Intuitiva, fleksebla kaj uzantamika ilo, ĝisdatigas kaj proprigas la dialogan arbon reale, subtenas ŝovmeti, zoomi, serĉi kaj administri, igante la interagon kun ChatGPT pli oportuna kaj personeca.
-// @description:es   Una herramienta intuitiva, flexible y amigable para el usuario, actualización en tiempo real y personalización del árbol de diálogo, soporta arrastrar y soltar, zoom, búsqueda y gestión, haciendo que la interacción con ChatGPT sea más conveniente y personalizada.
-// @description:fi   Intuitiivinen, joustava ja käyttäjäystävällinen työkalu, dialogipuun reaaliaikainen päivitys ja mukauttaminen, tukee vetämistä ja pudottamista, zoomausta, hakua ja hallintaa, tekee vuorovaikutuksesta ChatGPT: n kanssa kätevämmän ja henkilökohtaisemman.
-// @description:fr   Un outil intuitif, flexible et convivial, mise à jour en temps réel et personnalisation de l'arbre de dialogue, prend en charge le glisser-déposer, le zoom, la recherche et la gestion, rendant l'interaction avec ChatGPT plus pratique et personnalisée.
-// @description:fr-CA   Un outil intuitif, flexible et convivial, mise à jour en temps réel et personnalisation de l'arbre de dialogue, prend en charge le glisser-déposer, le zoom, la recherche et la gestion, rendant l'interaction avec ChatGPT plus pratique et personnalisée.
-// @description:he   כלי אינטואיטיבי, גמיש וידידותי למשתמש, עדכון בזמן אמת והתאמה אישית של עץ הדיאלוג, תומך בגרירה ושחרור, זום, חיפוש וניהול, והופך את האינטראקציה עם ChatGPT לנוחה ומותאמת אישית יותר.
-// @description:hu   Egy intuitív, rugalmas és felhasználóbarát eszköz, valós idejű frissítés és a párbeszéd fa testreszabása, támogatja a húzást és az ejtést, a nagyítást, a keresést és a kezelést, megkönnyítve az interakciót a ChatGPT-vel és személyre szabottabbá téve azt.
-// @description:id   Alat intuitif, fleksibel, dan ramah pengguna, pembaruan real-time dan penyesuaian pohon dialog, mendukung seret dan lepas, zoom, pencarian, dan manajemen, membuat interaksi dengan ChatGPT lebih nyaman dan personal.
-// @description:it   Uno strumento intuitivo, flessibile e user-friendly, aggiornamento in tempo reale e personalizzazione dell'albero dei dialoghi, supporta il drag-and-drop, lo zoom, la ricerca e la gestione, rendendo l'interazione con ChatGPT più conveniente e personalizzata.
-// @description:ja   直感的で柔軟でユーザーフレンドリーなツール、ダイアログツリーのリアルタイム更新とカスタマイズ、ドラッグアンドドロップ、ズーム、検索、管理をサポートし、ChatGPTとのインタラクションをより便利でパーソナライズされたものにします。
-// @description:ka   ინტუიციური, გადაწყვეტი და მომხმარებლებთან მეგობრიანი ხელსაწყო, დიალოგების ხეების განახლება რეალურ დროში და პერსონალიზაცია, რეჟიმების ჩამოყალიბების, გადიდების, ძიებისა და მართვის მხარდაჭერა, რაც გახდის ChatGPT-თან ინტერაქციას უფრო კომფორტულ და პერსონალურ.
-// @description:ko   직관적이고 유연하며 사용자 친화적인 도구, 실시간 업데이트 및 대화 트리 사용자 정의, 드래그 앤 드롭, 줌, 검색 및 관리 지원, ChatGPT와의 상호 작용을 더 편리하고 개인화된 경험으로 만듭니다.
-// @description:nb   Et intuitivt, fleksibelt og brukervennlig verktøy, sanntidsoppdatering og tilpasning av dialogtreet, støtter dra og slipp, zoom, søk og styring, noe som gjør interaksjon med ChatGPT mer praktisk og personlig.
-// @description:nl   Een intuïtief, flexibel en gebruiksvriendelijk hulpmiddel, real-time bijwerken en aanpassen van de dialoogboom, ondersteunt slepen en neerzetten, zoomen, zoeken en beheren, waardoor interactie met ChatGPT handiger en gepersonaliseerd wordt.
-// @description:pl   Intuicyjne, elastyczne i przyjazne użytkownikowi narzędzie, aktualizacja w czasie rzeczywistym i dostosowywanie drzewa dialogowego, obsługuje przeciąganie i upuszczanie, powiększanie, wyszukiwanie i zarządzanie, co sprawia, że interakcja z ChatGPT jest bardziej wygodna i spersonalizowana.
-// @description:pt-PT Uma ferramenta intuitiva, flexível e amigável para o usuário, com atualização em tempo real e personalização da árvore de diálogo, suporta arrastar e soltar, zoom, pesquisa e gestão, tornando a interação com o ChatGPT mais conveniente e personalizada.
-// @description:pt-BR Uma ferramenta intuitiva, flexível e amigável ao usuário, atualização em tempo real e personalização da árvore de diálogo, suporta arrastar e soltar, zoom, pesquisa e gerenciamento, tornando a interação com o ChatGPT mais conveniente e personalizada.
-// @description:ro   Un instrument intuitiv, flexibil și prietenos pentru utilizator, actualizare în timp real și personalizarea arborelui de dialog, suportă drag-and-drop, zoom, căutare și management, făcând interacțiunea cu ChatGPT mai convenabilă și personalizată.
-// @description:ru   Интуитивный, гибкий и удобный инструмент, обновление в реальном времени и настройка дерева диалога, поддерживает перетаскивание, масштабирование, поиск и управление, делая взаимодействие с ChatGPT более удобным и персонализированным.
-// @description:sk   Intuitívny, flexibilný a užívateľsky príjemný nástroj, aktualizácia v reálnom čase a prispôsobenie stromu dialógov, podporuje pretiahnutie a pustenie, priblíženie, vyhľadávanie a správu, čo uľahčuje interakciu s ChatGPT a personalizuje ju.
-// @description:sr   Интуитиван, флексибилан и кориснички пријатан алат, ажурирање у реалном времену и прилагођавање дијалога, подржава превлачење, зумирање, претрагу и управљање, олакшавајући интеракцију са ChatGPT и персонализујући је.
-// @description:sv   Ett intuitivt, flexibelt och användarvänligt verktyg, uppdatering i realtid och anpassning av dialogträdet, stöder dra och släpp, zoomning, sökning och hantering, vilket gör interaktionen med ChatGPT mer bekväm och personlig.
-// @description:th   เครื่องมือที่ใช้งานง่าย ยืดหยุ่น และเป็นมิตรกับผู้ใช้ การอัปเดตแบบเรียลไทม์และการปรับแต่งต้นไม้ของการสนทนา รองรับการลากและวาง การซูม การค้นหาและการจัดการ ทำให้การโต้ตอบกับ ChatGPT สะดวกและส่วนบุคคลขึ้น
-// @description:tr   Kullanıcı dostu, esnek ve kullanıcı dostu bir araç, dialog ağacının gerçek zamanlı güncellemesi ve özelleştirmesi, sürükle ve bırak, yakınlaştırma, arama ve yönetimi destekler, ChatGPT ile etkileşimi daha uygun ve kişiselleştirilmiş hale getirir.
-// @description:uk   Інтуїтивний, гнучкий та зручний для користувача інструмент, оновлення в реальному часі та налаштування діалогового дерева, підтримує перетягування, масштабування, пошук та керування, спрощуючи взаємодію з ChatGPT та роблячи її більш індивідуалізованою.
-// @description:ug   ئىنتۇئىتىۋ، يۇمشاق ۋە ئىشلىتكۈچى دوستىي قورال، سۆھبەت تارىخچىسىنى ۋاقتى ۋاقتىلا يېڭىلاش ۋە ئۆزگەرتىش، تارتىپلاش، چوڭايتىش، ئىزدەش ۋە باشقۇرۇشنى قوللايدۇ، ChatGPT بىلەن ئاراملىشىشنى يەنە قولاي ۋە شەخسىيلاشتۇرىدۇ.
-// @description:vi   Một công cụ trực quan, linh hoạt và thân thiện với người dùng, cập nhật theo thời gian thực và tùy chỉnh cây hội thoại, hỗ trợ kéo và thả, zoom, tìm kiếm và quản lý, làm cho tương tác với ChatGPT thuận tiện và cá nhân hóa hơn.
-// @description:zh-CN   一款直观、灵活和用户友好的工具，实时更新和自定义对话树，支持拖拽、缩放、搜索和管理，让与ChatGPT的互动更加便捷和个性化。
-// @description:zh-TW   一款直觀、靈活和使用者友善的工具，即時更新和自定義對話樹，支援拖放、縮放、搜尋和管理，讓與ChatGPT的互動更加便利和個人化。
+// @version      2023.10.16.01
+// @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
+// @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
+// @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
+// @description:ckb ChatGPT ChatTree 🌳، 🚀بەردووم و بێ سنووریدانی کارپێکردنی تایبەتمەندیەکانت لەگەڵ ChatGPT🚀 🔄نوێکردنەوەی بەرزی ڕووداوی ChatGPT بە ڕاستی گشتی + ڕوانین🔄 💡پێشاندانی تایبەتمەندیەکانی ChatGPT، تێبینی تایبەت، نیشانکردن💡🔍 گەڕانی زانایی لە ChatGPT: چاودێری ئاسانی گفتوگۆی تایبەت🔍 📋پانێڵی باشکردنی تایبەتمەندی لەگەڵ ChatGPT، ڕووکاری ئاسان بەکارهێنان، هەڵبژاردنە پڕەکانی باشکردن، پۆلەکان، تاگ و زیاتر📋
+// @description:cs ChatGPT ChatTree 🌳, 🚀trvalé a neomezené řízení interakcí s ChatGPT🚀 🔄aktualizace stromu konverzace ChatGPT v reálném čase + vizualizace🔄 💡tipy na konverzaci s ChatGPT, vlastní komentáře, záložky💡🔍 inteligentní vyhledávání v ChatGPT: rychlé nalezení konkrétních konverzací🔍 📋Panel pro správu interakcí s ChatGPT, uživatelsky přívětivé rozhraní, komplexní možnosti správy interakcí, kategorie, štítky a více📋
+// @description:da ChatGPT ChatTree 🌳, 🚀permanent og ubegrænset styring af dine interaktioner med ChatGPT🚀 🔄real-tids opdatering og visualisering af ChatGPT samtaletræ🔄 💡tips til samtaler med ChatGPT, brugerdefinerede kommentarer, bogmærker💡🔍 Intelligent søgning i ChatGPT: hurtig lokalisering af specifikke samtaler🔍 📋Styringspanel for interaktion med ChatGPT, brugervenlig grænseflade, fuldstændige styringsmuligheder for interaktion, kategorier, tags og mere📋
+// @description:de ChatGPT ChatTree 🌳, 🚀dauerhafte und uneingeschränkte Verwaltung Ihrer Interaktionen mit ChatGPT🚀 🔄Echtzeit-Aktualisierung und Visualisierung des ChatGPT-Gesprächsbaums🔄 💡Tipps für Gespräche mit ChatGPT, benutzerdefinierte Kommentare, Lesezeichen💡🔍Intelligente Suche in ChatGPT: schnelle Auffindung spezifischer Gespräche🔍 📋Verwaltungsoberfläche für Interaktionen mit ChatGPT, benutzerfreundlich, umfassende Verwaltungsoptionen, Kategorien, Tags und mehr📋
+// @description:el ChatGPT ChatTree 🌳, 🚀μόνιμη και απεριόριστη διαχείριση των αλληλεπιδράσεών σας με το ChatGPT🚀 🔄πραγματικός χρόνος ενημέρωσης και οπτικοποίησης του δέντρου συνομιλίας ChatGPT🔄 💡συμβουλές για συνομιλίες με το ChatGPT, προσαρμοσμένα σχόλια, σελιδοδείκτες💡🔍Έξυπνη αναζήτηση στο ChatGPT: γρήγορος εντοπισμός συγκεκριμένων συνομιλιών🔍 📋Πίνακας διαχείρισης αλληλεπιδράσεων με το ChatGPT, φιλικό προς τον χρήστη περιβάλλον, πλήρεις επιλογές διαχείρισης, κατηγορίες, ετικέτες και περισσότερα📋
+// @description:en ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
+// @description:eo ChatGPT ChatTree 🌳, 🚀eterna kaj senlima administrado de viaj interagoj kun ChatGPT🚀 🔄aktualigoj en reala tempo kaj vida prezento de la babilo-arbo de ChatGPT🔄 💡konsiletoj por babili kun ChatGPT, propraj notoj, legosignoj💡🔍Inteligenta serĉo en ChatGPT: rapide trovi specifajn konversaciojn🔍 📋Administra panelo por interagoj kun ChatGPT, uzantamika interfaco, ampleksaj opcioj por administri interagojn, kategorioj, etikedoj kaj pli📋
+// @description:es ChatGPT ChatTree 🌳, 🚀gestión permanente e ilimitada de tus interacciones con ChatGPT🚀 🔄actualizaciones en tiempo real y visualización del árbol de conversación de ChatGPT🔄 💡consejos para conversaciones con ChatGPT, anotaciones personalizadas, marcadores💡🔍Búsqueda inteligente en ChatGPT: localiza rápidamente conversaciones específicas🔍 📋Panel de gestión de interacción con ChatGPT, interfaz fácil de usar, opciones completas de gestión de interacción, categorización, etiquetas y más📋
+// @description:fi ChatGPT ChatTree 🌳, 🚀jatkuva ja rajoittamaton vuorovaikutuksesi hallinta ChatGPT:n kanssa🚀 🔄ChatGPT-keskustelupuun reaaliaikaiset päivitykset ja visualisointi🔄 💡vinkkejä keskusteluihin ChatGPT:n kanssa, mukautetut huomautukset, kirjanmerkit💡🔍Älykäs haku ChatGPT:ssa: löydä nopeasti tiettyjä keskusteluja🔍 📋ChatGPT-vuorovaikutuksen hallintapaneeli, käyttäjäystävällinen käyttöliittymä, kattavat vuorovaikutuksen hallintaoptiot, luokittelu, tagit ja lisää📋
+// @description:fr ChatGPT ChatTree 🌳, 🚀surveillance continue et sans restriction de vos dialogues avec ChatGPT🚀 🔄rafraîchissement et affichage en direct de l'arborescence des échanges avec ChatGPT🔄 💡astuces pour discuter avec ChatGPT, notes sur mesure, favoris💡🔍Fouille astucieuse dans ChatGPT : repérage immédiat des discussions ciblées🔍 📋Tableau de bord pour la gestion des interactions avec ChatGPT, ergonomie intuitive, choix exhaustifs pour la supervision des dialogues, classement, balises et davantage📋
+// @description:fr-CA ChatGPT ChatTree 🌳, 🚀contrôle ininterrompu de vos échanges avec ChatGPT🚀 🔄actualisation en temps réel de la structure de conversation de ChatGPT🔄 💡trucs pour converser avec ChatGPT, commentaires personnalisés, marque-pages💡🔍identification express des conversations spécifiques🔍 📋Tableau de contrôle des interactions avec ChatGPT, interface accessible, catégorisation, balises et plus📋
+// @description:he ChatGPT ChatTree 🌳, 🚀ניהול תמידי וללא הגבלות של האינטראקציה שלך עם ChatGPT🚀 🔄עדכונים בזמן אמת וויזואליזציה של עץ השיחה של ChatGPT🔄 💡טיפים לשיחה עם ChatGPT, הערות מותאמות אישית, סימניות💡🔍חיפוש חכם ב-ChatGPT: מיקום מהיר של שיחות מסוימות🔍 📋פנל ניהול האינטראקציה עם ChatGPT, ממשק ידידותי למשתמש, אפשרויות ניהול האינטראקציה המלאות, קטגוריזציה, תגיות ועוד📋
+// @description:hr ChatGPT ChatTree 🌳, 🚀stalno i neograničeno upravljanje vašim interakcijama s ChatGPT-om🚀 🔄ažuriranja u stvarnom vremenu i vizualizacija ChatGPT-ovog razgovornog stabla🔄 💡savjeti za razgovore s ChatGPT-om, prilagođene napomene, oznake💡🔍Pametno pretraživanje u ChatGPT: brzo lociranje određenih razgovora🔍 📋Ploča za upravljanje interakcijama s ChatGPT-om, sučelje pogodno za korisnika, sveobuhvatne opcije za upravljanje interakcijama, kategorizacija, oznake i još mnogo toga📋
+// @description:hu ChatGPT ChatTree 🌳, 🚀állandó és korlátlan interakciók kezelése a ChatGPT-vel🚀 🔄ChatGPT beszélgetési fa valós idejű frissítései és vizualizációja🔄 💡beszélgetési tippek a ChatGPT-tel, egyéni megjegyzések, könyvjelzők💡🔍Intelligens keresés a ChatGPT-ben: gyorsan megtalálja a kijelölt beszélgetéseket🔍 📋ChatGPT Interakció Kezelési Panel, felhasználóbarát felület, átfogó interakciókezelési lehetőségek, kategorizálás, címkék és több📋
+// @description:id ChatGPT ChatTree 🌳, 🚀pengelolaan interaksi Anda dengan ChatGPT secara permanen dan tanpa batas🚀 🔄pembaruan real-time dan visualisasi pohon percakapan ChatGPT🔄 💡tips percakapan ChatGPT, anotasi kustom, bookmark💡🔍Pencarian Cerdas di ChatGPT: cepat menemukan percakapan spesifik🔍 📋Panel Manajemen Interaksi ChatGPT, antarmuka yang ramah pengguna, pilihan manajemen interaksi ChatGPT yang komprehensif, kategorisasi, tag, dan lain-lain📋
+// @description:it ChatGPT ChatTree 🌳, 🚀gestione permanente e illimitata delle tue interazioni con ChatGPT🚀 🔄aggiornamenti in tempo reale e visualizzazione dell'albero di conversazione di ChatGPT🔄 💡consigli per conversazioni con ChatGPT, annotazioni personalizzate, segnalibri💡🔍Ricerca intelligente in ChatGPT: individuazione rapida di conversazioni specifiche🔍 📋Pannello di gestione interazioni con ChatGPT, interfaccia user-friendly, opzioni complete di gestione interazioni, categorizzazione, tag e altro ancora📋
+// @description:ja ChatGPT ChatTree 🌳, 🚀ChatGPTとの対話を永続的かつ無制限に管理🚀 🔄ChatGPT会話ツリーのリアルタイム更新と可視化🔄 💡ChatGPTとの会話のヒント、カスタム注釈、ブックマーク💡🔍ChatGPTでのスマート検索：特定の会話を迅速に見つける🔍 📋ChatGPTとの対話管理パネル、ユーザーフレンドリーなインターフェース、対話管理の包括的なオプション、カテゴリー、タグなど📋
+// @description:ka ChatGPT ChatTree 🌳, 🚀თქვენი ინტერაქციების მუდმივი და ულიმიტო მართვა ChatGPT-თან🚀 🔄ChatGPT სტუმრობის ხეს რეალურ დროში განახლებები და ვიზუალიზაცია🔄 💡რჩევები სტუმრობაში ChatGPT-თან, პერსონალური კომენტარები, წიგნის ნიშნები💡🔍სწრაფი ძებნა ChatGPT-ში: კონკრეტულ სასტუმროში სწრაფი მოძებნა🔍 📋ChatGPT-თან ინტერაქციის მართვის პანელი, მომხმარებლისთვის მეგობრიანი ინტერფეისი, ინტერაქციის მართვის რეგულაცია, კატეგორიზაცია, თეგები და სხვა📋
+// @description:ko ChatGPT ChatTree 🌳, 🚀ChatGPT와의 상호작용을 영구적이고 무제한으로 관리🚀 🔄ChatGPT 대화 트리의 실시간 업데이트 및 시각화🔄 💡ChatGPT 대화 팁, 사용자 정의 주석, 북마크💡🔍ChatGPT 스마트 검색: 특정 대화를 빠르게 찾기🔍 📋ChatGPT 상호작용 관리 패널, 사용자 친화적 인터페이스, 전체 상호 작용 관리 옵션, 카테고리, 태그 및 기타📋
+// @description:nb ChatGPT ChatTree 🌳, 🚀permanent og ubegrenset styring av dine interaksjoner med ChatGPT🚀 🔄sanntidsoppdateringer og visualisering av ChatGPT samtaletre🔄 💡ChatGPT samtale tips, egendefinerte kommentarer, bokmerker💡🔍Smart søk i ChatGPT: raskt finne spesifikke samtaler🔍 📋ChatGPT interaksjonsstyringspanel, brukervennlig grensesnitt, omfattende interaksjonsstyringsalternativer, kategorisering, tagger og mer📋
+// @description:nl ChatGPT ChatTree 🌳, 🚀permanente en onbeperkte beheer van uw interacties met ChatGPT🚀 🔄real-time updates en visualisatie van ChatGPT gespreksboom🔄 💡ChatGPT gesprekstips, aangepaste opmerkingen, bladwijzers💡🔍Slim zoeken in ChatGPT: snel specifieke gesprekken lokaliseren🔍 📋ChatGPT Interactiebeheerpaneel, gebruiksvriendelijke interface, uitgebreide beheeropties voor interactie, categorisatie, tags en meer📋
+// @description:pl ChatGPT ChatTree 🌳, 🚀stałe i nieograniczone zarządzanie interakcjami z ChatGPT🚀 🔄aktualizacje w czasie rzeczywistym i wizualizacja drzewa rozmów z ChatGPT🔄 💡wskazówki do rozmów z ChatGPT, niestandardowe komentarze, zakładki💡🔍inteligentne wyszukiwanie w ChatGPT: szybkie lokalizowanie konkretnych rozmów🔍 📋Panel zarządzania interakcjami z ChatGPT, intuicyjny interfejs, kompleksowe opcje zarządzania interakcjami, kategorie, etykiety i więcej📋
+// @description:pt-BR ChatGPT ChatTree 🌳, 🚀gerenciamento permanente e irrestrito de suas interações com o ChatGPT🚀 🔄atualizações em tempo real e visualização da árvore de conversas do ChatGPT🔄 💡dicas de conversa com ChatGPT, anotações personalizadas, favoritos💡🔍Busca inteligente no ChatGPT: localizar rapidamente conversas específicas🔍 📋Painel de gerenciamento de interação com ChatGPT, interface amigável, opções abrangentes de gerenciamento de interação, categorização, tags e mais📋
+// @description:ro ChatGPT ChatTree 🌳, 🚀administrare permanentă și nelimitată a interacțiunilor tale cu ChatGPT🚀 🔄actualizări în timp real și vizualizarea arborelui de conversație ChatGPT🔄 💡sfaturi de conversație cu ChatGPT, comentarii personalizate, semne de carte💡🔍Căutare inteligentă în ChatGPT: localizare rapidă a conversațiilor specifice🔍 📋Panoul de administrare a interacțiunilor cu ChatGPT, interfață prietenoasă, opțiuni complete de administrare a interacțiunilor, categorii, etichete și mai mult📋
+// @description:ru ChatGPT ChatTree 🌳, 🚀постоянное и неограниченное управление вашими взаимодействиями с ChatGPT🚀 🔄обновления в реальном времени и визуализация дерева диалогов ChatGPT🔄 💡советы для разговоров с ChatGPT, настраиваемые комментарии, закладки💡🔍Умный поиск в ChatGPT: быстрое нахождение конкретных диалогов🔍 📋Панель управления взаимодействием с ChatGPT, удобный интерфейс, полные настройки управления взаимодействием, категории, теги и многое другое📋
+// @description:sk ChatGPT ChatTree 🌳, 🚀trvalé a neobmedzené riadenie vašich interakcií s ChatGPT🚀 🔄aktualizácie v reálnom čase a vizualizácia rozhovorového stromu ChatGPT🔄 💡tipy na rozhovory s ChatGPT, vlastné poznámky, záložky💡🔍inteligentné vyhľadávanie v ChatGPT: rýchle nájdenie konkrétnych rozhovorov🔍 📋Panel na správu interakcií s ChatGPT, používateľsky prívetivé rozhranie, komplexné možnosti riadenia interakcií, kategórie, štítky a viac📋
+// @description:sr ChatGPT ChatTree 🌳, 🚀stalno i neograničeno upravljanje vašim interakcijama sa ChatGPT🚀 🔄ažuriranja u realnom vremenu i vizualizacija stabla razgovora ChatGPT🔄 💡saveti za razgovore sa ChatGPT, prilagođene napomene, obeleživači💡🔍Pametna pretraga u ChatGPT: brzo lociranje specifičnih razgovora🔍 📋Panel za upravljanje interakcijama sa ChatGPT, korisnički prijatan interfejs, sveobuhvatne opcije za upravljanje interakcijama, kategorizacija, oznake i više📋
+// @description:sv ChatGPT ChatTree 🌳, 🚀permanent och obegränsad hantering av dina interaktioner med ChatGPT🚀 🔄real-tidsuppdateringar och visualisering av ChatGPTs konversationsträd🔄 💡ChatGPT konversationstips, anpassade anteckningar, bokmärken💡🔍Smart sökning i ChatGPT: snabbt lokalisera specifika konversationer🔍 📋ChatGPT Interaktionshanteringspanel, användarvänligt gränssnitt, omfattande interaktionshanteringsalternativ, kategorisering, taggar och mer📋
+// @description:th ChatGPT ChatTree 🌳, 🚀การจัดการที่ถาวรและไม่จำกัดกับการโต้ตอบของคุณกับ ChatGPT🚀 🔄การอัปเดตและการแสดงภาพของต้นไม้บทสนทนาของ ChatGPT ในเวลาจริง🔄 💡เคล็ดลับการสนทนา ChatGPT, หมายเหตุที่กำหนดเอง, บุ๊กมาร์ก💡🔍การค้นหาอย่างฉลาดใน ChatGPT: ค้นหาบทสนทนาเฉพาะอย่างรวดเร็ว🔍 📋แผงควบคุมการโต้ตอบกับ ChatGPT, อินเตอร์เฟซที่เป็นมิตร, ตัวเลือกการจัดการโต้ตอบที่ครอบคลุม, การจัดประเภท, แท็ก และอื่น ๆ📋
+// @description:tr ChatGPT ChatTree 🌳, 🚀ChatGPT ile etkileşimlerinizi kalıcı ve sınırsız bir şekilde yönetme🚀 🔄ChatGPT konuşma ağacının gerçek zamanlı güncellemeleri ve görselleştirmesi🔄 💡ChatGPT ile konuşma ipuçları, özel notlar, yer imleri💡🔍ChatGPT'te Akıllı Arama: belirli konuşmaları hızlı bir şekilde bulun🔍 📋ChatGPT Etkileşim Yönetim Paneli, kullanıcı dostu arayüz, kapsamlı etkileşim yönetim seçenekleri, kategorizasyon, etiketler ve daha fazlası📋
+// @description:uk ChatGPT ChatTree 🌳, 🚀постійне та безобмежене управління вашими взаємодіями з ChatGPT🚀 🔄оновлення дерева розмови ChatGPT у реальному часі + візуалізація🔄 💡поради для розмови з ChatGPT, власні анотації, закладки💡🔍розумний пошук в ChatGPT: швидке знаходження конкретних розмов🔍 📋Панель управління взаємодіями з ChatGPT, зручний інтерфейс, повний набір опцій для управління взаємодіями, категорії, теги та більше📋
+// @description:ug ChatGPT ChatTree 🌳, 🚀مەڭگۈلۈك ۋە چەكسىز بولغان ChatGPT بىلەن ئالاقىڭىزنى باشقۇرۇڭ🚀 🔄ChatGPT سۆھبەت ئاگىدىنى چۈشەندۈرۈش ۋە كۆرسىتىش🔄 💡ChatGPT بىلەن سۆھبەتكە كېلىشىش ئۈچۈن تەۋسىيەلەر، شەخسىي ئىزاھاتلار، خەتكۈچلەر💡🔍ChatGPT دا ئەقىللىق ئىزدەش: مەلۇم سۆھبەتلەرنى تېز تاپالايدۇ🔍 📋ChatGPT ئارىلىق باشقۇرۇش تاختىسى، ئىشلىتىشكە يېڭىراك يۈزى، تولۇق باشقۇرۇش تاللانمىلىرى، تۈرلەر، خەتكۈچلەر ۋە باشقا📋
+// @description:vi ChatGPT ChatTree 🌳, 🚀quản lý vĩnh viễn và không giới hạn các tương tác của bạn với ChatGPT🚀 🔄cập nhật và trực quan hóa cây trò chuyện ChatGPT theo thời gian thực🔄 💡mẹo trò chuyện với ChatGPT, ghi chú tùy chỉnh, dấu trang💡🔍Tìm kiếm thông minh trong ChatGPT: xác định nhanh các cuộc trò chuyện cụ thể🔍 📋Bảng điều khiển quản lý tương tác với ChatGPT, giao diện thân thiện, các tùy chọn quản lý tương tác đầy đủ, phân loại, thẻ và nhiều hơn nữa📋
+// @description:zh-CN ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您与ChatGPT的每一次互动🚀 🔄实时ChatGPT对话树更新+可视化🔄 💡ChatGPT对话提示，自定义注释，书签💡🔍 ChatGPT智能搜索：快速定位特定对话🔍 📋ChatGPT互动管理面板，界面友好，全面ChatGPT互动管理选项，分类、标签和更多📋
+// @description:zh-TW ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您與ChatGPT的每一次互動🚀 🔄即時ChatGPT對話樹更新+視覺化🔄 💡ChatGPT對話提示，自訂註解，書籤💡🔍 ChatGPT智能搜尋：快速定位特定對話🔍 📋ChatGPT互動管理面板，介面友善，全面ChatGPT互動管理選項，分類、標籤和更多📋
+// @description:zh-HK ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您與ChatGPT的每一次互動🚀 🔄實時ChatGPT對話樹更新+可視化🔄 💡ChatGPT對話提示，自定義註釋，書籤💡🔍 ChatGPT智能搜索：快速定位特定對話🔍 📋ChatGPT互動管理面板，界面友好，全面ChatGPT互動管理選項，分類、標籤和更多📋
+// @description:zh-SG ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您与ChatGPT的每一次互动🚀 🔄实时ChatGPT对话树更新+可视化🔄 💡ChatGPT对话提示，自定义注释，书签💡🔍 ChatGPT智能搜索：快速定位特定对话🔍 📋ChatGPT互动管理面板，界面友好，全面ChatGPT互动管理选项，分类、标签和更多📋
 // @author   cuizhenzhi
 // @match    *://chat.openai.com/*
 // @grant    GM_addStyle
@@ -51,7 +54,8 @@
 // @require      https://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js
 // @run-at document-end
-// @supportURL   https://docs.google.com/forms/d/e/1FAIpQLSetbHqiS1GBM6bG0QaaKy9cN31jKXK76BcYCW8_wkRNH7I5kQ/viewform
+// @homepageURL         https://github.com/cuizhenzhi/ChatTree
+// @supportURL   https://github.com/cuizhenzhi/ChatTree/issues
 // @license GPL-2.0-only
 // @icon data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" stroke-width="8" fill="none" stroke="white" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="rgb(25, 195, 125)"/><path d="M40 61 V89 Q40 90 41 90 H59 Q60 90 60 89 V61 Q60 60 61 61 Q66 65 69 61 70 60 71 61 75 65 79 61 80 60 81 61 85 65 89 61 90 60 89 59 75 55 61 41 60 40 60.5 40.5 Q66 45 69 41 70 40 71 41 75 45 79 41 80 40 79 39 70 35 61 26 60 25 61 26 Q65 30 69 26 70 25 69 24 60 20 51 11 50 10 49 11 40 20 31 24 30 25 31 26 Q35 30 39 26 40 25 39 26 30 35 21 39 20 40 21 41 Q25 45 29 41 30 40 31 41 35 45 39 41 40 40 39 41 25 55 11 59 10 60 11 61 Q15 65 19 61 20 60 21 61 25 65 29 61 30 60 31 61 35 65 39 61 40 60 40 61"></path></svg>
 // ==/UserScript==
@@ -2245,7 +2249,8 @@
       isMouseOver: false
     },
     url: {
-      isValidURL: false,
+      isForLiveValidURL: false,
+      isForDeletedValidURL: false,
       url: ''
     },
     treeUpdate: {
@@ -2321,7 +2326,7 @@
   const treeOperation = {
 
     initializeChatTree: async function () {
-      if (!states.url.isValidURL) {
+      if (!states.url.isForLiveValidURL) {
         ButtonOperations.showUserNotification(translate("mismatchedLink"));
         return;
       }
@@ -2380,7 +2385,7 @@
       }
 
       if (conversationData.rootNode.content.toLowerCase() === "New Chat".toLowerCase()
-      ||conversationData.rootNode.content.toLowerCase() === Default_RootNode_Content.toLowerCase()
+        ||conversationData.rootNode.content.toLowerCase() === Default_RootNode_Content.toLowerCase()
         ||conversationData.rootNode.content.toLowerCase() === "Chat Start Here".toLowerCase()) {
         try {
           const targetElement = document.querySelector('.absolute.flex.right-1.z-10.dark\\:text-gray-300.text-gray-800.visible');
@@ -2424,24 +2429,10 @@
           console.error('Error getting chat data:', error);  // 如果出现错误，在控制台打印错误信息
         }
       }
-      let allDivs = DOMOperations.getAllDivs();
-      if (allDivs.length > 1) {
-        const gptDiv = allDivs[1].querySelector('.relative.p-1.rounded-sm.h-9.w-9.text-white.flex.items-center.justify-center');
-
-        if (gptDiv) {
-          const computedStyle = window.getComputedStyle(gptDiv);
-          const bgColor = computedStyle.backgroundColor;
-          log('Background Color:', bgColor);
-          if (bgColor === 'rgb(171, 104, 255)') {
-            conversationData.participants.gpt.type = 'GPT-4'
-          } else if (bgColor === 'rgb(25, 195, 125)') {
-            conversationData.participants.gpt.type = 'GPT-3'
-          } else {
-            log('The background color does not match.');
-          }
-        } else {
-          log('gptDiv not found');
-        }
+      let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
+      //log(gptInfoDiv);
+      if(gptInfoDiv){
+        conversationData.participants.gpt.type = gptInfoDiv.innerText;
       }
       log("url:", operatingURL);
       let result = DOMOperations.getButtonInfo();
@@ -2600,6 +2591,9 @@
         .catch(error => console.error(error));
     },
     jumpToDialogueItem: async function (uuid) {
+      if(!states.url.isForLiveValidURL){
+        return;
+      }
       if (!uuid || !conversationData.uuid2pathMap.get(uuid) || uuid === conversationData.rootNode.uuid) {
         return;
       }
@@ -2695,9 +2689,30 @@
       return window.location.href;
     },
 
-    isValidURL: function (url) {
+    isForLiveValidURL: function (url) {
       const pattern = /^https:\/\/chat\.openai\.com\/c\/[a-z0-9\-]+\/?$/;
       return pattern.test(url);
+    },
+
+    isForDeletedValidURL: function (url) {
+      const pattern = /^https:\/\/chat\.openai\.com\/chattree\/[a-z0-9\-]+\/?$/;
+      return pattern.test(url);
+    },
+
+    changeBetweenChattreeWithCAndOneMeansChattreeToC: function(chattreetoc, url) {
+      function replaceFirstChattreeWithC(url) {
+        return url.replace(/^https:\/\/chat\.openai\.com\/chattree/, "https://chat.openai.com/c");
+      }
+
+      function replaceFirstCWithChattree(url) {
+        return url.replace(/^https:\/\/chat\.openai\.com\/c/, "https://chat.openai.com/chattree");
+      }
+
+      if(chattreetoc){
+        return replaceFirstChattreeWithC(url);
+      } else {
+        return replaceFirstCWithChattree(url);
+      }
     },
 
     isNonUniqueURL: function (url) {
@@ -2709,26 +2724,27 @@
     },
     getCurURLInfo: function () {
       let curURL = window.location.href;
-      let isCurURLValid = this.isValidURL(curURL);
-      let isCurURLUnique = !this.isNonUniqueURL(curURL);
+      let validURL = this.isForLiveValidURL(curURL);
+      let nonUniqueURL = !this.isNonUniqueURL(curURL);
       return {
         curURL: curURL,
-        isCurURLValid: isCurURLValid,
-        isCurURLUnique: isCurURLUnique,
+        validURL: validURL,
+        nonUniqueURL: nonUniqueURL,
       };
     },
     observeTargetChanges: function () {
       let lastURL = window.location.href;
-      if (urlOperations.isValidURL(lastURL)) {
+      log("lastURL:",lastURL);
+      if (urlOperations.isForLiveValidURL(lastURL)||urlOperations.isForDeletedValidURL(lastURL)) {
+        log("is_anyKind_of_valid");
         urlOperations.handleURLChange(lastURL);
-        states.url.url = window.location.href;
-        states.url.isValidURL = true;
+        states.url.url = lastURL;
       }
 
       function callback(mutationsList, observer) {
         const currentURL = window.location.href;
         log("currentURL:", currentURL);
-        if (urlOperations.isValidURL(currentURL)) {
+        if (urlOperations.isForLiveValidURL(currentURL)) {
           if (currentURL !== lastURL) {
             log("URL changed:", currentURL);
             lastURL = currentURL;
@@ -2737,6 +2753,9 @@
           } else {
             log("Current URL:", currentURL);
           }
+        } else if (urlOperations.isForDeletedValidURL(currentURL)) {
+          log("URL changed:", currentURL, " detected. Please refresh the page.");
+          urlOperations.handleURLChange(currentURL);
         } else if (urlOperations.isNonUniqueURL(currentURL)) {
           log("Non-unique URL:", currentURL, " detected. Please refresh the page.");
           urlOperations.handleURLChange(currentURL);
@@ -2815,7 +2834,8 @@
     handleURLChange: function (url) {
       log("In handleURLChange, Data:", conversationData);
       if (urlOperations.isNonUniqueURL(url)) {
-        states.url.isValidURL = false;
+        states.url.isForLiveValidURL = false;
+        states.url.isForDeletedValidURL = false;
         states.url.url = '';
         states.treeUpdate.isDOMOperating = false;
         conversationData = {
@@ -2844,8 +2864,49 @@
         treeLayout(root);
         settingsKit.refreshTree();
         log("请刷新页面或者转到具有对话信息的页面从而获取正确的链接");
-      } else {
-        states.url.isValidURL = true;
+      }
+      else if (urlOperations.isForDeletedValidURL(url)){
+        states.url.isForLiveValidURL = false;
+        states.url.isForDeletedValidURL = true;
+        states.treeUpdate.isDOMOperating = false;
+        states.url.url = url;
+        const htmlClass = document.documentElement.getAttribute('class');
+        let wholeScreenDiv = document.getElementById("__next"); // 修正单词拼写
+        if (wholeScreenDiv && htmlClass && htmlClass === 'black') {
+          wholeScreenDiv.style.background = 'rgb(51,53,65)';
+        } else {
+          document.documentElement.className = 'light'; // 使用 className
+        }
+
+        //rgb(51,53,65)
+        log("this_is_delete_url",url);
+        url = urlOperations.changeBetweenChattreeWithCAndOneMeansChattreeToC(1, url);
+        log("delete_url_to_new_url",url);
+        dbOperations.loadConversationsData(url).then(loadeddata => {
+          log("Loaded data for URL:", loadeddata);
+          let interval;
+          interval = setInterval(()=>{
+            if(document.title === "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content){
+              clearInterval(interval);
+            }
+            document.title = "查看模式(ChatTree提供支持): "+loadeddata.rootNode.content;
+          }, 1500);
+          conversationData = loadeddata;
+          root = d3.hierarchy(conversationData.rootNode);
+          const widthPerNode = 30;
+          const heightPerNode = 30;
+          treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+
+          treeLayout(root);
+          settingsKit.refreshTree();
+        }).catch(error => {
+          console.error("Error loading data:", error);
+        });
+      }
+      else {
+        states.url.isForLiveValidURL = true;
+        states.url.isForDeletedValidURL = true;
+        states.treeUpdate.isDOMOperating = false;
         states.url.url = url;
         dbOperations.loadConversationsData(url).then(loadeddata => {
           log("Loaded data for URL:", loadeddata);
@@ -2928,6 +2989,7 @@
               controlPanelKit.init();
               controlPanelKit.renderConversations(chatHistory);
               controlPanelKit.updateCategorySelect();
+              filteredConversations = chatHistory;
             })
             .catch(error => console.error(error));
           resolve();
@@ -2971,7 +3033,9 @@
                   topic: cursor.value.rootNode.content,
                   link: url,
                   categories: cursor.value.categories || [], // 新增字段
-                  chatTreeTags: cursor.value.chatTreeTags || [] // 新增字段
+                  chatTreeTags: cursor.value.chatTreeTags || [], // 新增字段
+                  isWholeConversationBookMarked: cursor.value.isWholeConversationBookMarked || false,
+                  timestamp : cursor.value.timestamp
                 });
               }
               cursor.continue();
@@ -3002,11 +3066,44 @@
       });
     },
 
+    changeWholeConversationBookMarked:function(url, shouldBeBookMarked){
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("加载数据:Database has not been initialized.");
+          return;
+        }
+        if (!url) {
+          reject("加载数据:No URL key specified.");
+          return;
+        }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const request = objectStore.get(url);
+
+        request.onsuccess = event => {
+          let result = event.target.result;
+          result.isWholeConversationBookMarked = shouldBeBookMarked;
+          dbOperations.saveConversationsData(result)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              //controlPanelKit.updateCategorySelect();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        };
+        request.onerror = event => reject("Error loading data:", event.target.errorCode);
+      });
+
+    },
 
     addOrDeleteTagOrClassToURL: async function (url, isTag, value, isAdd) {
       log("In DBOper:", "url:",url, "isTag:",isTag, "value:",value, "isAdd:",isAdd);
 
-      if (!url || !urlOperations.isValidURL(url)) {
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
         return;
       }
       return new Promise((resolve, reject) => {
@@ -3045,7 +3142,7 @@
               result.chatTreeTags = result.chatTreeTags.filter(tag => tag != value);
               log("deleted!");
             }
-          else if (!isTag && result.categories.includes(value)) {
+            else if (!isTag && result.categories.includes(value)) {
               result.categories = result.categories.filter(tag => tag != value);
               log("deleted!");
             }
@@ -3079,6 +3176,7 @@
           reject("保存数据:No URL key specified.");
           return;
         }
+        data.timestamp = Date.now();
         const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
         const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
         const request = objectStore.put(data);
@@ -3121,7 +3219,7 @@
     },
 
     changeConversationDataTopic: async function (url, newTopic) {
-      if (!url || !urlOperations.isValidURL(url)) {
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
         return;
       }
       return new Promise((resolve, reject) => {
@@ -3140,13 +3238,20 @@
         request.onsuccess = event => {
           let result = event.target.result;
           result.rootNode.content = newTopic;
-          dbOperations.saveConversationsData(result);
+          dbOperations.saveConversationsData(result)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              controlPanelKit.updateCategorySelect();
+            })
+            .catch(error => {
+              console.error(error);
+            });
         };
         request.onerror = event => reject("Error loading data:", event.target.errorCode);
       });
     },
     loadConversationsData: function (url) {
-      if (!url || !urlOperations.isValidURL(url)) {
+      if (!url || (!urlOperations.isForLiveValidURL(url))&& (!urlOperations.isForDeletedValidURL(url))) {
         return;
       }
       return new Promise((resolve, reject) => {
@@ -3229,7 +3334,7 @@
 
     deleteConversationData: function (url) {
       return new Promise((resolve, reject) => {
-        if (!url || !urlOperations.isValidURL(url)) {
+        if (!url || !urlOperations.isForLiveValidURL(url)) {
           reject('Invalid URL');
           return;
         }
@@ -3365,7 +3470,10 @@
     getTextContent: function (div, i) {
       let isUser = null;
       let isGPT = null;
-      if (i % 2) {
+      //isUser = div.querySelector('div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words');
+      isGPT = div.querySelector(".markdown.prose");
+
+      if (isGPT) {
         isGPT = div.querySelector(".markdown.prose");
       } else {
         isUser = div.querySelector('div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words');
@@ -3698,7 +3806,7 @@
         let curURL = window.location.href;
         log("curURL:", curURL, "states:", states);
         if (curURL !== states.url.url) {
-          if (urlOperations.isValidURL(curURL)) {
+          if (urlOperations.isForLiveValidURL(curURL)) {
             if (confirm(translate("confirmCurrentURL").replace('{item}', curURL))) {
               urlOperations.handleURLChange(curURL);
               ButtonOperations.showUserNotification(translate("startUpdatingConversationTree"));
@@ -3712,7 +3820,7 @@
         }
         log("按钮点击而开始更新树!states:", states);
 
-        if (states.url.isValidURL === true && states.url.url !== '' && !states.treeUpdate.isDOMOperating) {
+        if (states.url.isForLiveValidURL === true && states.url.url !== '' && !states.treeUpdate.isDOMOperating) {
           log("由于按钮点击而开始更新树!");
           let allDivs = DOMOperations.getAllDivs();
           if (allDivs.length === 0) {
@@ -3972,16 +4080,27 @@
           const maxX = window.innerWidth - contentDiv.offsetWidth;
           const maxY = window.innerHeight - contentDiv.offsetHeight;
 
-          let left = parseInt(contentDiv.style.left);
-          let top = parseInt(contentDiv.style.top);
+          let left = parseInt(contentDiv.style.left, 10); // 解析当前的 left 值
+          let top = parseInt(contentDiv.style.top, 10); // 解析当前的 top 值
 
-          left = Math.min(maxX, Math.max(0, left));
-          top = Math.min(maxY, Math.max(0, top));
+          // 判断是否超出窗口界限
+          let outOfBoundsX = left < 0 || left > maxX;
+          let outOfBoundsY = top < 0 || top > maxY;
 
-          contentDiv.style.left = left + "px";
-          contentDiv.style.top = top + "px";
-          contentDiv.style.right = "auto";
-          contentDiv.style.bottom = "auto";
+          if (outOfBoundsX || outOfBoundsY) {
+            // 如果超过窗口界限，则重新定位到窗口右上角
+            contentDiv.style.left = maxX + "px";
+            contentDiv.style.top = "0px";
+            contentDiv.style.right = "auto";
+            contentDiv.style.bottom = "auto";
+          } else {
+            // 如果没有超过界限，则保持现有位置
+            left = Math.min(maxX, Math.max(0, left));
+            top = Math.min(maxY, Math.max(0, top));
+
+            contentDiv.style.left = left + "px";
+            contentDiv.style.top = top + "px";
+          }
         }
       });
     }
@@ -4629,6 +4748,8 @@
       contentDiv.style.lineHeight = '1.6';
       contentDiv.style.overflow = 'hidden';
       contentDiv.style.userSelect = 'text';
+      let windowHeight = window.innerHeight;
+      contentDiv.style.height = windowHeight - 20 + 'px';
 
       selectedNodeContent.style.paddingTop = '10px';
       selectedNodeContent.style.paddingRight = '10px';
@@ -4636,7 +4757,8 @@
       selectedNodeContent.style.paddingLeft = '10px';
       selectedNodeContent.style.userSelect = 'text';
       selectedNodeContent.style.overflow = 'auto';
-      selectedNodeContent.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass);
+      //selectedNodeContent.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass);
+      selectedNodeContent.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert');
 
       copyButton.innerHTML = `📋`;
       copyButton.style.border = 'none';
@@ -4791,16 +4913,15 @@
           let maxHeight = window.innerHeight;
           let elementWidth = contentDiv.offsetWidth;
           let elementHeight = contentDiv.offsetHeight;
-          if (newLeft < 0) {
-            newLeft = 0;
-          } else if (newLeft > maxWidth - elementWidth) {
+
+          // 检查右边界
+          if (newLeft > maxWidth - elementWidth) {
             newLeft = maxWidth - elementWidth;
           }
 
+          // 检查上边界
           if (newTop < 0) {
             newTop = 0;
-          } else if (newTop > maxHeight - elementHeight) {
-            newTop = maxHeight - elementHeight;
           }
 
           contentDiv.style.left = newLeft + 'px';
@@ -4812,6 +4933,7 @@
           ContentKit.positionCommentFormRelativeToContentDiv();
         }
       }
+
 
       closeButton.addEventListener('click', function () {
         contentDiv.style.display = 'none';
@@ -5295,11 +5417,14 @@
       refreshTreeButton.addEventListener('click', this.refreshTree);
       undoButton.addEventListener('click', this.undo);
       redoButton.addEventListener('click', this.redo);
-      deleteDiv.addEventListener('click', this.deleteConversationData(null, false));
-    },
-    deleteConversationData: async function (operatingLink, IsfromPanel) {
-      if (states.treeUpdate.isDOMOperating || !states.url.isValidURL || conversationData.url === null) {
-        return;
+      deleteDiv.addEventListener('click', function() {
+        settingsKit.handleTwoTypesOfDeleteConversationData(null, false);
+      });    },
+    handleTwoTypesOfDeleteConversationData: async function (operatingLink, IsfromPanel) {
+      if(!operatingLink) {
+        if (states.treeUpdate.isDOMOperating || (!states.url.isForLiveValidURL&&!states.url.isForDeletedValidURL) || conversationData.url === null) {
+          return;
+        }
       }
       let operatingURL;
       if (operatingLink === null && IsfromPanel === false) {
@@ -5307,9 +5432,26 @@
       } else if (operatingLink && IsfromPanel === true) {
         operatingURL = operatingLink;
       }
+      //log("going to confirm delete");
       if (confirm(translate("confirmDeleteLinkData").replace('{item}', operatingURL))) {
         try {
-          await dbOperations.deleteConversationData(operatingURL);
+          //await dbOperations.deleteConversationData(operatingURL);
+          dbOperations.deleteConversationData(operatingURL)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              log("after_init_conversationData:",chatHistory);
+              controlPanelKit.updateCategorySelect();
+              log("before_filteredConversations:",filteredConversations);
+
+              filteredConversations = filteredConversations.filter(aconv => {
+                return !(aconv.link === operatingURL)
+              });
+              controlPanelKit.renderConversations(filteredConversations);
+              log("after_filteredConversations:",filteredConversations);
+            })
+            .catch(error => {
+              console.error(error);
+            });
           log('Data deleted successfully');
           ButtonOperations.showUserNotification(translate("conversationDataDeleted"), 'alert');
           if(IsfromPanel){
@@ -5971,6 +6113,7 @@
   let categorySelect = document.createElement('select');
   let conversationContainer = document.createElement('div');
   let togglePanel = document.createElement('div');
+  let filteredConversations = [];
   const controlPanelKit = {
     init: function () {
       panelToggleButton.id = "panelToggleButton";
@@ -6137,16 +6280,15 @@
     executeFilter:function(){
       const selectedCategory = categorySelect.value.toLowerCase(); // 注意转换为小写
       const query = searchTopicBox.value.toLowerCase();
-      let filteredConversations = chatHistory.filter(conv => {
+      filteredConversations = chatHistory.filter(conv => {
         return conv.topic.toLowerCase().includes(query);
       });
-      let truely_filtered;
       if(selectedCategory !== translate('allCategoriesFilter').toLowerCase()) {
-        truely_filtered = filteredConversations.filter(conv => {
+        filteredConversations = filteredConversations.filter(conv => {
           return conv.categories.some(category => category.toLowerCase().includes(selectedCategory));
         });
-        controlPanelKit.renderConversations(truely_filtered);
-        log(`User selected category: ${selectedCategory}, filteredConversations:`, truely_filtered);
+        controlPanelKit.renderConversations(filteredConversations);
+        log(`User selected category: ${selectedCategory}, filteredConversations:`, filteredConversations);
       }
       else {
         controlPanelKit.renderConversations(filteredConversations);
@@ -6158,6 +6300,28 @@
       panelToggleButton.style.display = 'none';
     },
     renderConversations: function (conversations) {
+      log("in_renderConv:",conversations);
+      conversations.sort((a, b) => {
+        // 比较isWholeConversationBookMarked字段
+        if (a.isWholeConversationBookMarked && !b.isWholeConversationBookMarked) {
+          return -1; // a排在b前面
+        }
+        if (!a.isWholeConversationBookMarked && b.isWholeConversationBookMarked) {
+          return 1; // b排在a前面
+        }
+
+        // 如果isWholeConversationBookMarked字段相同，则比较timestamp字段
+        if (a.timestamp > b.timestamp) {
+          return -1; // a排在b前面
+        }
+        if (a.timestamp < b.timestamp) {
+          return 1; // b排在a前面
+        }
+
+        return 0; // a和b相等，保持原来的顺序（稳定排序）
+      });
+
+// 现在chatHistory数组已经根据你的规则进行了排序。
 
       //log("in render:");
       const conversationContainer = document.getElementById("conversationContainer");
@@ -6194,9 +6358,45 @@
         const optionsContainer = document.createElement("div");
         optionsContainer.id = "optionsContainer_" + safeId;
         optionsContainer.classList.add("optionsContainer");
-        optionsContainer.innerHTML = '<div class="flex visible">   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></button>    <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg></button>  <button class="p-1 hover:text-token-text-primary">' +
-          '<svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z"/></svg>' +
-          '</button>   <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg></button></div>'
+
+        optionsContainer.innerHTML = conv.isWholeConversationBookMarked === false ?
+`<div class="flex visible">   
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+  </button>    
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+  </button>  
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z"/></svg>
+  </button>   
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>    
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9 4.45962C9.91153 4.16968 10.9104 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C3.75612 8.07914 4.32973 7.43025 5 6.82137" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke-width="1.5"/>
+  </svg>
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.2691 4.41115C11.5006 3.89177 11.6164 3.63208 11.7776 3.55211C11.9176 3.48263 12.082 3.48263 12.222 3.55211C12.3832 3.63208 12.499 3.89177 12.7305 4.41115L14.5745 8.54808C14.643 8.70162 14.6772 8.77839 14.7302 8.83718C14.777 8.8892 14.8343 8.93081 14.8982 8.95929C14.9705 8.99149 15.0541 9.00031 15.2213 9.01795L19.7256 9.49336C20.2911 9.55304 20.5738 9.58288 20.6997 9.71147C20.809 9.82316 20.8598 9.97956 20.837 10.1342C20.8108 10.3122 20.5996 10.5025 20.1772 10.8832L16.8125 13.9154C16.6877 14.0279 16.6252 14.0842 16.5857 14.1527C16.5507 14.2134 16.5288 14.2807 16.5215 14.3503C16.5132 14.429 16.5306 14.5112 16.5655 14.6757L17.5053 19.1064C17.6233 19.6627 17.6823 19.9408 17.5989 20.1002C17.5264 20.2388 17.3934 20.3354 17.2393 20.3615C17.0619 20.3915 16.8156 20.2495 16.323 19.9654L12.3995 17.7024C12.2539 17.6184 12.1811 17.5765 12.1037 17.56C12.0352 17.5455 11.9644 17.5455 11.8959 17.56C11.8185 17.5765 11.7457 17.6184 11.6001 17.7024L7.67662 19.9654C7.18404 20.2495 6.93775 20.3915 6.76034 20.3615C6.60623 20.3354 6.47319 20.2388 6.40075 20.1002C6.31736 19.9408 6.37635 19.6627 6.49434 19.1064L7.4341 14.6757C7.46898 14.5112 7.48642 14.429 7.47814 14.3503C7.47081 14.2807 7.44894 14.2134 7.41394 14.1527C7.37439 14.0842 7.31195 14.0279 7.18708 13.9154L3.82246 10.8832C3.40005 10.5025 3.18884 10.3122 3.16258 10.1342C3.13978 9.97956 3.19059 9.82316 3.29993 9.71147C3.42581 9.58288 3.70856 9.55304 4.27406 9.49336L8.77835 9.01795C8.94553 9.00031 9.02911 8.99149 9.10139 8.95929C9.16534 8.93081 9.2226 8.8892 9.26946 8.83718C9.32241 8.77839 9.35663 8.70162 9.42508 8.54808L11.2691 4.41115Z" stroke="#fe1616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
+  </button>
+</div>
+`:
+`
+<div class="flex visible">   
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+  </button>    
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+  </button>  
+  <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z"/></svg>
+  </button>   
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>    
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9 4.45962C9.91153 4.16968 10.9104 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C3.75612 8.07914 4.32973 7.43025 5 6.82137" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke-width="1.5"/>
+  </svg>
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11.2691 4.41115C11.5006 3.89177 11.6164 3.63208 11.7776 3.55211C11.9176 3.48263 12.082 3.48263 12.222 3.55211C12.3832 3.63208 12.499 3.89177 12.7305 4.41115L14.5745 8.54808C14.643 8.70162 14.6772 8.77839 14.7302 8.83718C14.777 8.8892 14.8343 8.93081 14.8982 8.95929C14.9705 8.99149 15.0541 9.00031 15.2213 9.01795L19.7256 9.49336C20.2911 9.55304 20.5738 9.58288 20.6997 9.71147C20.809 9.82316 20.8598 9.97956 20.837 10.1342C20.8108 10.3122 20.5996 10.5025 20.1772 10.8832L16.8125 13.9154C16.6877 14.0279 16.6252 14.0842 16.5857 14.1527C16.5507 14.2134 16.5288 14.2807 16.5215 14.3503C16.5132 14.429 16.5306 14.5112 16.5655 14.6757L17.5053 19.1064C17.6233 19.6627 17.6823 19.9408 17.5989 20.1002C17.5264 20.2388 17.3934 20.3354 17.2393 20.3615C17.0619 20.3915 16.8156 20.2495 16.323 19.9654L12.3995 17.7024C12.2539 17.6184 12.1811 17.5765 12.1037 17.56C12.0352 17.5455 11.9644 17.5455 11.8959 17.56C11.8185 17.5765 11.7457 17.6184 11.6001 17.7024L7.67662 19.9654C7.18404 20.2495 6.93775 20.3915 6.76034 20.3615C6.60623 20.3354 6.47319 20.2388 6.40075 20.1002C6.31736 19.9408 6.37635 19.6627 6.49434 19.1064L7.4341 14.6757C7.46898 14.5112 7.48642 14.429 7.47814 14.3503C7.47081 14.2807 7.44894 14.2134 7.41394 14.1527C7.37439 14.0842 7.31195 14.0279 7.18708 13.9154L3.82246 10.8832C3.40005 10.5025 3.18884 10.3122 3.16258 10.1342C3.13978 9.97956 3.19059 9.82316 3.29993 9.71147C3.42581 9.58288 3.70856 9.55304 4.27406 9.49336L8.77835 9.01795C8.94553 9.00031 9.02911 8.99149 9.10139 8.95929C9.16534 8.93081 9.2226 8.8892 9.26946 8.83718C9.32241 8.77839 9.35663 8.70162 9.42508 8.54808L11.2691 4.41115Z" stroke="#fe1616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="#fe1616"></path></svg>
+  </button>
+</div>
+`;
         let buttons = optionsContainer.querySelectorAll('button');
         for (let i = 0; i < buttons.length; i++) {
           buttons[i].style.cursor = 'pointer';
@@ -6207,11 +6407,11 @@
           createTopicInput(conv, topicElem);
         })
         buttons[1].addEventListener('click', function () {
-          settingsKit.deleteConversationData(conv.link, true);
+          log("button1 clicked");
+          settingsKit.handleTwoTypesOfDeleteConversationData(conv.link, true)
         })
         buttons[2].addEventListener('click', function () {
           window.open(conv.link, '_blank');
-
           // let templink = document.createElement('a');
           // templink.href = conv.link;
           // templink.target = '_blank';
@@ -6223,6 +6423,34 @@
           nodesInAndOutKit.copyToClipboard(conv.link);
           log("link_copied!");
         })
+        buttons[4].addEventListener('click', function () {
+          let seekURL = urlOperations.changeBetweenChattreeWithCAndOneMeansChattreeToC(0, conv.link);
+          window.open(seekURL, '_blank');
+
+          log("deleted_information_to_load!");
+        })
+        buttons[5].addEventListener('click', function(){
+          return handleBookMarks(conv, buttons[5]);
+        });
+        async function handleBookMarks(conv, button){
+          //log("beforeClickIsBookMarked:", JSON.stringify(conv));
+          //await sleep(1000);
+
+          const path = button.querySelector('path');
+          const currentFill = path.getAttribute('fill');
+          const newFill = currentFill === 'none' ? '#fe1616' : 'none';
+          path.setAttribute('fill', newFill);
+          let shouldBeBookMarked = currentFill === 'none';
+          dbOperations.changeWholeConversationBookMarked(conv.link, shouldBeBookMarked);
+          //conv.isWholeConversationBookMarked = currentFill === 'none';
+          // await sleep(1000);
+          // log("afterClickIsBookMarked:", JSON.stringify(conv));
+          // await sleep(1000);
+          // log("afterClickChatHistory:", JSON.stringify(chatHistory));
+          // await sleep(1000);
+          // log("afterClickChatHistory:", JSON.stringify(filteredConversations));
+        }
+
         function createTopicInput(conv, replacedtopicElem) {
           const input = document.createElement("input");
           input.type = "text";
@@ -6272,7 +6500,6 @@
           catDeleteBtn.classList.add("delete-icon");
           catDeleteBtn.onclick = function () {
             deleteClassOrTag("category", categoryElem, conv, category)
-
             // categoryElem.remove();
             // conv.categories = conv.categories.filter(cat => cat !== category);
           };

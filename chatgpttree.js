@@ -2,7 +2,7 @@
 // @name         ChatGPT ChatTree 🌳
 // @name:zh-CN   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2023.10.16.01
+// @version      2023.10.18.01
 // @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
 // @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
 // @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
@@ -63,18 +63,6 @@
 (function () {
   "use strict";
 
-  // 创建新的 link 元素
-  //var thelink = document.createElement('link');
-
-// 设置 link 元素的属性
-  //thelink.rel = 'stylesheet';
-  //thelink.href = 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css';
-
-// 将 link 元素添加到 head 中
-  //document.head.appendChild(thelink);
-  // $.get('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css', function(data) {
-  //   $('<style></style>').appendTo('head').html(data);
-  // });
   const isDevelopmentMode = false;
 
   function log(...messages) {
@@ -89,18 +77,29 @@
 
   GM_addStyle(`
   
-          #searchTopicContainer {
+        #searchTopicContainer {
             margin-bottom: 20px;
         }
 
-        .conversation {/*#conversationContainer */
+         .conversation {
             border: 1px solid #ccc;
             margin-bottom: 10px;
             padding: 10px;
             margin-top: 20px;
             margin-left: 20px;
             margin-right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border 0.1s ease-in-out; /* 添加过渡效果 */
+            border-radius: 4px; /* 添加边框圆角 */
         }
+        
+        .conversation:hover {
+            border: 2px solid black; /* 鼠标悬停时改变边框样式 */
+            box-shadow: 0px 0px 10px black; /* 添加外边框阴影效果 */
+        }
+
 
         .category {
             background-color: #f3f3f3;
@@ -140,11 +139,7 @@
             margin-left: auto; /* 推到右侧 */
         }
 
-        .conversation {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+
 
         
         .topicContainer{
@@ -184,8 +179,9 @@
             width: 100%;
             height: 100%;
             z-index: 999;  /* 根据需要设置，以确保该元素位于其他元素之上 */
-            
         }
+        
+
 
         #panelToggleButton {
             position: fixed;
@@ -440,7 +436,7 @@
         #thumbnailSvg {
             /*background-color: rgba(128, 128, 128, 0.4); !* Gray with 0.4 opacity *!*/
             /*background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);*/
-            background-image: linear-gradient(to top, rgba(250, 208, 196, 1) 0%, rgba(255, 209, 255, 0.9) 100%);
+            background: linear-gradient(to top, rgba(250, 208, 196, 1) 0%, rgba(255, 209, 255, 0.9) 100%);
            /*background-image: linear-gradient(to top, rgba(220,220,220, 1) 0%, rgba(220,220,220, 1) 100%);*/
 
 
@@ -449,8 +445,6 @@
             /*background-color: rgba(128, 128, 128, 0.4); !* Gray with 0.4 opacity *!*/
             /*background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);*/
             /*background-image: linear-gradient(to top, rgba(220,220,220, 0.2) 0%, rgba(220,220,220, 0.2) 100%);*/
-          background-image: linear-gradient(to top, rgba(250, 208, 196, 0.2) 0%, rgba(255, 209, 255, 0.2) 100%);
-
         }
 
         #search-container {
@@ -576,7 +570,7 @@
         }
 
 
-        #settingsDiv, .actionDiv {
+        #settingsDiv, .actionDiv, .rightMiddleDiv {
             width: 40px;
             height: 40px;
             display: flex;
@@ -590,9 +584,41 @@
             box-shadow: none;
             transition: background-color 0.3s; /* 平滑过渡效果 */
             user-select: none;
-
         }
-
+        #feedbackDiv {
+            bottom: 40%;
+            display: flex;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue;
+            font-size: 1.5em;
+        }
+        #colorSelectDiv {
+            bottom: 46%;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue; 
+            font-size: 1.5em;
+        }
+        
+        .rightMiddleDiv:hover {
+            background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
+        }
+              
+        #rightMiddleMenu {
+          position: fixed;
+          bottom: 52%;
+          right: 10px;
+        }
+        
+       .actionDiv {
+            display: none;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue;
+            font-size: 1.5em;
+        }
+  
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -615,17 +641,10 @@
             justify-content: center; /* 水平居中 */
             align-items: center; /* 垂直居中 */
         }
-
-        .actionDiv {
-            display: none; /* 默认隐藏 */
-            right: 10px; /* 你可以根据需要调整这些值来确定div的位置 */
-            cursor: pointer;
-            color: deepskyblue; /* 或你想要的任何颜色 */
-            font-size: 1.5em;
-        }
-
+        
         #plusDiv {
-            bottom: 110px;
+            bottom: 60px;
+            right: 60px;
         }
 
         #minusDiv {
@@ -633,28 +652,30 @@
         }
 
         #thumbNailDiv {
-            bottom: 160px;
+            bottom: 10px;
+            right: 60px;
         }
 
         #refreshTree {
-            bottom: 210px;
+            bottom: 10px;
+            right: 110px;
         }
 
         #undoDiv {
-            bottom: 260px;
+            bottom: 60px;
+            right: 160px;
         }
 
         #redoDiv {
-            bottom: 310px;
+            bottom: 60px;
+            right: 110px;
         }
 
         #deleteDiv {
-            bottom: 360px;
+            bottom: 10px;
+            right: 160px;
         }
 
-        #feedbackDiv {
-            bottom: 410px;
-        }
 
 
         #settingsDiv:hover, .actionDiv:hover {
@@ -2228,7 +2249,7 @@
 }`;
     lang = JSON.parse(lang);
     const userLang = navigator.languages.find(l => l in lang) || 'en';
-    //const userLang =  'zh-TW';
+    //const userLang =  'en';
     //log("currentLang:",userLang);
     globalUserLang = userLang;
     return lang[userLang];
@@ -2469,7 +2490,48 @@
       await this.updateTree(operatingURL);
 
     },
-
+    initializeSubChatTree: async function (fromWhichDivClickLeft){
+      log("initializeSubChatTree");
+      let result = DOMOperations.getButtonInfo();
+      let allChatDivs = DOMOperations.getAllDivs();
+      if (allChatDivs.length === 0) {
+        log("监测到没有divs:退出初始化!");
+        states.treeUpdate.isDOMOperating = false;
+        return;
+      }
+      let hasLeftButton = false;
+      for(let i = fromWhichDivClickLeft; i < allChatDivs.length; i++){
+        if (result.childIndicesPath[i] !== 1){
+          hasLeftButton = true;
+          log("hasLeftButton === true");
+          break;
+        }
+      }
+      while (hasLeftButton) {
+        let j = fromWhichDivClickLeft;
+        for (; j < allChatDivs.length; j++) {
+          if (result.childIndicesPath[j] !== 1) {
+            DOMOperations.clickButtonAtDivLevel(0, j);
+            log("clicking the ", j, "th div!");
+            await waitForDomChange(document.body);
+            break;
+          }
+        }
+        if (j === allChatDivs.length) {
+          break;
+        }
+        result = DOMOperations.getButtonInfo();
+        allChatDivs = DOMOperations.getAllDivs();
+        log("result:", result);
+        for(let i = fromWhichDivClickLeft; i < allChatDivs.length; i++){
+          if (result.childIndicesPath[i] !== 1){
+            log("hasLeftButton === true");
+            hasLeftButton = true;
+            break;
+          }
+        }
+      }
+    },
     //🤖chatGPT版本
     updateTree: async function (url) {
       let allpaths = [];
@@ -2536,13 +2598,13 @@
 
         let curRootChoice = allChatDivs.length - 1;
         for (; curRootChoice >= 0; curRootChoice--) {
-          if (url !== states.url.url) {
-            log("发现url变化! 退出更新树");
-            states.treeUpdate.isDOMOperating = false;
-            return;
-          }
+          // if (url !== states.url.url) {
+          //   log("发现url变化! 退出更新树");
+          //   states.treeUpdate.isDOMOperating = false;
+          //   return;
+          // }
           if (result.childIndicesPath[curRootChoice] !== result.childrenCountPath[curRootChoice]) {
-            DOMOperations.clickButtonAtDivLevel(1, curRootChoice);
+            await DOMOperations.clickButtonAtDivLevel(1, curRootChoice);
             let ableToContinue = false;
             while (!ableToContinue) {
               await sleep(50);
@@ -2562,6 +2624,9 @@
             }
             curRootDivChoice = curRootChoice;
             hasRightButtonUnClicked = true;
+            //if(allChatDivs.length -1 > curRootChoice){
+              await treeOperation.initializeSubChatTree(curRootChoice + 1);
+            //}
             break;
           }
         }
@@ -2870,13 +2935,14 @@
         states.url.isForDeletedValidURL = true;
         states.treeUpdate.isDOMOperating = false;
         states.url.url = url;
-        const htmlClass = document.documentElement.getAttribute('class');
-        let wholeScreenDiv = document.getElementById("__next"); // 修正单词拼写
-        if (wholeScreenDiv && htmlClass && htmlClass === 'black') {
-          wholeScreenDiv.style.background = 'rgb(51,53,65)';
-        } else {
-          document.documentElement.className = 'light'; // 使用 className
-        }
+        document.documentElement.setAttribute('class', 'light');
+        // const htmlClass = document.documentElement.getAttribute('class');
+        // let wholeScreenDiv = document.getElementById("__next"); // 修正单词拼写
+        // if (wholeScreenDiv && htmlClass && htmlClass === 'black') {
+        //   wholeScreenDiv.style.background = 'rgb(51,53,65)';
+        // } else {
+        //   document.documentElement.className = 'light'; // 使用 className
+        // }
 
         //rgb(51,53,65)
         log("this_is_delete_url",url);
@@ -2925,8 +2991,15 @@
     }
   };
 
-  let GlobalMainTreeBtnColorSettings = {};
-  let GlobalMainTreeBtnPositionSettings = {};
+  //const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(51, 230, 15, 0.74) 0%, rgba(250, 0, 187, 0.74) 100%)';
+  const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(117, 194, 102, 0.31) 0%, rgba(206, 44, 166, 0.31) 100%)';
+
+  //'linear-gradient(to top, rgba(210, 108, 196, 0.2) 0%, rgba(205, 209, 83, 0.2) 100%)'
+  const GlobalUserSettings = {
+    MainTreeBtnColorSettings : {},
+    MainTreeBtnPositionSettings : {},
+    MainSVGBackground: DEFAULT_MAINSVG_BACKGROUND,
+  };
   const dbOperations = {
     initDatabase: function () {
       return new Promise((resolve, reject) => {
@@ -2966,20 +3039,34 @@
               log('Got search history:', records);
             })
             .catch(error => console.error(error));
-          dbOperations.getMainTreeBtnSettings('mainTreeBtn')
+          dbOperations.getUserSettings('mainTreeBtn')
             .then(MainTreeBtnSettings => {
               log('Got MainTreeBtnSettings:', MainTreeBtnSettings);
-              GlobalMainTreeBtnColorSettings = MainTreeBtnSettings;
-              treeMainBtn.style.background = GlobalMainTreeBtnColorSettings.color;
-              treeMainBtn.style.opacity = GlobalMainTreeBtnColorSettings.opacity;
+              GlobalUserSettings.MainTreeBtnColorSettings = MainTreeBtnSettings;
+              treeMainBtn.style.background = GlobalUserSettings.MainTreeBtnColorSettings.color;
+              treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings.opacity;
             })
             .catch(error => console.error(error));
-          dbOperations.getMainTreeBtnSettings('mainTreeBtnPos')
+          dbOperations.getUserSettings('mainTreeBtnPos')
             .then(mainTreeBtnPos => {
               log('Got mainTreeBtnPosSettings:', mainTreeBtnPos);
-              GlobalMainTreeBtnPositionSettings = mainTreeBtnPos;
-              treeMainBtn.style.top = GlobalMainTreeBtnPositionSettings.top;
-              treeMainBtn.style.left = GlobalMainTreeBtnPositionSettings.left;
+              GlobalUserSettings.MainTreeBtnPositionSettings = mainTreeBtnPos;
+              treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top;
+              treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left;
+            })
+            .catch(error => console.error(error));
+          dbOperations.getUserSettings('mainSVG')
+            .then(mainSVGBackground => {
+              log('Got mainTreeBtnPosSettings:', mainSVGBackground);
+              if(mainSVGBackground && mainSVGBackground.background) {
+                GlobalUserSettings.MainSVGBackground = mainSVGBackground.background;
+                let mainSvg = document.getElementById('mainSvg');
+                if (mainSvg) {
+                  log("get mainSvg:", mainSvg);
+                  mainSvg.style.background = mainSVGBackground.background.toString();
+                  log("get mainSVGBackground:", mainSVGBackground);
+                }
+              }
             })
             .catch(error => console.error(error));
           dbOperations.initConversationData()
@@ -3025,18 +3112,29 @@
               const url = cursor.value.url;
 
               if (url && !url.includes("conversations_information")) {
-                const id = url.split('/').pop();
-                const safeId = id.replace(/-/g, '');
 
-                information.conversations.push({
-                  id: safeId,
-                  topic: cursor.value.rootNode.content,
-                  link: url,
-                  categories: cursor.value.categories || [], // 新增字段
-                  chatTreeTags: cursor.value.chatTreeTags || [], // 新增字段
-                  isWholeConversationBookMarked: cursor.value.isWholeConversationBookMarked || false,
-                  timestamp : cursor.value.timestamp
-                });
+                if(cursor.value.rootNode.children.length === 0){
+                  dbOperations.deleteConversationData(url)
+                    .then(log("a conversation is deleted!"))
+                    .catch(error => {
+                      console.error(error);
+                    });
+                }
+                else {
+
+                  const id = url.split('/').pop();
+                  const safeId = id.replace(/-/g, '');
+
+                  information.conversations.push({
+                    id: safeId,
+                    topic: cursor.value.rootNode.content,
+                    link: url,
+                    categories: cursor.value.categories || [], // 新增字段
+                    chatTreeTags: cursor.value.chatTreeTags || [], // 新增字段
+                    isWholeConversationBookMarked: cursor.value.isWholeConversationBookMarked || false,
+                    timestamp: cursor.value.timestamp
+                  });
+                }
               }
               cursor.continue();
             } else {
@@ -3184,7 +3282,7 @@
         request.onerror = event => reject("Error saving data:", event.target.errorCode);
       });
     },
-    getMainTreeBtnSettings: function (key) {
+    getUserSettings: function (key) {
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readonly');
         const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
@@ -3201,7 +3299,7 @@
         };
       });
     },
-    updateMainTreeBtnSettings: function (newSettings) {
+    updateUserSettings: function (newSettings) {
       return new Promise((resolve, reject) => {
         const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readwrite');
         const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
@@ -3294,13 +3392,14 @@
             conversationData.uuid2pathMap.set(conversationData.rootNode.uuid, []);
             conversationData.path2nodeMap.set('', conversationData.rootNode);
             log("在load中: data", conversationData);
+            resolve(conversationData);
 
-            const addRequest = objectStore.add(conversationData);
-            addRequest.onsuccess = () => {
-              log("返回data:", conversationData);
-              resolve(conversationData);
-            }
-            addRequest.onerror = event => reject("Error creating new data:", event.target.errorCode);
+            // const addRequest = objectStore.add(conversationData);
+            // addRequest.onsuccess = () => {
+            //   log("返回data:", conversationData);
+            //   resolve(conversationData);
+            // }
+            // addRequest.onerror = event => reject("Error creating new data:", event.target.errorCode);
           } else {
             log("dataExisting!");
             conversationData = result;
@@ -3546,6 +3645,7 @@
       settingsContainer.style.display = "none";
       searchContainer.style.display = 'none';
       mainSvg.setAttribute("visibility", "hidden");
+      rightMiddleContainer.style.display = 'none';
       if (states.visualization.thumbnailSvg === "visible") {
         thumbnail.setAttribute("visibility", "hidden");
       }
@@ -3561,6 +3661,7 @@
       settingsContainer.style.display = "block";
       searchContainer.style.display = 'flex';
       mainSvg.setAttribute("visibility", "visible");
+      rightMiddleContainer.style.display = 'block';
       if (states.visualization.contentDiv === 'block') {
         contentDiv.style.display = 'block';
       }
@@ -3588,7 +3689,7 @@
   let isMouseOver = false;
   let offsetX, offsetY;
   let menu;
-  let colorPicker, opacityPicker;
+  let mainBtnColorPicker, mainBtnOpacityPicker;
 
   const ButtonOperations = {
     createButton: function () {
@@ -3600,8 +3701,8 @@
       //treeMainBtn.style.right = '20px';
       //treeMainBtn.style.top =   '20px';
       try {
-        treeMainBtn.style.left = GlobalMainTreeBtnPositionSettings.left ? GlobalMainTreeBtnPositionSettings.left : '20px';
-        treeMainBtn.style.top = GlobalMainTreeBtnPositionSettings.top ? GlobalMainTreeBtnPositionSettings.top : '20px';
+        treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left ? GlobalUserSettings.MainTreeBtnPositionSettings.left : '20px';
+        treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top ? GlobalUserSettings.MainTreeBtnPositionSettings.top : '20px';
       } catch (e) {
         treeMainBtn.style.right = '30%';
         treeMainBtn.style.top = '20px';
@@ -3610,8 +3711,8 @@
       treeMainBtn.style.resize = "both";
       treeMainBtn.style.width = "150px";
       treeMainBtn.style.height = "30px";
-      treeMainBtn.style.backgroundColor = GlobalMainTreeBtnColorSettings ? GlobalMainTreeBtnColorSettings.color : "rgb(16,209,38)";
-      treeMainBtn.style.opacity = GlobalMainTreeBtnColorSettings ? GlobalMainTreeBtnColorSettings.opacity : "0.9";
+      treeMainBtn.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
+      treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.opacity : "0.9";
       treeMainBtn.style.borderRadius = "12px";
       document.body.appendChild(treeMainBtn);
       treeMainBtn.style.display = 'block';
@@ -3658,7 +3759,7 @@
     onMouseUp: function () {
       isDragging = false;
       const newSettings = {id: 'mainTreeBtnPos', left: treeMainBtn.style.left, top: treeMainBtn.style.top};
-      dbOperations.updateMainTreeBtnSettings(newSettings).then(() => {
+      dbOperations.updateUserSettings(newSettings).then(() => {
       }).catch(error => {
         console.error("Error saving Change:", error);
       });
@@ -3680,13 +3781,30 @@
       let updateCurrentConversationTreeText = translate("updateCurrentConversationTree");
       let adjustBackgroundColorAndOpacityText = translate("adjustBackgroundColorAndOpacity");
       let toggleConversationTreeText = translate("toggleConversationTree");
+      function rgbToHex(rgb) {
+        let match = rgb.match(/\d+/g);
+        if (match) {
+          let r = parseInt(match[0]);
+          let g = parseInt(match[1]);
+          let b = parseInt(match[2]);
+          return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        }
+        return '#000000';  // Return a default color if the conversion fails
+      }
+
+      let color = treeMainBtn.style.background;
+      let hexColor = rgbToHex(color);
+      let opacity = parseFloat(treeMainBtn.style.opacity);
+      log("color:", hexColor, 'opacity:', opacity);
+
       menu.innerHTML = `
-            <button class='menu-option' id='opt_updateTree' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 10px'>${updateCurrentConversationTreeText}</button>
-            <button class='menu-option' id='adjustOption' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 10px'>${adjustBackgroundColorAndOpacityText}</button>
-            <button class='menu-option' id='showSvg' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 10px'>${toggleConversationTreeText}</button>
-            <input type='color' id='colorPicker' style='display:none;'>
-            <input type='range' id='opacityPicker' style='display:none;' min='20' max='100' value='90'>
-        `;
+    <button class='menu-option' id='opt_updateTree' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${updateCurrentConversationTreeText}</button>
+    <button class='menu-option' id='adjustOption' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
+    <button class='menu-option' id='showSvg' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
+    <input type='range' id='mainBtnOpacityPicker' style='display:none;' min='20' max='100' value=${opacity * 100}>
+    <input type='color' id='mainBtnColorPicker' style='display:none;' value=${hexColor}>
+`;
+
       menu.style.position = "fixed";
       menu.style.zIndex = "10000";
       menu.style.backgroundColor = "transparent";
@@ -3770,12 +3888,12 @@
       menu.addEventListener("click", ButtonOperations.onMenuClick);
       menu.addEventListener("mouseenter", () => isMouseOver = true);
       menu.addEventListener("mouseleave", ButtonOperations.hideMenuIfNotOver);
-      colorPicker = document.getElementById('colorPicker');
-      opacityPicker = document.getElementById('opacityPicker');
-      colorPicker.addEventListener('input', ButtonOperations.onColorChange);
-      colorPicker.addEventListener('change', ButtonOperations.onColorChangeDone);
-      opacityPicker.addEventListener('input', ButtonOperations.onOpacityChange);
-      opacityPicker.addEventListener('change', ButtonOperations.onOpacityChangeDone);
+      mainBtnColorPicker = document.getElementById('mainBtnColorPicker');
+      mainBtnOpacityPicker = document.getElementById('mainBtnOpacityPicker');
+      mainBtnColorPicker.addEventListener('input', ButtonOperations.onColorChange);
+      mainBtnColorPicker.addEventListener('change', ButtonOperations.onColorChangeDone);
+      mainBtnOpacityPicker.addEventListener('input', ButtonOperations.onOpacityChange);
+      mainBtnOpacityPicker.addEventListener('change', ButtonOperations.onOpacityChangeDone);
 
       document.querySelectorAll('.menu-option').forEach(el => {
         el.style.backgroundColor = treeMainBtn.style.backgroundColor;
@@ -3799,8 +3917,8 @@
 
     onMenuClick: function (e) {
       if (e.target.id === 'adjustOption') {
-        colorPicker.style.display = 'inline-block';
-        opacityPicker.style.display = 'inline-block';
+        mainBtnColorPicker.style.display = 'block';
+        mainBtnOpacityPicker.style.display = 'inline-block';
       }
       if (e.target.id === 'opt_updateTree') {
         let curURL = window.location.href;
@@ -3836,7 +3954,7 @@
       if (e.target.id === 'showSvg') {
         toggleSvgShow(1);
       }
-      if (e.target.innerText != '')
+      if (e.target.id === 'adjustOption' || e.target.id === 'opt_updateTree' || e.target.id === 'showSvg')
         ButtonOperations.showUserNotification(translate("selectedItem").replace('{item}', e.target.innerText));
     },
 
@@ -3929,7 +4047,6 @@
           el.style.backgroundColor = color;
         });
       }
-
     },
 
     onOpacityChange: function (e) {
@@ -3945,7 +4062,7 @@
       const opacity = e.target.value / 100;
       let opacity_string = opacity.toString();
       const newSettings = {id: 'mainTreeBtn', color: treeMainBtn.style.backgroundColor, opacity: opacity_string};
-      dbOperations.updateMainTreeBtnSettings(newSettings).then(() => {
+      dbOperations.updateUserSettings(newSettings).then(() => {
         ButtonOperations.showUserNotification(translate("successSavingChanges"));
       }).catch(error => {
         console.error("Error saving Change:", error);
@@ -3955,7 +4072,7 @@
       const opacity_string = treeMainBtn.style.opacity
 
       const newSettings = {id: 'mainTreeBtn', color: treeMainBtn.style.backgroundColor, opacity: opacity_string};
-      dbOperations.updateMainTreeBtnSettings(newSettings).then(() => {
+      dbOperations.updateUserSettings(newSettings).then(() => {
         ButtonOperations.showUserNotification(translate("successSavingChanges"));
       }).catch(error => {
         console.error("Error saving Change:", error);
@@ -4038,7 +4155,10 @@
       }
       svg = initSvgAndGradient.createSvg(d3.select("body"), {}, "100%", "100%", true, "mainSvg");
       svgThumbnail = initSvgAndGradient.createSvg(d3.select("body"), initSvgAndGradient.thumbnailStyles, "0px", "0px", false, "thumbnailSvg");
-
+      let mainSvg = document.getElementById('mainSvg');
+      if(mainSvg){
+        mainSvg.style.background = GlobalUserSettings.MainSVGBackground ? GlobalUserSettings.MainSVGBackground : DEFAULT_MAINSVG_BACKGROUND;
+      }
       defs = svg.append("defs");
       initSvgAndGradient.createLinearGradient(defs, "chatgptGradient", "#34aeeb", "#0a87d8");
       initSvgAndGradient.createLinearGradient(defs, "userGradient", "#ffc085", "#ff7f00");
@@ -4865,7 +4985,9 @@
           initialMouseY = e.clientY;
           initialDivX = contentDiv.offsetLeft;
           initialDivY = contentDiv.offsetTop;
-
+          let rect = contentDiv.getBoundingClientRect();
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
           document.body.style.cursor = 'grabbing';
           document.addEventListener('mousemove', moveContentDiv);
         }
@@ -4879,7 +5001,9 @@
           initialMouseY = e.clientY;
           initialDivX = contentDiv.offsetLeft;
           initialDivY = contentDiv.offsetTop;
-
+          let rect = contentDiv.getBoundingClientRect();
+          offsetX = e.clientX - rect.left;
+          offsetY = e.clientY - rect.top;
           document.body.style.cursor = 'move';
           document.addEventListener('mousemove', moveContentDiv);
         }
@@ -4900,32 +5024,38 @@
         e.preventDefault();
 
       });
-
-      function moveContentDiv(e) {
+      // onMouseDown: function (e) {
+      //   if (e.button !== 0) return;
+      //   let rect = treeMainBtn.getBoundingClientRect();
+      //   offsetX = e.clientX - rect.left;
+      //   offsetY = e.clientY - rect.top;
+      //   isDragging = true;
+      //   window.addEventListener("mousemove", ButtonOperations.onMouseMove);
+      //   window.addEventListener("mouseup", ButtonOperations.onMouseUp);
+      // },
+      function moveContentDiv  (e) {
         if (isRightMouseDown || isLeftMouseDown) {
-          const dx = e.clientX - initialMouseX;
-          const dy = e.clientY - initialMouseY;
-
-          let newLeft = initialDivX + dx;
-          let newTop = initialDivY + dy;
-
+          ButtonOperations.hideMenu();
+          let top = e.clientY - offsetY;
+          let left = e.clientX - offsetX;
           let maxWidth = window.innerWidth;
           let maxHeight = window.innerHeight;
           let elementWidth = contentDiv.offsetWidth;
           let elementHeight = contentDiv.offsetHeight;
-
-          // 检查右边界
-          if (newLeft > maxWidth - elementWidth) {
-            newLeft = maxWidth - elementWidth;
+          if (left < 0) {
+            left = 0;
+          } else if (left > maxWidth - elementWidth) {
+            left = maxWidth - elementWidth;
           }
-
-          // 检查上边界
-          if (newTop < 0) {
-            newTop = 0;
+          if (top < 0) {
+            top = 0;
+          } else if (top > maxHeight - elementHeight) {
+            top = maxHeight - elementHeight;
           }
-
-          contentDiv.style.left = newLeft + 'px';
-          contentDiv.style.top = newTop + 'px';
+          contentDiv.style.left = left + "px";
+          contentDiv.style.top = top + "px";
+          contentDiv.style.right = "auto";
+          contentDiv.style.bottom = "auto";
 
           document.body.style.cursor = isRightMouseDown ? 'move' : 'grabbing';
           talkingPerson.style.cursor = 'grabbing';
@@ -4933,6 +5063,38 @@
           ContentKit.positionCommentFormRelativeToContentDiv();
         }
       }
+      // function moveContentDiv(e) {
+      //   if (isRightMouseDown || isLeftMouseDown) {
+      //     const dx = e.clientX - initialMouseX;
+      //     const dy = e.clientY - initialMouseY;
+      //
+      //     let newLeft = initialDivX + dx;
+      //     let newTop = initialDivY + dy;
+      //
+      //     let maxWidth = window.innerWidth;
+      //     let maxHeight = window.innerHeight;
+      //     let elementWidth = contentDiv.offsetWidth;
+      //     let elementHeight = contentDiv.offsetHeight;
+      //
+      //     // 检查右边界
+      //     if (newLeft > maxWidth - elementWidth) {
+      //       newLeft = maxWidth - elementWidth;
+      //     }
+      //
+      //     // 检查上边界
+      //     if (newTop < 0) {
+      //       newTop = 0;
+      //     }
+      //
+      //     contentDiv.style.left = newLeft + 'px';
+      //     contentDiv.style.top = newTop + 'px';
+      //
+      //     document.body.style.cursor = isRightMouseDown ? 'move' : 'grabbing';
+      //     talkingPerson.style.cursor = 'grabbing';
+      //
+      //     ContentKit.positionCommentFormRelativeToContentDiv();
+      //   }
+      // }
 
 
       closeButton.addEventListener('click', function () {
@@ -5251,6 +5413,10 @@
   let deleteDiv = document.createElement('div');
   let feedbackDiv = document.createElement('div');
   let settingsContainer = document.createElement('div');
+  let rightMiddleContainer = document.createElement('div');
+  let colorSelectDiv = document.createElement('div');
+  const tooltipDiv = document.createElement('div');
+  let rightMiddleMenu = document.createElement("div");
 
   let scaleIncrementSmall = 0.1;
   let scaleIncrementLarge = 0.3;
@@ -5261,37 +5427,6 @@
   let undoStack = [];
   let redoStack = [];
   let newOperation = {};
-
-  const tooltipDiv = document.createElement('div');
-  if (globalUserLang.startsWith('zh')) {
-    tooltipDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 310px; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
-    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
-        <span class="block text-center font-medium normal-case text-white text-sm mb-2">点击参与问卷调查 (腾讯问卷)</span>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 100px; height: 100px; display: block; margin: auto;">
-        </div>
-        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
-        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
-    </div>
-</div>`;
-  } else {
-    tooltipDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 310px; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
-    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
-        <p class="block text-center font-medium normal-case text-white text-sm mb-2">Click to take the survey</br>(Google Forms)</p>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 100px; height: 100px; display: block; margin: auto;">
-        </div>
-        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
-        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
-    </div>
-</div>`;
-  }
-  tooltipDiv.style.display = 'none';
-  tooltipDiv.className = "actionDiv1";
-
-  settingsContainer.appendChild(tooltipDiv);
 
   const settingsKit = {
     init: function () {
@@ -5305,6 +5440,7 @@
 
       settingsContainer.appendChild(settingsDiv);
       settingsContainer.style.display = 'none';
+      rightMiddleContainer.style.display = 'none';
 
       const settingSVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="30" height="30"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path fill="rgb(217, 74, 171)" d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4.6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/></svg>';
       settingsDiv.innerHTML = settingSVG;
@@ -5346,16 +5482,273 @@
       settingsContainer.appendChild(deleteDiv);
 
       feedbackDiv.id = 'feedbackDiv';
-      feedbackDiv.className = "actionDiv";
+      feedbackDiv.className = "rightMiddleDiv";
       feedbackDiv.innerText = '✉️';
-      settingsContainer.appendChild(feedbackDiv);
+      rightMiddleContainer.appendChild(feedbackDiv);
+
+      rightMiddleMenu.style.display = 'none';
+      rightMiddleMenu.id = 'rightMiddleMenu';
+      rightMiddleContainer.appendChild(rightMiddleMenu);
+
+      colorSelectDiv.id = "colorSelectDiv";
+      colorSelectDiv.className = "rightMiddleDiv";
+      colorSelectDiv.innerText = '🎨';
+      rightMiddleContainer.appendChild(colorSelectDiv);
+
+      //rightMiddleDiv.style.display = 'block';
+      if (globalUserLang.startsWith('zh')) {
+        tooltipDiv.innerHTML = `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 29%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <span class="block text-center font-medium normal-case text-white text-sm mb-2">点击参与问卷调查 (腾讯问卷)</span>
+        <div style="width: 100px; height: 100px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 100px; height: 100px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>`;
+      } else {
+        tooltipDiv.innerHTML = `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 28%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <p class="block text-center font-medium normal-case text-white text-sm mb-2">Click to take the survey</br>(Google Forms)</p>
+        <div style="width: 100px; height: 100px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 100px; height: 100px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>`;
+      }
+      tooltipDiv.style.display = 'none';
+      rightMiddleContainer.appendChild(tooltipDiv);
 
       document.body.appendChild(settingsContainer);
+      document.body.appendChild(rightMiddleContainer);
+
+    },
+    toggleColorSelectShow: function() {
+      if (rightMiddleMenu.style.display === 'flex') {
+        rightMiddleMenu.style.display = 'none';
+        return;
+      }
+      rightMiddleMenu.style.display = 'flex';
+      document.addEventListener('click', (e) => {
+        if (!rightMiddleContainer.contains(e.target)) {
+          rightMiddleMenu.style.display = 'none';
+        }
+      });
+      function rgbToHex(rgb) {
+        const result = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/.exec(rgb);
+        return result
+          ? '#' +
+          parseInt(result[1]).toString(16).padStart(2, '0') +
+          parseInt(result[2]).toString(16).padStart(2, '0') +
+          parseInt(result[3]).toString(16).padStart(2, '0')
+          : null;
+      }
+
+
+      //let hexColor = rgbToHex(color);
+      //let opacity = parseFloat(treeMainBtn.style.opacity);
+      rightMiddleMenu.style.color = 'black';
+      rightMiddleMenu.innerHTML = `
+        <style>
+            .color-select-menu {
+                display: flex;
+                gap: 20px;
+                padding: 20px;
+                border-radius: 10px;
+                background-color: rgba(255, 255, 255, 0.95);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .color-group {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .color-group div {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            label {
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+            input[type='range'] {
+                margin-bottom: 20px;
+            }
+        </style>
+        <div class="color-select-menu">
+            <div class="color-group">
+                <label>Background</label>
+                <div>
+                    <input type='range' id='SVGOpacityPicker' min='10' max='99' value='90'>
+                </div>
+                <div>
+                    <input type='color' id='SVGColorTopPicker'>
+                    <input type='color' id='SVGColorBottomPicker'>
+                </div>
+            </div>
+<!--            <div class="color-group">-->
+<!--                <label>ChatGPT</label>-->
+<!--                <div>-->
+<!--                    <input type='color' id='chatGPTColorPicker'>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="color-group">-->
+<!--                <label>User</label>-->
+<!--                <div>-->
+<!--                    <input type='color' id='userColorPicker'>-->
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+    `;
+
+      let mainSvg = document.getElementById('mainSvg');
+      if (mainSvg) {
+        let currentBackground = mainSvg.style.background;
+
+        // 获取顶部和底部的颜色
+        let colorMatches = currentBackground.match(/rgba?\((\d{1,3}, \d{1,3}, \d{1,3})(?:, ([\d\.]+))?\)/g);
+        let topColor = colorMatches && colorMatches[0];
+        let bottomColor = colorMatches && colorMatches[1];
+
+        // 获取 opacity
+        let opacityMatch = topColor.match(/rgba?\(\d{1,3}, \d{1,3}, \d{1,3}, ([\d\.]+)\)/);
+        let opacity = opacityMatch ? parseFloat(opacityMatch[1]) * 100 : 100; // 将 opacity 转换回百分比
+
+        log("opacity:",opacity);
+        log("color:",rgbToHex(topColor));
+        document.getElementById('SVGOpacityPicker').value = opacity;
+        document.getElementById('SVGColorTopPicker').value = rgbToHex(topColor);
+        document.getElementById('SVGColorBottomPicker').value = rgbToHex(bottomColor);
+      }
+
+      let SVGOpacityPicker = document.getElementById('SVGOpacityPicker');
+
+      let SVGColorTopPicker = document.getElementById('SVGColorTopPicker');
+      let SVGColorBottomPicker = document.getElementById('SVGColorBottomPicker');
+      let chatGPTColorPicker = document.getElementById('chatGPTColorPicker');
+      let userColorPicker = document.getElementById('userColorPicker');
+
+      //改变
+      SVGOpacityPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGOpacityChange);
+
+      SVGColorTopPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorTopChange);
+      SVGColorBottomPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorBottomChange);
+      // chatGPTColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onChatGPTColorChange);
+      // userColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onUserColorChange);
+
+      //改完
+      SVGOpacityPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGOpacityChangeDone);
+      SVGColorTopPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorTopChangeDone);
+      SVGColorBottomPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorBottomChangeDone);
+      // chatGPTColorPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onChatGPTColorChangeDone);
+      // userColorPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onUserColorChangeDone);
 
     },
 
+    colorAndOpacityKit: {
+
+
+      onSVGOpacityChange: function (e) {
+        const opacity = e.target.value / 100;
+        let mainSvg = document.getElementById('mainSvg');
+        if (mainSvg) {
+          let currentBackground = mainSvg.style.background;
+
+          // 使用正则表达式替换顶部和底部的opacity
+          let newBackground = currentBackground.replace(
+            /rgba\((\d{1,3}, \d{1,3}, \d{1,3}), [\d\.]+\)/g,
+            `rgba($1, ${opacity})`
+          );
+          mainSvg.style.background = newBackground;
+          return newBackground;
+        }
+        return DEFAULT_MAINSVG_BACKGROUND;
+      },
+      hexToRgb:function (hex) {
+        var bigint = parseInt(hex.substring(1), 16);
+        var r = (bigint >> 16) & 255;
+        var g = (bigint >> 8) & 255;
+        var b = bigint & 255;
+        return r + "," + g + "," + b;
+      },
+      onSVGColorTopChange: function (e) {
+        const color = e.target.value;
+        let mainSvg = document.getElementById('mainSvg');
+        if (mainSvg) {
+          let currentBackground = mainSvg.style.background;
+
+          // 使用正则表达式获取当前的opacity
+          let opacityMatch = currentBackground.match(/rgba\(\d{1,3}, \d{1,3}, \d{1,3}, ([\d\.]+)\)/);
+          let opacity = opacityMatch ? opacityMatch[1] : 1;  // 默认值为1，如果没有匹配到opacity
+
+          // 使用正则表达式替换顶部的颜色，同时保留原有的opacity
+          let newBackground = currentBackground.replace(
+            /linear-gradient\(to top, rgba\(\d{1,3}, \d{1,3}, \d{1,3}, [\d\.]+\) 0%/,
+            `linear-gradient(to top, rgba(${settingsKit.colorAndOpacityKit.hexToRgb(color)}, ${opacity}) 0%`
+          );
+          mainSvg.style.background = newBackground;
+          return newBackground;
+        }
+        return DEFAULT_MAINSVG_BACKGROUND;
+      },
+      onSVGColorBottomChange: function(e) {
+        const color = e.target.value;
+        let mainSvg = document.getElementById('mainSvg');
+        if (mainSvg) {
+          let currentBackground = mainSvg.style.background;
+          // 使用正则表达式获取当前的opacity
+          let opacityMatch = currentBackground.match(/rgba\(\d{1,3}, \d{1,3}, \d{1,3}, ([\d\.]+)\) 100%/);
+          let opacity = opacityMatch ? opacityMatch[1] : 1;  // 默认值为1，如果没有匹配到opacity
+          // 使用正则表达式替换底部的颜色，同时保留原有的opacity
+          let newBackground = currentBackground.replace(
+            /rgba\(\d{1,3}, \d{1,3}, \d{1,3}, [\d\.]+\) 100%/,
+            `rgba(${settingsKit.colorAndOpacityKit.hexToRgb(color)}, ${opacity}) 100%`
+          );
+          mainSvg.style.background = newBackground;
+          return newBackground;
+        }
+        return DEFAULT_MAINSVG_BACKGROUND;
+      },
+      onSVGOpacityChangeDone: function (e) {
+        let newBackground = settingsKit.colorAndOpacityKit.onSVGOpacityChange(e);
+        const newSettings = {id: 'mainSVG', background: newBackground};
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+      onSVGColorTopChangeDone: function (e) {
+        let newBackground = settingsKit.colorAndOpacityKit.onSVGColorTopChange(e);
+        const newSettings = {id: 'mainSVG', background: newBackground};
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+      onSVGColorBottomChangeDone: function (e) {
+        let newBackground = settingsKit.colorAndOpacityKit.onSVGColorBottomChange(e);
+        const newSettings = {id: 'mainSVG', background: newBackground};
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+    },
+
+
     addEventListeners: function () {
 
+      colorSelectDiv.addEventListener('click', settingsKit.toggleColorSelectShow);
       feedbackDiv.addEventListener('click', () => {
         // 检测用户的语言设置
         if (globalUserLang.startsWith('zh')) {
@@ -5391,25 +5784,19 @@
           tooltipDiv.style.display = 'none';
         }, 400);
       });
-
-
-      let settingsTimeOut;
-      settingsContainer.addEventListener('mouseenter', function (e) {
-        log("settingsContainer mouseover");
-        clearTimeout(settingsTimeOut);
+      settingsDiv.addEventListener('click', function (e) {
+        log("settingsContainer click");
         let elements = document.querySelectorAll('.actionDiv');
-        elements.forEach(element => {
-          element.style.display = 'flex';
-        });
-      });
-      settingsContainer.addEventListener('mouseleave', function () {
-        log("settingsContainer mouseleave");
-        settingsTimeOut = setTimeout(() => {
-          let elements = document.querySelectorAll('.actionDiv');
+        if(deleteDiv.style.display !== 'flex') {
+          elements.forEach(element => {
+            element.style.display = 'flex';
+          });
+        }
+        else{
           elements.forEach(element => {
             element.style.display = 'none';
           });
-        }, 400);
+        }
       });
       zoomInButton.addEventListener('click', this.zoomIn);
       zoomOutButton.addEventListener('click', this.zoomOut);
@@ -6235,7 +6622,6 @@
       // Append 'managePanel' to the document body or another container element
       document.body.appendChild(managePanel);
 
-      managePanel.style.height = window.innerHeight - 20 + 'px';
       togglePanel.innerHTML = '×';
       togglePanel.style.position = 'fixed';
       togglePanel.style.fontSize = '30px';
@@ -6360,7 +6746,7 @@
         optionsContainer.classList.add("optionsContainer");
 
         optionsContainer.innerHTML = conv.isWholeConversationBookMarked === false ?
-`<div class="flex visible">   
+          `<div class="flex visible">   
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
   </button>    
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
@@ -6378,7 +6764,7 @@
   </button>
 </div>
 `:
-`
+          `
 <div class="flex visible">   
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
   </button>    

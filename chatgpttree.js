@@ -2,7 +2,7 @@
 // @name         ChatGPT ChatTree 🌳
 // @name:zh-CN   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2023.10.18.01
+// @version      2023.10.27.01
 // @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
 // @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
 // @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
@@ -183,7 +183,7 @@
         
 
 
-        #panelToggleButton {
+        #panelToggleButtonSVGShow {
             position: fixed;
             left: 0;
             top: 40%;
@@ -585,6 +585,43 @@
             transition: background-color 0.3s; /* 平滑过渡效果 */
             user-select: none;
         }
+        
+        .rightAlwaysShownDiv {
+        
+            position: fixed;
+            bottom: 70%;
+            display: flex;
+            right: 10px; 
+            cursor: pointer;
+            font-size: 1.5em;
+            width: 40px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background-color: rgba(191,96,210,0.5);
+            border-radius: 50%; /* 让div成为圆形 */
+            /*box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);*/
+            box-shadow: none;
+            transition: background-color 0.3s; /* 平滑过渡效果 */
+            user-select: none;
+        }
+        
+        #colorSelectDiv {
+            bottom: 64%;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue; 
+            font-size: 1.5em;
+        }
+       .language-container {
+       color: black;
+          width: 200px;
+          margin: 20px auto;
+          position: relative;
+          bottom: 56%;
+          right: 60px;
+        }
         #feedbackDiv {
             bottom: 40%;
             display: flex;
@@ -593,22 +630,39 @@
             color: deepskyblue;
             font-size: 1.5em;
         }
-        #colorSelectDiv {
+      
+        #WeChatDiv {
             bottom: 46%;
             right: 10px; 
             cursor: pointer;
             color: deepskyblue; 
             font-size: 1.5em;
         }
-        
-        .rightMiddleDiv:hover {
+        #TencentDiv {
+            bottom: 52%;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue; 
+            font-size: 1.5em;
+        }  
+       #languageSelectDiv {
+            bottom: 58%;
+            right: 10px; 
+            cursor: pointer;
+            color: deepskyblue; 
+            font-size: 12px;
+        }
+        .rightMiddleDiv:hover  {
             background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
         }
-              
+        .rightAlwaysShownDiv:hover {
+            background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
+        }
         #rightMiddleMenu {
           position: fixed;
           bottom: 52%;
-          right: 10px;
+          right: 60px;
+          z-Index: 10000;
         }
         
        .actionDiv {
@@ -681,9 +735,46 @@
         #settingsDiv:hover, .actionDiv:hover {
             background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
         }
+        
+        
+        
+        
+
+
+.language-dropdown {
+    width: 100%;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    appearance: none; /* 移除默认的外观 */
+    -webkit-appearance: none; /* 为了Safari */
+    -moz-appearance: none; /* 为了Firefox */
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.language-dropdown:focus {
+    outline: none;
+    background-color: #e9e9e9;
+}
+
+.language-container::after {
+
+
+    font-size: 14px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* 这样它就不会干扰下拉列表的点击事件了 */
+}
+
     `);
 
-  const getLang = function () {
+  const getLang = function (selectLang = null) {
     let lang =
       `{
    "ar": {
@@ -2248,26 +2339,39 @@
     }
 }`;
     lang = JSON.parse(lang);
-    const userLang = navigator.languages.find(l => l in lang) || 'en';
+
+    const userLang = selectLang ? lang[selectLang] ? selectLang : 'en' : navigator.languages.find(l => l in lang) || 'en';
     //const userLang =  'en';
     //log("currentLang:",userLang);
     globalUserLang = userLang;
-    return lang[userLang];
-
+    return {
+      langPack: lang[userLang],
+      userLang: userLang
+    }
   };
   let globalUserLang;
-  const currentLangPack = getLang();
+  //let  = getLang().userLang;
+
+  let currentLangPack = getLang().langPack;
 
   //log("currentLangPack", currentLangPack);
-
   function translate(key) {
     return currentLangPack[key] || key;
   }
 
+
+  let DEFAULT_USER_TOP_COLOR = "#ff7f00", DEFAULT_USER_BOTTOM_COLOR = "#ffc085",
+    DEFAULT_CHATGPT_TOP_COLOR = "#0a87d8",DEFAULT_CHATGPT_BOTTOM_COLOR = "#34aeeb";
+
+
   const states = {
     mainButton: {
       isDragging: false,
-      isMouseOver: false
+      isMouseOver: false,
+      isThereNavbar: false,
+      isMouseInNavbar: false,
+      isMainTreeBtnInNavbar: false,
+      canNotEnterNavbar: true
     },
     url: {
       isForLiveValidURL: false,
@@ -2281,7 +2385,21 @@
       contentDiv: 0,
       thumbnailSvg: 0,
       panelToggleButton: 0,
-    }
+    },
+    colorSetting:  {
+      customUser: {
+        is: false,
+        url: "url(#CUSTOM_USER_GRADIENT)",
+        top: DEFAULT_USER_TOP_COLOR,
+        bottom: DEFAULT_USER_BOTTOM_COLOR,
+      },
+      customChatGPT: {
+        is: false,
+        url: "url(#CUSTOM_CHATGPT_GRADIENT)",
+        top: DEFAULT_CHATGPT_TOP_COLOR,
+        bottom: DEFAULT_CHATGPT_BOTTOM_COLOR,
+      },
+    },
   };
 
   const Default_RootNode_Content = "Chat Starts Here";
@@ -2406,8 +2524,8 @@
       }
 
       if (conversationData.rootNode.content.toLowerCase() === "New Chat".toLowerCase()
-        ||conversationData.rootNode.content.toLowerCase() === Default_RootNode_Content.toLowerCase()
-        ||conversationData.rootNode.content.toLowerCase() === "Chat Start Here".toLowerCase()) {
+        || conversationData.rootNode.content.toLowerCase() === Default_RootNode_Content.toLowerCase()
+        || conversationData.rootNode.content.toLowerCase() === "Chat Start Here".toLowerCase()) {
         try {
           const targetElement = document.querySelector('.absolute.flex.right-1.z-10.dark\\:text-gray-300.text-gray-800.visible');
           if (targetElement) {
@@ -2452,7 +2570,7 @@
       }
       let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
       //log(gptInfoDiv);
-      if(gptInfoDiv){
+      if (gptInfoDiv) {
         conversationData.participants.gpt.type = gptInfoDiv.innerText;
       }
       log("url:", operatingURL);
@@ -2490,7 +2608,7 @@
       await this.updateTree(operatingURL);
 
     },
-    initializeSubChatTree: async function (fromWhichDivClickLeft){
+    initializeSubChatTree: async function (fromWhichDivClickLeft) {
       log("initializeSubChatTree");
       let result = DOMOperations.getButtonInfo();
       let allChatDivs = DOMOperations.getAllDivs();
@@ -2500,8 +2618,8 @@
         return;
       }
       let hasLeftButton = false;
-      for(let i = fromWhichDivClickLeft; i < allChatDivs.length; i++){
-        if (result.childIndicesPath[i] !== 1){
+      for (let i = fromWhichDivClickLeft; i < allChatDivs.length; i++) {
+        if (result.childIndicesPath[i] !== 1) {
           hasLeftButton = true;
           log("hasLeftButton === true");
           break;
@@ -2523,8 +2641,8 @@
         result = DOMOperations.getButtonInfo();
         allChatDivs = DOMOperations.getAllDivs();
         log("result:", result);
-        for(let i = fromWhichDivClickLeft; i < allChatDivs.length; i++){
-          if (result.childIndicesPath[i] !== 1){
+        for (let i = fromWhichDivClickLeft; i < allChatDivs.length; i++) {
+          if (result.childIndicesPath[i] !== 1) {
             log("hasLeftButton === true");
             hasLeftButton = true;
             break;
@@ -2534,6 +2652,35 @@
     },
     //🤖chatGPT版本
     updateTree: async function (url) {
+      let gotNotice = prompt("Would you like to delete all comments or load the original conversation? If YES, enter 'Y' in capital letter. Otherwise, simply cancel this box.");
+      if(gotNotice === "Y"){
+        log("gotNotice:",gotNotice);
+        let rootNodeContent = conversationData.rootNode.content ? conversationData.rootNode.content : Default_RootNode_Content;
+        conversationData = {
+          url: conversationData.url,
+          rootNode: new DialogueNode(rootNodeContent, "chatGPT"),
+          uuid2pathMap: new Map(),
+          uuid2nodeMap: new Map(),
+          path2nodeMap: new Map(),
+          timestamp: Date.now(),
+          participants: {
+            user: {
+              name: conversationData.participants.user.name,
+              avatarURL: conversationData.participants.user.avatarURL,
+              avatarHTML: conversationData.participants.user.avatarHTML,
+            },
+            gpt: {
+              type: conversationData.participants.gpt.type,
+            }
+          },
+          isWholeConversationBookMarked: conversationData.isWholeConversationBookMarked || false,
+          chatTreeTags: conversationData.chatTreeTags || [],
+          categories: conversationData.categories || [],
+          bookMarked: conversationData.bookMarked
+        };
+        //conversationData = newConversationData;
+      }
+
       let allpaths = [];
       log("更新树");
       let operatingURL = url;
@@ -2569,7 +2716,7 @@
           }
           let contentResult = DOMOperations.getTextContent(allChatDivs[i], i);
           let path = result.childIndicesPath.slice(0, i + 1);
-          log("path", path, "content:", contentResult);
+          // log("path", path, "content:", contentResult);
           let isExisting = conversationData.path2nodeMap.get(arrayToKey(path));
           if (isExisting) {
             log("isExisting!", isExisting);
@@ -2625,7 +2772,7 @@
             curRootDivChoice = curRootChoice;
             hasRightButtonUnClicked = true;
             //if(allChatDivs.length -1 > curRootChoice){
-              await treeOperation.initializeSubChatTree(curRootChoice + 1);
+            await treeOperation.initializeSubChatTree(curRootChoice + 1);
             //}
             break;
           }
@@ -2654,19 +2801,27 @@
           controlPanelKit.renderConversations(chatHistory);
         })
         .catch(error => console.error(error));
+      let mainSvg = document.getElementById("mainSvg")
+      let mainSvgShown = mainSvg.getAttribute("visibility");
+      if(mainSvgShown === 'hidden'){
+        toggleSvgShow(1);
+      }
     },
     jumpToDialogueItem: async function (uuid) {
-      if(!states.url.isForLiveValidURL){
+      if (!states.url.isForLiveValidURL) {
         return;
       }
       if (!uuid || !conversationData.uuid2pathMap.get(uuid) || uuid === conversationData.rootNode.uuid) {
         return;
       }
       let path = conversationData.uuid2pathMap.get(uuid);
+      let content = conversationData.uuid2nodeMap.get(uuid);
+
       if (!path) {
         log("没有从map中获取路径! 请检查!")
         return;
       }
+
 
       let result = DOMOperations.getButtonInfo();
       log("path:", path);
@@ -2678,6 +2833,10 @@
           continue;
         }
         if (path[i] < result.childIndicesPath[i]) {
+          if(result.childIndicesPath[i] === 0){
+            confirm("Due to potential issues with the chatgpt page, the previously saved path might be outdated or untraceable. To retrieve this path, please refresh the entire tree via the central ChatTree button. If you wish to perform a complete tree update in order to get the accurate path, enter 'Y' as instructed in the previous prompt.")
+            return;
+          }
           DOMOperations.clickButtonAtDivLevel(0, i);
           log("path:", path);
           result = DOMOperations.getButtonInfo();
@@ -2685,6 +2844,10 @@
           continue;
         }
         if (path[i] > result.childIndicesPath[i]) {
+          if(result.childIndicesPath[i] === result.childrenCountPath[i]){
+            confirm("Due to potential issues with the chatgpt page, the previously saved path might be outdated or untraceable. To retrieve this path, please refresh the entire tree via the central ChatTree button. If you wish to perform a complete tree update in order to get the accurate path, enter 'Y' as instructed in the previous prompt.")
+            return;
+          }
           DOMOperations.clickButtonAtDivLevel(1, i);
           log("path:", path);
           result = DOMOperations.getButtonInfo();
@@ -2706,6 +2869,8 @@
         let allDivs = DOMOperations.getAllDivs();
         log("path", path, "result.childIndicesPath", result.childIndicesPath, "allDivs[path.length - 1]", allDivs[path.length - 1]);
 
+
+        //if content
         function highlightDiv1() {
           allDivs[path.length - 1].classList.add('highlight');
           setTimeout(() => {
@@ -2764,7 +2929,7 @@
       return pattern.test(url);
     },
 
-    changeBetweenChattreeWithCAndOneMeansChattreeToC: function(chattreetoc, url) {
+    changeBetweenChattreeWithCAndOneMeansChattreeToC: function (chattreetoc, url) {
       function replaceFirstChattreeWithC(url) {
         return url.replace(/^https:\/\/chat\.openai\.com\/chattree/, "https://chat.openai.com/c");
       }
@@ -2773,7 +2938,7 @@
         return url.replace(/^https:\/\/chat\.openai\.com\/c/, "https://chat.openai.com/chattree");
       }
 
-      if(chattreetoc){
+      if (chattreetoc) {
         return replaceFirstChattreeWithC(url);
       } else {
         return replaceFirstCWithChattree(url);
@@ -2799,8 +2964,8 @@
     },
     observeTargetChanges: function () {
       let lastURL = window.location.href;
-      log("lastURL:",lastURL);
-      if (urlOperations.isForLiveValidURL(lastURL)||urlOperations.isForDeletedValidURL(lastURL)) {
+      log("lastURL:", lastURL);
+      if (urlOperations.isForLiveValidURL(lastURL) || urlOperations.isForDeletedValidURL(lastURL)) {
         log("is_anyKind_of_valid");
         urlOperations.handleURLChange(lastURL);
         states.url.url = lastURL;
@@ -2929,8 +3094,7 @@
         treeLayout(root);
         settingsKit.refreshTree();
         log("请刷新页面或者转到具有对话信息的页面从而获取正确的链接");
-      }
-      else if (urlOperations.isForDeletedValidURL(url)){
+      } else if (urlOperations.isForDeletedValidURL(url)) {
         states.url.isForLiveValidURL = false;
         states.url.isForDeletedValidURL = true;
         states.treeUpdate.isDOMOperating = false;
@@ -2945,17 +3109,17 @@
         // }
 
         //rgb(51,53,65)
-        log("this_is_delete_url",url);
+        log("this_is_delete_url", url);
         url = urlOperations.changeBetweenChattreeWithCAndOneMeansChattreeToC(1, url);
-        log("delete_url_to_new_url",url);
+        log("delete_url_to_new_url", url);
         dbOperations.loadConversationsData(url).then(loadeddata => {
           log("Loaded data for URL:", loadeddata);
           let interval;
-          interval = setInterval(()=>{
-            if(document.title === "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content){
+          interval = setInterval(() => {
+            if (document.title === "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content) {
               clearInterval(interval);
             }
-            document.title = "查看模式(ChatTree提供支持): "+loadeddata.rootNode.content;
+            document.title = "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content;
           }, 1500);
           conversationData = loadeddata;
           root = d3.hierarchy(conversationData.rootNode);
@@ -2968,8 +3132,7 @@
         }).catch(error => {
           console.error("Error loading data:", error);
         });
-      }
-      else {
+      } else {
         states.url.isForLiveValidURL = true;
         states.url.isForDeletedValidURL = true;
         states.treeUpdate.isDOMOperating = false;
@@ -2996,8 +3159,8 @@
 
   //'linear-gradient(to top, rgba(210, 108, 196, 0.2) 0%, rgba(205, 209, 83, 0.2) 100%)'
   const GlobalUserSettings = {
-    MainTreeBtnColorSettings : {},
-    MainTreeBtnPositionSettings : {},
+    MainTreeBtnColorSettings: {},
+    MainTreeBtnPositionSettings: {},
     MainSVGBackground: DEFAULT_MAINSVG_BACKGROUND,
   };
   const dbOperations = {
@@ -3045,6 +3208,8 @@
               GlobalUserSettings.MainTreeBtnColorSettings = MainTreeBtnSettings;
               treeMainBtn.style.background = GlobalUserSettings.MainTreeBtnColorSettings.color;
               treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings.opacity;
+              navMainButton.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
+              navMainButton.style.opacity = '1';
             })
             .catch(error => console.error(error));
           dbOperations.getUserSettings('mainTreeBtnPos')
@@ -3053,12 +3218,47 @@
               GlobalUserSettings.MainTreeBtnPositionSettings = mainTreeBtnPos;
               treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top;
               treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left;
+              if (mainTreeBtnPos.isInNavbar === true) {
+                navMainButton.style.display = 'block';
+                treeMainBtn.style.display = 'none';
+                states.mainButton.isMainTreeBtnInNavbar = true;
+              }
             })
             .catch(error => console.error(error));
+
+
+          dbOperations.getUserSettings('userLang')
+            .then(userLang => {
+
+              languageSelect.addEventListener('change', languageKits.init);
+              //setTimeout()
+             log('Got userLang:', userLang);
+                if(userLang && userLang.globalUserLang) {
+                  globalUserLang = userLang.globalUserLang;
+                  languageKits.init({
+                    target: {
+                      value: globalUserLang,
+                      shouldNotSave: true,
+                    }
+                  })
+                }
+                ButtonOperations.showUserNotification(translate("chatTreeRunning"));
+
+                const options = languageSelect.querySelectorAll('option');
+                options.forEach(option => {
+                  if (option.value === globalUserLang) {
+                    option.selected = true;
+                  } else {
+                    option.selected = false;
+                  }
+                });
+            })
+            .catch(error => console.error(error));
+
           dbOperations.getUserSettings('mainSVG')
             .then(mainSVGBackground => {
               log('Got mainTreeBtnPosSettings:', mainSVGBackground);
-              if(mainSVGBackground && mainSVGBackground.background) {
+              if (mainSVGBackground && mainSVGBackground.background) {
                 GlobalUserSettings.MainSVGBackground = mainSVGBackground.background;
                 let mainSvg = document.getElementById('mainSvg');
                 if (mainSvg) {
@@ -3069,6 +3269,47 @@
               }
             })
             .catch(error => console.error(error));
+
+          dbOperations.getUserSettings('userColor')
+            .then(userColor => {
+              log('Got userColor:', userColor);
+              if (userColor && userColor.state && userColor.state.is) {
+                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",userColor.state.bottom ,userColor.state.top);
+                states.colorSetting.customUser = userColor.state;
+                states.colorSetting.customUser.url = 'url(#CUSTOM_USER_GRADIENT)';
+              }
+            })
+            .catch(error => console.error(error));
+
+          dbOperations.getUserSettings('chatGPTColor')
+            .then(chatGPTColor => {
+              log('Got chatGPTColor:', chatGPTColor);
+              if (chatGPTColor && chatGPTColor.state && chatGPTColor.state.is) {
+                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT",chatGPTColor.state.bottom ,chatGPTColor.state.top);
+                states.colorSetting.customChatGPT = chatGPTColor.state;
+                states.colorSetting.customChatGPT.url = 'url(#CUSTOM_CHATGPT_GRADIENT)';
+              }
+            })
+            .catch(error => console.error(error));
+          drawMainSVG();
+
+          dbOperations.getUserSettings('mainTreeBtnSticky')
+            .then(canNotEnterNavbar => {
+              if (canNotEnterNavbar && typeof canNotEnterNavbar.canNotEnterNavbar !== 'undefined') {
+                log("canNotEnter?", canNotEnterNavbar);
+                states.mainButton.canNotEnterNavbar = canNotEnterNavbar.canNotEnterNavbar;
+
+                  toggleMainBtnMovingAccessbility.innerHTML = canNotEnterNavbar.canNotEnterNavbar ? greenForNotEnter : redForEnterable;
+
+              } else {
+                throw new Error("Unexpected structure from getUserSettings");
+              }
+            })
+            .catch(error => {
+              console.error(error);
+              toggleMainBtnMovingAccessbility.innerHTML = redForEnterable;
+            });
+
           dbOperations.initConversationData()
             .then(information => {
               log("information:", information);
@@ -3085,7 +3326,7 @@
     },
 
     initConversationData: function () {
-      if(!db){
+      if (!db) {
         return;
       }
       return new Promise((resolve, reject) => {
@@ -3113,14 +3354,13 @@
 
               if (url && !url.includes("conversations_information")) {
 
-                if(cursor.value.rootNode.children.length === 0){
+                if (cursor.value.rootNode.children.length === 0) {
                   dbOperations.deleteConversationData(url)
                     .then(log("a conversation is deleted!"))
                     .catch(error => {
                       console.error(error);
                     });
-                }
-                else {
+                } else {
 
                   const id = url.split('/').pop();
                   const safeId = id.replace(/-/g, '');
@@ -3164,7 +3404,7 @@
       });
     },
 
-    changeWholeConversationBookMarked:function(url, shouldBeBookMarked){
+    changeWholeConversationBookMarked: function (url, shouldBeBookMarked) {
       if (!url || !urlOperations.isForLiveValidURL(url)) {
         return;
       }
@@ -3199,7 +3439,7 @@
     },
 
     addOrDeleteTagOrClassToURL: async function (url, isTag, value, isAdd) {
-      log("In DBOper:", "url:",url, "isTag:",isTag, "value:",value, "isAdd:",isAdd);
+      log("In DBOper:", "url:", url, "isTag:", isTag, "value:", value, "isAdd:", isAdd);
 
       if (!url || !urlOperations.isForLiveValidURL(url)) {
         return;
@@ -3219,19 +3459,18 @@
 
         request.onsuccess = event => {
           let result = event.target.result;
-          log("result:",result);
+          log("result:", result);
           if (isAdd) {
-            if(!result.chatTreeTags){
+            if (!result.chatTreeTags) {
               result.chatTreeTags = [];
             }
-            if(!result.categories){
+            if (!result.categories) {
               result.categories = [];
             }
             if (isTag && !result.chatTreeTags.includes(value)) {
               result.chatTreeTags.push(value);
               log("added!");
-            }
-            else if (!isTag && !result.categories.includes(value)) {
+            } else if (!isTag && !result.categories.includes(value)) {
               result.categories.push(value);
               log("added!");
             }
@@ -3239,8 +3478,7 @@
             if (isTag && result.chatTreeTags.includes(value)) {
               result.chatTreeTags = result.chatTreeTags.filter(tag => tag != value);
               log("deleted!");
-            }
-            else if (!isTag && result.categories.includes(value)) {
+            } else if (!isTag && result.categories.includes(value)) {
               result.categories = result.categories.filter(tag => tag != value);
               log("deleted!");
             }
@@ -3292,7 +3530,6 @@
           log(settings);
           resolve(settings);
         };
-
         request.onerror = function (event) {
           console.error('读取设置失败', event.target.errorCode);
           reject(event.target.errorCode);
@@ -3349,7 +3586,7 @@
       });
     },
     loadConversationsData: function (url) {
-      if (!url || (!urlOperations.isForLiveValidURL(url))&& (!urlOperations.isForDeletedValidURL(url))) {
+      if (!url || (!urlOperations.isForLiveValidURL(url)) && (!urlOperations.isForDeletedValidURL(url))) {
         return;
       }
       return new Promise((resolve, reject) => {
@@ -3495,20 +3732,73 @@
       });
     }
   };
+  window.addEventListener('DOMContentLoaded', (event) => {
+    log('DOM fully loaded and parsed');
+    // 在这里调用你的函数
+    let timeout;
+    timeout = setTimeout(() => DOMOperations.setNavBarDiv(), 1000);
 
+
+  });
+
+  const titleDiv = document.createElement('div');
+  const title = document.createElement('h3');
+  const stickyDiv = document.createElement('div');
+  const navPanelButton = document.createElement('button');
+  const navMainButton = document.createElement('button');
   const DOMOperations = {
+
+    setNavBarDiv: function () {
+      let HistoryDiv = document.querySelector('.flex-col.flex-1.transition-opacity.duration-500.-mr-2.pr-2.overflow-y-auto');
+      let NoHistoryDiv = document.querySelector('.absolute.left-0.top-14.z-20.overflow-hidden.transition-all.duration-500.invisible.max-h-0');
+//       let navbarHTML = `
+// <div class="sticky top-0 z-[16]" data-projection-id="6" style="opacity: 1;"><h3 class="h-9 pb-2 pt-3 px-3 gizmo:px-2 text-xs text-gray-500 font-medium text-ellipsis overflow-hidden break-all bg-gray-50 gizmo:bg-white dark:bg-gray-900 gizmo:dark:bg-black gizmo:text-gizmo-gray-600">ChatGPT_ChatTree</h3></div>
+//   <div style="display: flex; flex-direction: column; align-items: stretch;">
+// <button style="display: block; border-radius: 12px; opacity: 0.9; background: linear-gradient(to right, rgb(0, 123, 255), rgb(0, 198, 255)); color: white; padding: 4px; font-weight: bold; box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px; margin: 6px; ">管理面板</button>
+// </div>
+//   `
+      //let navbarDiv = document.createElement('div');
+      // navbarDiv.innerHTML = navbarHTML;
+
+
+      navPanelButton.addEventListener('click', controlPanelKit.toggleHistoryPanel);
+      // navbarDiv.appendChild(titleDiv);
+      // navbarDiv.appendChild(navPanelButton);
+
+      log('Searching for elements...');
+
+      let isAdded = false;
+      if (HistoryDiv || NoHistoryDiv) {
+        log('Elements found:', HistoryDiv, NoHistoryDiv);
+        if (HistoryDiv && HistoryDiv.parentNode) {
+          HistoryDiv.parentNode.insertBefore(stickyDiv, HistoryDiv);
+          navPanelButton.parentNode.insertBefore(navMainButton, navPanelButton);
+          HistoryDiv.parentNode.insertBefore(titleDiv, stickyDiv);
+        }
+        isAdded = true;
+      } else {
+        log('Elements not found');
+        treeMainBtn.style.display = 'block';
+        states.mainButton.isMainTreeBtnInNavbar = false;
+      }
+
+      return isAdded;
+    },
+
+
     getAllDivs: function () {
       return document.querySelectorAll('div[data-testid^="conversation-turn-"]');
 
     },
     clickButtonAtDivLevel: function (buttonIndex, divLevel = -1,) {
       let allChatDivs = DOMOperations.getAllDivs();
+      if (divLevel >= allChatDivs.length) {
+        return;
+      }
       let conversationDiv = allChatDivs[divLevel];
-      if (conversationDiv) {
-
-        const buttonInfoDiv = conversationDiv.querySelector('.text-xs.flex.items-center');
-
-        let buttons = buttonInfoDiv.querySelectorAll("button");
+      const buttonInfoDiv = conversationDiv.querySelector('.text-xs.flex.items-center');
+      let buttons = buttonInfoDiv.querySelectorAll("button");
+      if (buttons) {
         log("In clickButtonAtDivLevel", "divLevel: ", divLevel, "buttons:", buttons);
         buttons[buttonIndex].click();
       } else {
@@ -3614,7 +3904,7 @@
 
 
   function start() {
-    ButtonOperations.showUserNotification(translate("chatTreeRunning"));
+    //ButtonOperations.showUserNotification(translate("chatTreeRunning"));
     dbOperations.initDatabase().then(() => {
       if (!db) {
         ButtonOperations.showUserNotification(translate("noDatabaseAndCreationFailed"));
@@ -3637,6 +3927,7 @@
       states.visualization.thumbnailSvg = thumbnail.getAttribute("visibility");
       states.visualization.contentDiv = contentDiv.style.display;
       states.visualization.panelToggleButton = panelToggleButton.style.display;
+      states.visualization.treeMainBtn = treeMainBtn.style.display;
     }
     log("states.visualization.thumbnailSvg", states.visualization.thumbnailSvg);
     if (isMainSvgsDisplayed === 'block') {
@@ -3652,6 +3943,9 @@
       if (states.visualization.contentDiv === 'block') {
         contentDiv.style.display = 'none';
       }
+      if (navMainButton.style.display === 'block') {
+        treeMainBtn.style.display = 'none';
+      }
       panelToggleButton.style.display = 'none';
       commentForm.style.display = 'none';
       document.documentElement.style.overflow = '';
@@ -3662,6 +3956,7 @@
       searchContainer.style.display = 'flex';
       mainSvg.setAttribute("visibility", "visible");
       rightMiddleContainer.style.display = 'block';
+      treeMainBtn.style.display = 'block';
       if (states.visualization.contentDiv === 'block') {
         contentDiv.style.display = 'block';
       }
@@ -3701,29 +3996,129 @@
       //treeMainBtn.style.right = '20px';
       //treeMainBtn.style.top =   '20px';
       try {
-        treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left ? GlobalUserSettings.MainTreeBtnPositionSettings.left : '20px';
+        treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left ? GlobalUserSettings.MainTreeBtnPositionSettings.left : '300px';
         treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top ? GlobalUserSettings.MainTreeBtnPositionSettings.top : '20px';
       } catch (e) {
         treeMainBtn.style.right = '30%';
         treeMainBtn.style.top = '20px';
       }
+
       treeMainBtn.style.zIndex = "9999";
       treeMainBtn.style.resize = "both";
       treeMainBtn.style.width = "150px";
+      treeMainBtn.style.color = "white";
       treeMainBtn.style.height = "30px";
       treeMainBtn.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
       treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.opacity : "0.9";
+
       treeMainBtn.style.borderRadius = "12px";
       document.body.appendChild(treeMainBtn);
       treeMainBtn.style.display = 'block';
 
 
-      treeMainBtn.addEventListener("mouseenter", ButtonOperations.showMenu);
+      treeMainBtn.addEventListener("mouseenter", () => {
+        ButtonOperations.showMenu(0)
+      });
       treeMainBtn.addEventListener("mouseleave", ButtonOperations.hideMenuIfNotOver);
       treeMainBtn.addEventListener("mousedown", ButtonOperations.onMouseDown);
       treeMainBtn.addEventListener("click", ButtonOperations.onClick);
+
+
+
+
+      titleDiv.classList.add('sticky', 'top-0', 'z-[16]');
+      titleDiv.setAttribute('data-projection-id', '6');
+      titleDiv.style.opacity = '1';
+      title.classList.add('h-9', 'pb-2', 'pt-3', 'px-3', 'gizmo:px-2', 'text-xs', 'text-gray-500', 'font-medium', 'text-ellipsis', 'overflow-hidden', 'break-all', 'bg-gray-50', 'gizmo:bg-white', 'dark:bg-gray-900', 'gizmo:dark:bg-black', 'gizmo:text-gizmo-gray-600');
+      title.textContent = '🌳ChatGPT • ChatTree🌳';
+      titleDiv.appendChild(title);
+
+      stickyDiv.style.flexDirection = 'column';
+      stickyDiv.style.alignItems = 'stretch';
+      stickyDiv.style.display = 'flex';
+
+
+      navPanelButton.style.display = 'block';
+      navPanelButton.style.borderRadius = '12px';
+      navPanelButton.style.opacity = '0.9';
+      navPanelButton.style.background = 'linear-gradient(to right, rgb(0, 123, 255), rgb(0, 198, 255))';
+      navPanelButton.style.color = 'white';
+      navPanelButton.style.padding = '4px';
+      navPanelButton.style.fontWeight = 'bold';
+      navPanelButton.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0px 3px 5px';
+      navPanelButton.style.margin = '6px';
+      navPanelButton.textContent = translate("openAdminPanel");
+      navPanelButton.style.height = '30px';
+      stickyDiv.appendChild(navPanelButton);
+
+      navMainButton.classList.add('main-button');
+      navMainButton.className = 'main-button';
+      navMainButton.id = 'navChatTreeBtn';
+      navMainButton.style.display = 'block';
+      navMainButton.style.zIndex = '9999';
+      navMainButton.style.resize = 'both';
+      navMainButton.style.height = '30px';
+      navMainButton.style.borderRadius = '12px';
+      navMainButton.style.margin = '6px';
+      navMainButton.style.right = 'auto';
+      navMainButton.style.bottom = 'auto';
+      navMainButton.style.color = 'white';
+      navMainButton.style.padding = '4px';
+      navMainButton.style.fontWeight = 'bold';
+      navMainButton.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0px 3px 5px';
+      navMainButton.style.display = 'none';
+      navMainButton.textContent = '🌳ChatTree🌳';
+
+      navMainButton.addEventListener("mouseenter", () => {
+        ButtonOperations.showMenu(1)
+      });
+      navMainButton.addEventListener("mousedown", ButtonOperations.onMouseDown);
+      navMainButton.addEventListener("mouseleave", ButtonOperations.hideMenuIfNotOver);
+
     },
+
+    toggleStickyMainBtn: function(){
+
+
+      //log("rightClick!");
+      if (states.mainButton.canNotEnterNavbar){//要可能被固定
+        states.mainButton.canNotEnterNavbar = false;
+        toggleMainBtnMovingAccessbility.innerHTML =redForEnterable  ;
+        ButtonOperations.showUserNotification("ChatTree now can be fixed in the nav bar!")
+      }
+      else{//要变得可以到处移动
+        states.mainButton.canNotEnterNavbar = true;
+        navMainButton.style.display = 'none';
+        toggleMainBtnMovingAccessbility.innerHTML = greenForNotEnter;
+        if(treeMainBtn.style.display ==='none') {//如果此时不见了, 要先展示出来. 如果此时本来就block, 就不动
+          treeMainBtn.style.left = window.innerWidth - 300 + 'px';
+          treeMainBtn.style.top = '20px';
+          treeMainBtn.style.display = 'block';
+        }
+        ButtonOperations.showUserNotification("ChatTree Now Can Move AnyWhere!")
+      }
+      const newSettings = {id: 'mainTreeBtnSticky', canNotEnterNavbar: states.mainButton.canNotEnterNavbar};
+      dbOperations.updateUserSettings(newSettings).then(() => {
+      }).catch(error => {
+        console.error("Error saving Change:", error);
+      });
+      log("newSettings:",newSettings);
+      //log("log(\"Now Turns To:\", states.mainButton.isAlwaysMovable); Now Turns To:", states.mainButton.canNotEnterNavbar);
+    },
+    // handleNavbarMouseEvent: function (event)  {
+    //   states.mainButton.isMouseInNavbar = event.type === 'mouseenter';
+    // },
+
     onMouseDown: function (e) {
+      // let navbar = document.querySelector('.flex.h-full.min-h-0.flex-col');
+      // states.mainButton.isThereNavbar = !!navbar;
+      // if(navbar){
+      //   navbar.addEventListener('mouseenter', ButtonOperations.handleNavbarMouseEvent);
+      //   navbar.addEventListener('mouseleave', ButtonOperations.handleNavbarMouseEvent);
+      // }
+
+
+
       if (e.button !== 0) return;
       let rect = treeMainBtn.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
@@ -3734,6 +4129,44 @@
     },
     onMouseMove: function (e) {
       if (!isDragging) return;
+      let navbar = document.querySelector('.flex.h-full.min-h-0.flex-col');
+      let mainNavBar = document.querySelector('.flex-shrink-0.overflow-x-hidden.dark.bg-gray-900')
+      // let mainNavBarVisible = "hidden";
+      // if (mainNavBar){
+      //   mainNavBarVisible = mainNavBar.style.visibility;
+      //   //log("navbarVisible:",mainNavBarVisible, "navmain:",mainNavBar);
+      // }
+      let mainSvgDiv = document.getElementById("mainSvgDiv")
+      states.mainButton.isThereNavbar = !!navbar;
+      if (states.mainButton.isThereNavbar) {
+        if (mainNavBar.style.visibility !== 'hidden' && mainSvgDiv.style.display === 'none') {
+
+          let navbarRect = navbar.getBoundingClientRect();
+          let mouseX = e.clientX;
+          let mouseY = e.clientY;
+
+          states.mainButton.isMouseInNavbar =
+            mouseX >= navbarRect.left &&
+            mouseX <= navbarRect.right &&
+            mouseY >= navbarRect.top &&
+            mouseY <= navbarRect.bottom;
+
+          if (states.mainButton.isMouseInNavbar && !states.mainButton.canNotEnterNavbar) {
+            if (!states.mainButton.isMainTreeBtnInNavbar) {
+              navMainButton.style.display = 'block';
+              treeMainBtn.style.display = 'none';
+              states.mainButton.isMainTreeBtnInNavbar = true;
+            }
+            return;
+          } else if (states.mainButton.isMainTreeBtnInNavbar) {
+            navMainButton.style.display = 'none';
+            treeMainBtn.style.display = 'block';
+            states.mainButton.isMainTreeBtnInNavbar = false;
+            offsetX = 15/// - rect.left;
+            offsetY = 5// - rect.top;
+          }
+        }
+      }
       ButtonOperations.hideMenu();
       let top = e.clientY - offsetY;
       let left = e.clientX - offsetX;
@@ -3741,6 +4174,7 @@
       let maxHeight = window.innerHeight;
       let elementWidth = treeMainBtn.offsetWidth;
       let elementHeight = treeMainBtn.offsetHeight;
+
       if (left < 0) {
         left = 0;
       } else if (left > maxWidth - elementWidth) {
@@ -3757,12 +4191,31 @@
       treeMainBtn.style.bottom = "auto";
     },
     onMouseUp: function () {
+      log("mouseup_in_treemainBtn!");
       isDragging = false;
-      const newSettings = {id: 'mainTreeBtnPos', left: treeMainBtn.style.left, top: treeMainBtn.style.top};
-      dbOperations.updateUserSettings(newSettings).then(() => {
-      }).catch(error => {
-        console.error("Error saving Change:", error);
-      });
+      if (states.mainButton.isMainTreeBtnInNavbar !== true) {
+        const newSettings = {
+          id: 'mainTreeBtnPos',
+          left: treeMainBtn.style.left,
+          top: treeMainBtn.style.top,
+          isInNavbar: false
+        };
+        dbOperations.updateUserSettings(newSettings).then(() => {
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      } else {
+        const newSettings = {
+          id: 'mainTreeBtnPos',
+          left: treeMainBtn.style.left,
+          top: treeMainBtn.style.top,
+          isInNavbar: true
+        };
+        dbOperations.updateUserSettings(newSettings).then(() => {
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      }
       window.removeEventListener("mousemove", ButtonOperations.onMouseMove);
       window.removeEventListener("mouseup", ButtonOperations.onMouseUp);
     },
@@ -3773,7 +4226,8 @@
         ButtonOperations.hideMenu();
       }
     },
-    showMenu: function () {
+    showMenu: function (fromNavbar = 0) {
+      log("mouseEnter!, fromNavbar:", fromNavbar);
       if (isDragging) return;
       isMouseOver = true;
       if (menu) return;
@@ -3781,6 +4235,7 @@
       let updateCurrentConversationTreeText = translate("updateCurrentConversationTree");
       let adjustBackgroundColorAndOpacityText = translate("adjustBackgroundColorAndOpacity");
       let toggleConversationTreeText = translate("toggleConversationTree");
+
       function rgbToHex(rgb) {
         let match = rgb.match(/\d+/g);
         if (match) {
@@ -3797,20 +4252,30 @@
       let opacity = parseFloat(treeMainBtn.style.opacity);
       log("color:", hexColor, 'opacity:', opacity);
 
-      menu.innerHTML = `
-    <button class='menu-option' id='opt_updateTree' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${updateCurrentConversationTreeText}</button>
-    <button class='menu-option' id='adjustOption' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
-    <button class='menu-option' id='showSvg' style='width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
+      menu.innerHTML = states.url.isForLiveValidURL ?
+
+        `
+    <button class='menu-option' id='opt_updateTree' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${updateCurrentConversationTreeText}</button>
+    <button class='menu-option' id='adjustOption' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
+    <button class='menu-option' id='showSvg' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
     <input type='range' id='mainBtnOpacityPicker' style='display:none;' min='20' max='100' value=${opacity * 100}>
     <input type='color' id='mainBtnColorPicker' style='display:none;' value=${hexColor}>
-`;
+`
+        :
+        `
+    <button class='menu-option' id='adjustOption' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
+    <button class='menu-option' id='showSvg' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
+    <input type='range' id='mainBtnOpacityPicker' style='color: white; display:none;' min='20' max='100' value=${opacity * 100}>
+    <input type='color' id='mainBtnColorPicker' style='display:none;' value=${hexColor}>
+`
+      ;
 
       menu.style.position = "fixed";
       menu.style.zIndex = "10000";
       menu.style.backgroundColor = "transparent";
       menu.style.border = "none";
       document.body.appendChild(menu);
-      ButtonOperations.positionMenu();
+      ButtonOperations.positionMenu(fromNavbar);
       const menuOptions = menu.querySelectorAll('.menu-option');
       menuOptions.forEach((el, index) => {
         el.style.transition = 'all 400ms ease-out';
@@ -3945,7 +4410,11 @@
             log("没有检测到Div!请刷新页面获取对话信息!");
             return;
           }
-          setTimeout(() => treeOperation.initializeChatTree(), 1000);
+          setTimeout(() => {
+            //if (confirm("This will delete previous comments!")) {
+            treeOperation.initializeChatTree()
+            //}
+          }, 100);
         } else {
           log("按钮点击而开始更新树!但是条件不允许!states:", states);
         }
@@ -4031,9 +4500,17 @@
       }, duration);
     },
 
-    positionMenu: function () {
-      let rect = treeMainBtn.getBoundingClientRect();
-      let menuLeft = rect.left - 15;
+    positionMenu: function (fromNavbar = 0) {
+      log("in_position:,fromNavbar", fromNavbar);
+
+      let rect;
+      if (!fromNavbar) {
+        rect = treeMainBtn.getBoundingClientRect();
+      } else {
+        rect = navMainButton.getBoundingClientRect();
+      }
+      log("rect:", rect);
+      let menuLeft = fromNavbar ? rect.left + 15 : rect.left - 15;
       menu.style.top = `${rect.bottom}px`;
       menu.style.left = `${menuLeft}px`;
       menu.style.width = `${rect.width}px`;
@@ -4042,6 +4519,7 @@
     onColorChange: function (e) {
       const color = e.target.value;
       treeMainBtn.style.backgroundColor = color;
+      navMainButton.style.backgroundColor = color;
       if (menu) {
         document.querySelectorAll('.menu-option').forEach(el => {
           el.style.backgroundColor = color;
@@ -4156,12 +4634,12 @@
       svg = initSvgAndGradient.createSvg(d3.select("body"), {}, "100%", "100%", true, "mainSvg");
       svgThumbnail = initSvgAndGradient.createSvg(d3.select("body"), initSvgAndGradient.thumbnailStyles, "0px", "0px", false, "thumbnailSvg");
       let mainSvg = document.getElementById('mainSvg');
-      if(mainSvg){
+      if (mainSvg) {
         mainSvg.style.background = GlobalUserSettings.MainSVGBackground ? GlobalUserSettings.MainSVGBackground : DEFAULT_MAINSVG_BACKGROUND;
       }
       defs = svg.append("defs");
-      initSvgAndGradient.createLinearGradient(defs, "chatgptGradient", "#34aeeb", "#0a87d8");
-      initSvgAndGradient.createLinearGradient(defs, "userGradient", "#ffc085", "#ff7f00");
+      initSvgAndGradient.createLinearGradient(defs, "DEFAULT_CHATGPT_GRADIENT", "#34aeeb", "#0a87d8");
+      initSvgAndGradient.createLinearGradient(defs, "DEFAULT_USER_GRADIENT", "#ffc085", "#ff7f00");
 
       gLinks = svg.append("g");
       gNodes = svg.append("g");
@@ -4176,23 +4654,20 @@
       }, {passive: false});
 
       window.addEventListener("resize", function () {
+        if (treeMainBtn) {
+          const maxX = window.innerWidth - treeMainBtn.offsetWidth;
+          const maxY = window.innerHeight - treeMainBtn.offsetHeight;
 
-        let treeMainButton = document.getElementById("chatTreeBtn");
-
-        if (treeMainButton) {
-          const maxX = window.innerWidth - treeMainButton.offsetWidth;
-          const maxY = window.innerHeight - treeMainButton.offsetHeight;
-
-          let left = parseInt(treeMainButton.style.left);
-          let top = parseInt(treeMainButton.style.top);
+          let left = parseInt(treeMainBtn.style.left);
+          let top = parseInt(treeMainBtn.style.top);
 
           left = Math.min(maxX, Math.max(0, left));
           top = Math.min(maxY, Math.max(0, top));
 
-          treeMainButton.style.left = left + "px";
-          treeMainButton.style.top = top + "px";
-          treeMainButton.style.right = "auto";
-          treeMainButton.style.bottom = "auto";
+          treeMainBtn.style.left = left + "px";
+          treeMainBtn.style.top = top + "px";
+          treeMainBtn.style.right = "auto";
+          treeMainBtn.style.bottom = "auto";
         }
 
         let contentDiv = document.getElementById("contentDiv");
@@ -4226,7 +4701,6 @@
     }
   }
   initSvgAndGradient.Visualizationinit(conversationData.rootNode);
-
 
   //dragAndZoomKits
   const dragAndZoomKits = {
@@ -4374,6 +4848,10 @@
       .attr("y2", d => (d.target.y - yRange[0]) * thumbScale + yOffset)
       .style("stroke", "#aaa");
 
+
+    let userGradient = states.colorSetting.customUser.is ? states.colorSetting.customUser.url : "url(#DEFAULT_USER_GRADIENT)";
+    let chatGPTGradient = states.colorSetting.customChatGPT.is ? states.colorSetting.customChatGPT.url : "url(#DEFAULT_CHATGPT_GRADIENT)";
+
     svgThumbnail.selectAll(".node")
       .data(root.descendants())
       .enter().append("circle")
@@ -4382,7 +4860,7 @@
       .attr("cy", d => (d.y - yRange[0]) * thumbScale + yOffset)
       .attr("r", 2)
       .style("fill", d => {
-        return d.data.type === "用户" ? "url(#userGradient)" : "url(#chatgptGradient)";
+        return d.data.type === "用户" ? userGradient : chatGPTGradient;
       });
 
     const transform = d3.zoomTransform(svg.node());
@@ -4469,10 +4947,13 @@
       .attr("dy", ".35em")
       .style("font-size", "12px");
 
+    let userGradient = states.colorSetting.customUser.is ? states.colorSetting.customUser.url : "url(#DEFAULT_USER_GRADIENT)";
+    let chatGPTGradient = states.colorSetting.customChatGPT.is ? states.colorSetting.customChatGPT.url : "url(#DEFAULT_CHATGPT_GRADIENT)";
+
     d3.selectAll(".node circle.chatgpt")
-      .style("fill", "url(#chatgptGradient)");
+      .style("fill", chatGPTGradient);
     d3.selectAll(".node circle.用户")
-      .style("fill", "url(#userGradient)");
+      .style("fill", userGradient);
 
 
     nodesEnter.append("text")
@@ -5033,7 +5514,7 @@
       //   window.addEventListener("mousemove", ButtonOperations.onMouseMove);
       //   window.addEventListener("mouseup", ButtonOperations.onMouseUp);
       // },
-      function moveContentDiv  (e) {
+      function moveContentDiv(e) {
         if (isRightMouseDown || isLeftMouseDown) {
           ButtonOperations.hideMenu();
           let top = e.clientY - offsetY;
@@ -5063,6 +5544,7 @@
           ContentKit.positionCommentFormRelativeToContentDiv();
         }
       }
+
       // function moveContentDiv(e) {
       //   if (isRightMouseDown || isLeftMouseDown) {
       //     const dx = e.clientX - initialMouseX;
@@ -5415,8 +5897,20 @@
   let settingsContainer = document.createElement('div');
   let rightMiddleContainer = document.createElement('div');
   let colorSelectDiv = document.createElement('div');
-  const tooltipDiv = document.createElement('div');
+  let languageSelectDiv = document.createElement('div');
+  let WeChatDiv = document.createElement('div');
+  let TencentDiv = document.createElement('div');
+  const WeChatPicDiv = document.createElement('div');
+  const TencentPicDiv = document.createElement('div');
+  const feedBackPicDiv = document.createElement('div');
   let rightMiddleMenu = document.createElement("div");
+  let toggleMainBtnMovingAccessbility = document.createElement("div");
+
+
+  let languageContainer = document.createElement('div');
+  let languageSelect = document.createElement('select');
+
+
 
   let scaleIncrementSmall = 0.1;
   let scaleIncrementLarge = 0.3;
@@ -5427,6 +5921,12 @@
   let undoStack = [];
   let redoStack = [];
   let newOperation = {};
+
+
+  let redForEnterable = `
+      <svg viewBox="-3 -3 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-tree" fill="#000000" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>929</title> <defs> </defs> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M14.779,12.18 L11.795,8.501 C11.795,8.501 13.396,8.937 13.57,8.937 C14.035,8.937 13.765,8.42 13.57,8.223 L11.185,5.192 C11.185,5.192 12.333,4.918 12.75,4.918 C13.168,4.918 12.947,4.401 12.75,4.204 L9.4,0.061 C9.203,-0.136 8.883,-0.136 8.686,0.061 L5.291,4.161 C5.093,4.358 4.805,4.876 5.291,4.876 C5.777,4.876 6.913,5.192 6.913,5.192 L4.325,8.079 C4.127,8.276 3.768,8.793 4.325,8.793 C4.644,8.793 6.275,8.502 6.275,8.502 L3.317,12.189 C3.12,12.385 2.76,12.903 3.317,12.903 C3.874,12.903 8.008,11.896 8.008,11.896 L8.008,14.941 C8.008,15.478 8.444,15.914 8.983,15.914 C9.52,15.914 9.998,15.478 9.998,14.941 L9.998,11.896 C9.998,11.896 14.373,12.895 14.778,12.895 C15.183,12.895 14.976,12.376 14.779,12.18 L14.779,12.18 Z" fill="#ff6600" class="si-glyph-fill"> </path> </g> </g></svg>
+`;
+  let greenForNotEnter = `<svg viewBox="-3 -3 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="si-glyph si-glyph-tree" fill="#000000" stroke="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <title>929</title> <defs> </defs> <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"> <path d="M14.779,12.18 L11.795,8.501 C11.795,8.501 13.396,8.937 13.57,8.937 C14.035,8.937 13.765,8.42 13.57,8.223 L11.185,5.192 C11.185,5.192 12.333,4.918 12.75,4.918 C13.168,4.918 12.947,4.401 12.75,4.204 L9.4,0.061 C9.203,-0.136 8.883,-0.136 8.686,0.061 L5.291,4.161 C5.093,4.358 4.805,4.876 5.291,4.876 C5.777,4.876 6.913,5.192 6.913,5.192 L4.325,8.079 C4.127,8.276 3.768,8.793 4.325,8.793 C4.644,8.793 6.275,8.502 6.275,8.502 L3.317,12.189 C3.12,12.385 2.76,12.903 3.317,12.903 C3.874,12.903 8.008,11.896 8.008,11.896 L8.008,14.941 C8.008,15.478 8.444,15.914 8.983,15.914 C9.52,15.914 9.998,15.478 9.998,14.941 L9.998,11.896 C9.998,11.896 14.373,12.895 14.778,12.895 C15.183,12.895 14.976,12.376 14.779,12.18 L14.779,12.18 Z" fill="#08aa13" class="si-glyph-fill"> </path> </g> </g></svg>`;
 
   const settingsKit = {
     init: function () {
@@ -5495,40 +5995,83 @@
       colorSelectDiv.innerText = '🎨';
       rightMiddleContainer.appendChild(colorSelectDiv);
 
-      //rightMiddleDiv.style.display = 'block';
-      if (globalUserLang.startsWith('zh')) {
-        tooltipDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 29%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
-    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
-        <span class="block text-center font-medium normal-case text-white text-sm mb-2">点击参与问卷调查 (腾讯问卷)</span>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 100px; height: 100px; display: block; margin: auto;">
-        </div>
-        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
-        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
-    </div>
-</div>`;
-      } else {
-        tooltipDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 28%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
-    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
-        <p class="block text-center font-medium normal-case text-white text-sm mb-2">Click to take the survey</br>(Google Forms)</p>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 100px; height: 100px; display: block; margin: auto;">
-        </div>
-        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
-        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
-    </div>
-</div>`;
-      }
-      tooltipDiv.style.display = 'none';
-      rightMiddleContainer.appendChild(tooltipDiv);
+      languageSelectDiv.id = "languageSelectDiv";
+      languageSelectDiv.className = "rightMiddleDiv";
+      languageSelectDiv.innerText = globalUserLang;
+      languageSelectDiv.style.fontSize = '12px';
+
+      rightMiddleContainer.appendChild(languageSelectDiv);
+
+      WeChatDiv.id = "WeChatDiv";
+      WeChatDiv.className = "rightMiddleDiv";
+      WeChatDiv.innerHTML =
+      `
+      <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="-7.582815 -10.290675 65.71773 61.74405"><defs><linearGradient gradientUnits="userSpaceOnUse" gradientTransform="scale(1.06228 .94137)" id="a" y2=".1504" x2="17.2422" y1="32.4312" x1="17.2422"><stop offset="0%" stop-color="#78D431"/><stop offset="100%" stop-color="#9EEE69"/><stop offset="100%" stop-color="#9EEE69"/></linearGradient><linearGradient gradientUnits="userSpaceOnUse" gradientTransform="scale(1.05667 .94637)" id="b" y2="14.6966" x2="33.4727" y1="41.634" x1="33.4727"><stop offset="0%" stop-color="#E4E6E6"/><stop offset="100%" stop-color="#F5F5FF"/></linearGradient></defs><g fill="none"><path fill="url(#a)" d="M0 15.3063c0 4.5919 2.4846 8.787 6.3245 11.5648.3388.2267.5082.5669.5082 1.0204 0 .1134-.0565.2835-.0565.3968-.2823 1.1338-.7906 3.0046-.847 3.0613-.0565.17-.113.2834-.113.4535 0 .3402.2824.6236.6212.6236.113 0 .2259-.0567.3388-.1134l4.0093-2.3243c.2823-.17.6211-.2834.96-.2834.1693 0 .3952 0 .5646.0567 1.8635.5669 3.8963.8503 5.9857.8503 10.1078 0 18.2957-6.8595 18.2957-15.3063S28.4035 0 18.2958 0C8.1879 0 0 6.8595 0 15.3063"/><path fill="url(#b)" d="M35.3424 39.6205c1.7463 0 3.4363-.2284 4.9572-.6854.1127-.057.2817-.057.4507-.057.2817 0 .5633.1142.7887.2284l3.3236 1.942c.1126.057.169.1142.2816.1142.2817 0 .507-.2285.507-.514 0-.1143-.0563-.2285-.0563-.3999 0-.0571-.4507-1.5992-.676-2.5702-.0563-.1142-.0563-.2285-.0563-.3427 0-.3427.169-.6283.4506-.8568 3.211-2.3417 5.239-5.8258 5.239-9.7097 0-7.0824-6.8163-12.851-15.2098-12.851s-15.2097 5.7115-15.2097 12.851c0 7.0824 6.8162 12.8511 15.2097 12.8511z"/><path fill="#187E28" d="M14.5484 10.3647c0 1.3223-1.0389 2.369-2.3512 2.369-1.3124 0-2.3513-1.0467-2.3513-2.369 0-1.3223 1.039-2.369 2.3513-2.369 1.3123 0 2.3512 1.0467 2.3512 2.369m12.1972 0c0 1.3223-1.039 2.369-2.3513 2.369-1.3123 0-2.3512-1.0467-2.3512-2.369 0-1.3223 1.039-2.369 2.3512-2.369 1.3124 0 2.3513 1.0467 2.3513 2.369"/><path fill="#858C8C" d="M38.502 22.8023c0 1.1517.9143 2.073 2.0573 2.073 1.143 0 2.0573-.9213 2.0573-2.073 0-1.1516-.9144-2.0729-2.0573-2.0729-1.143 0-2.0574.9213-2.0574 2.073m-10.1398 0c0 1.1516.9144 2.0729 2.0573 2.0729 1.143 0 2.0574-.9213 2.0574-2.073 0-1.1516-.9144-2.0729-2.0574-2.0729-1.143 0-2.0573.9213-2.0573 2.073"/></g></svg>
+      `
+      ;
+      rightMiddleContainer.appendChild(WeChatDiv);
+
+      TencentDiv.id = "TencentDiv";
+      TencentDiv.className = "rightMiddleDiv";
+      TencentDiv.innerHTML =
+        `
+        <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="-18.15 -35.9725 157.3 215.835"><path fill="#faab07" d="M60.503 142.237c-12.533 0-24.038-4.195-31.445-10.46-3.762 1.124-8.574 2.932-11.61 5.175-2.6 1.918-2.275 3.874-1.807 4.663 2.056 3.47 35.273 2.216 44.862 1.136zm0 0c12.535 0 24.039-4.195 31.447-10.46 3.76 1.124 8.573 2.932 11.61 5.175 2.598 1.918 2.274 3.874 1.805 4.663-2.056 3.47-35.272 2.216-44.862 1.136zm0 0"/><path d="M60.576 67.119c20.698-.14 37.286-4.147 42.907-5.683 1.34-.367 2.056-1.024 2.056-1.024.005-.189.085-3.37.085-5.01C105.624 27.768 92.58.001 60.5 0 28.42.001 15.375 27.769 15.375 55.401c0 1.642.08 4.822.086 5.01 0 0 .583.615 1.65.913 5.19 1.444 22.09 5.65 43.312 5.795zm56.245 23.02c-1.283-4.129-3.034-8.944-4.808-13.568 0 0-1.02-.126-1.537.023-15.913 4.623-35.202 7.57-49.9 7.392h-.153c-14.616.175-33.774-2.737-49.634-7.315-.606-.175-1.802-.1-1.802-.1-1.774 4.624-3.525 9.44-4.808 13.568-6.119 19.69-4.136 27.838-2.627 28.02 3.239.392 12.606-14.821 12.606-14.821 0 15.459 13.957 39.195 45.918 39.413h.848c31.96-.218 45.917-23.954 45.917-39.413 0 0 9.368 15.213 12.607 14.822 1.508-.183 3.491-8.332-2.627-28.021"/><path fill="#fff" d="M49.085 40.824c-4.352.197-8.07-4.76-8.304-11.063-.236-6.305 3.098-11.576 7.45-11.773 4.347-.195 8.064 4.76 8.3 11.065.238 6.306-3.097 11.577-7.446 11.771m31.133-11.063c-.233 6.302-3.951 11.26-8.303 11.063-4.35-.195-7.684-5.465-7.446-11.77.236-6.305 3.952-11.26 8.3-11.066 4.352.197 7.686 5.468 7.449 11.773"/><path fill="#faab07" d="M87.952 49.725C86.79 47.15 75.077 44.28 60.578 44.28h-.156c-14.5 0-26.212 2.87-27.375 5.446a.863.863 0 00-.085.367.88.88 0 00.16.496c.98 1.427 13.985 8.487 27.3 8.487h.156c13.314 0 26.319-7.058 27.299-8.487a.873.873 0 00.16-.498.856.856 0 00-.085-.365"/><path d="M54.434 29.854c.199 2.49-1.167 4.702-3.046 4.943-1.883.242-3.568-1.58-3.768-4.07-.197-2.492 1.167-4.704 3.043-4.944 1.886-.244 3.574 1.58 3.771 4.07m11.956.833c.385-.689 3.004-4.312 8.427-2.993 1.425.347 2.084.857 2.223 1.057.205.296.262.718.053 1.286-.412 1.126-1.263 1.095-1.734.875-.305-.142-4.082-2.66-7.562 1.097-.24.257-.668.346-1.073.04-.407-.308-.574-.93-.334-1.362"/><path fill="#fff" d="M60.576 83.08h-.153c-9.996.12-22.116-1.204-33.854-3.518-1.004 5.818-1.61 13.132-1.09 21.853 1.316 22.043 14.407 35.9 34.614 36.1h.82c20.208-.2 33.298-14.057 34.616-36.1.52-8.723-.087-16.035-1.092-21.854-11.739 2.315-23.862 3.64-33.86 3.518"/><path fill="#eb1923" d="M32.102 81.235v21.693s9.937 2.004 19.893.616V83.535c-6.307-.357-13.109-1.152-19.893-2.3"/><path fill="#eb1923" d="M105.539 60.412s-19.33 6.102-44.963 6.275h-.153c-25.591-.172-44.896-6.255-44.962-6.275L8.987 76.57c16.193 4.882 36.261 8.028 51.436 7.845h.153c15.175.183 35.242-2.963 51.437-7.845zm0 0"/></svg>
+        `;
+      rightMiddleContainer.appendChild(TencentDiv);
+
+
+      languageContainer.className="language-container";
+      languageContainer.style.position = 'fixed';
+      languageContainer.style.display = 'none';
+      languageSelect.id = 'languageSelect';
+      languageSelect.className= "language-dropdown";
+      let languages = ['ar', 'bg', 'ckb', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es', 'fi', 'fr', 'fr-CA'
+      , 'he', 'hu', 'id', 'it', 'ja', 'ka', 'ko', 'nb', 'nl', 'pl', 'pt-PT', 'pt-BR', 'ro', 'ru', 'sk'
+      , 'sr', 'sv', 'th', 'tr', 'uk', 'ug', 'vi', 'zh-CN', 'zh-TW', 'zh-HK', 'zh-SG']
+      languages.forEach(lang => {
+        let option = document.createElement('option');
+        option.value = lang;
+        option.innerText = lang;
+        if (lang === globalUserLang) {
+          option.selected = true;
+        }
+        languageSelect.appendChild(option);
+      });
+      languageContainer.appendChild(languageSelect);
+      rightMiddleContainer.appendChild(languageContainer);
+
+
+      toggleMainBtnMovingAccessbility.id = "toggleMainBtnMovingAccessbility";
+      toggleMainBtnMovingAccessbility.className = "rightAlwaysShownDiv";
+      //toggleMainBtnMovingAccessbility.innerHTML= states.mainButton.canNotEnterNavbar ?greenForNotEnter  : redForEnterable;
+      toggleMainBtnMovingAccessbility.addEventListener('click', ButtonOperations.toggleStickyMainBtn)
+      document.body.appendChild(toggleMainBtnMovingAccessbility);
+
+      feedBackPicDiv.style.display = 'none';
+      rightMiddleContainer.appendChild(feedBackPicDiv);
+      WeChatPicDiv.style.display = 'none';
+      rightMiddleContainer.appendChild(WeChatPicDiv);
+      TencentPicDiv.style.display = 'none';
+      rightMiddleContainer.appendChild(TencentPicDiv);
+
 
       document.body.appendChild(settingsContainer);
       document.body.appendChild(rightMiddleContainer);
 
     },
-    toggleColorSelectShow: function() {
+    toggleLanguageSelectShow: function () {
+      if (languageContainer.style.display !== 'none') {
+        languageContainer.style.display = 'none';
+        return;
+      }
+      languageContainer.style.display = 'flex';
+      document.addEventListener('click', (e) => {
+        if (!rightMiddleContainer.contains(e.target)) {
+          languageContainer.style.display = 'none';
+        }
+      });
+    },
+    toggleColorSelectShow: function () {
       if (rightMiddleMenu.style.display === 'flex') {
         rightMiddleMenu.style.display = 'none';
         return;
@@ -5539,6 +6082,7 @@
           rightMiddleMenu.style.display = 'none';
         }
       });
+
       function rgbToHex(rgb) {
         const result = /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/.exec(rgb);
         return result
@@ -5593,20 +6137,51 @@
                     <input type='color' id='SVGColorBottomPicker'>
                 </div>
             </div>
-<!--            <div class="color-group">-->
-<!--                <label>ChatGPT</label>-->
-<!--                <div>-->
-<!--                    <input type='color' id='chatGPTColorPicker'>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="color-group">-->
-<!--                <label>User</label>-->
-<!--                <div>-->
-<!--                    <input type='color' id='userColorPicker'>-->
-<!--                </div>-->
-<!--            </div>-->
+            <div class="color-group">
+                <label>ChatGPT</label>
+                <div>
+                    <input type='color' id='chatGPTColorTopPicker'>
+                </div>
+                <div>
+                    <input type='color' id='chatGPTColorBottomPicker'>
+                </div>
+            </div>
+            <div class="color-group">
+                <label>User</label>
+                <div>
+                    <input type='color' id='userColorTopPicker'>
+                </div>
+                <div>
+                    <input type='color' id='userColorBottomPicker'>
+                </div>
+            </div>
         </div>
     `;
+      let SVGOpacityPicker = document.getElementById('SVGOpacityPicker');
+
+      let SVGColorTopPicker = document.getElementById('SVGColorTopPicker');
+      let SVGColorBottomPicker = document.getElementById('SVGColorBottomPicker');
+      let chatGPTColorTopPicker = document.getElementById('chatGPTColorTopPicker');
+      let chatGPTColorBottomPicker = document.getElementById('chatGPTColorBottomPicker');
+      let userColorTopPicker = document.getElementById('userColorTopPicker');
+      let userColorBottomPicker = document.getElementById('userColorBottomPicker');
+
+      //改变
+      SVGOpacityPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGOpacityChange);
+
+      SVGColorTopPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorTopChange);
+      SVGColorBottomPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorBottomChange);
+      // chatGPTColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onChatGPTColorChange);
+      // userColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onUserColorChange);
+
+      //改完
+      SVGOpacityPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGOpacityChangeDone);
+      SVGColorTopPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorTopChangeDone);
+      SVGColorBottomPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorBottomChangeDone);
+      chatGPTColorTopPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onChatGPTColorTopPickerChangeDone);
+      chatGPTColorBottomPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onChatGPTColorBottomPickerChangeDone);
+      userColorTopPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onUserColorTopPickerChangeDone);
+      userColorBottomPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onUserColorBottomPickerChangeDone);
 
       let mainSvg = document.getElementById('mainSvg');
       if (mainSvg) {
@@ -5621,36 +6196,18 @@
         let opacityMatch = topColor.match(/rgba?\(\d{1,3}, \d{1,3}, \d{1,3}, ([\d\.]+)\)/);
         let opacity = opacityMatch ? parseFloat(opacityMatch[1]) * 100 : 100; // 将 opacity 转换回百分比
 
-        log("opacity:",opacity);
-        log("color:",rgbToHex(topColor));
-        document.getElementById('SVGOpacityPicker').value = opacity;
-        document.getElementById('SVGColorTopPicker').value = rgbToHex(topColor);
-        document.getElementById('SVGColorBottomPicker').value = rgbToHex(bottomColor);
+        log("opacity:", opacity);
+        log("color:", rgbToHex(topColor));
+        SVGOpacityPicker.value = opacity;
+        SVGColorTopPicker.value = rgbToHex(topColor);
+        SVGColorBottomPicker.value = rgbToHex(bottomColor);
+        chatGPTColorTopPicker.value = states.colorSetting.customChatGPT.top;
+        chatGPTColorBottomPicker.value = states.colorSetting.customChatGPT.bottom;
+        userColorTopPicker.value = states.colorSetting.customUser.top;
+        userColorBottomPicker.value = states.colorSetting.customUser.bottom;
       }
 
-      let SVGOpacityPicker = document.getElementById('SVGOpacityPicker');
-
-      let SVGColorTopPicker = document.getElementById('SVGColorTopPicker');
-      let SVGColorBottomPicker = document.getElementById('SVGColorBottomPicker');
-      let chatGPTColorPicker = document.getElementById('chatGPTColorPicker');
-      let userColorPicker = document.getElementById('userColorPicker');
-
-      //改变
-      SVGOpacityPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGOpacityChange);
-
-      SVGColorTopPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorTopChange);
-      SVGColorBottomPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onSVGColorBottomChange);
-      // chatGPTColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onChatGPTColorChange);
-      // userColorPicker.addEventListener('input', settingsKit.colorAndOpacityKit.onUserColorChange);
-
-      //改完
-      SVGOpacityPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGOpacityChangeDone);
-      SVGColorTopPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorTopChangeDone);
-      SVGColorBottomPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onSVGColorBottomChangeDone);
-      // chatGPTColorPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onChatGPTColorChangeDone);
-      // userColorPicker.addEventListener('change', settingsKit.colorAndOpacityKit.onUserColorChangeDone);
-
-    },
+     },
 
     colorAndOpacityKit: {
 
@@ -5671,7 +6228,7 @@
         }
         return DEFAULT_MAINSVG_BACKGROUND;
       },
-      hexToRgb:function (hex) {
+      hexToRgb: function (hex) {
         var bigint = parseInt(hex.substring(1), 16);
         var r = (bigint >> 16) & 255;
         var g = (bigint >> 8) & 255;
@@ -5698,7 +6255,7 @@
         }
         return DEFAULT_MAINSVG_BACKGROUND;
       },
-      onSVGColorBottomChange: function(e) {
+      onSVGColorBottomChange: function (e) {
         const color = e.target.value;
         let mainSvg = document.getElementById('mainSvg');
         if (mainSvg) {
@@ -5743,11 +6300,95 @@
           console.error("Error saving Change:", error);
         });
       },
+
+      onChatGPTColorTopPickerChangeDone: function(e){
+        log("ChangeDone!");
+        states.colorSetting.customChatGPT.is = true;
+        // 移除现有的渐变
+       // const existingGradient = defs.querySelector('#CUSTOM_USER_GRADIENT');
+        const defsNode = defs.node();
+        const existingGradient = defsNode.querySelector('#CUSTOM_CHATGPT_GRADIENT');
+        if (existingGradient) {
+          defsNode.removeChild(existingGradient);
+        }
+        states.colorSetting.customChatGPT.top = e.target.value.toString();
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", states.colorSetting.customChatGPT.bottom ,states.colorSetting.customChatGPT.top);
+        drawMainSVG();
+
+        const newSettings = {id: 'chatGPTColor', state: states.colorSetting.customChatGPT};
+        log("newGPTSetting:",newSettings);
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+      onChatGPTColorBottomPickerChangeDone: function(e){
+        log("ChangeDone!");
+        states.colorSetting.customChatGPT.is = true;
+        // 移除现有的渐变
+        const defsNode = defs.node();
+        const existingGradient = defsNode.querySelector('#CUSTOM_CHATGPT_GRADIENT');
+        if (existingGradient) {
+          defsNode.removeChild(existingGradient);
+        }
+        states.colorSetting.customChatGPT.bottom = e.target.value.toString();
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT",states.colorSetting.customChatGPT.bottom ,states.colorSetting.customChatGPT.top);
+        drawMainSVG();
+        const newSettings = {id: 'chatGPTColor', state: states.colorSetting.customChatGPT};
+        log("newGPTSetting:",newSettings);
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+      onUserColorTopPickerChangeDone: function(e){
+        log("ChangeDone!");
+        states.colorSetting.customUser.is = true;
+        // 移除现有的渐变
+        const defsNode = defs.node();
+        const existingGradient = defsNode.querySelector('#CUSTOM_USER_GRADIENT');
+        if (existingGradient) {
+          defsNode.removeChild(existingGradient);
+        }
+        states.colorSetting.customUser.top = e.target.value.toString();
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",states.colorSetting.customUser.bottom ,states.colorSetting.customUser.top);
+        drawMainSVG();
+        const newSettings = {id: 'userColor', state: states.colorSetting.customUser};
+        log("newUserSetting:",newSettings);
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      },
+      onUserColorBottomPickerChangeDone: function(e){
+        log("ChangeDone!");
+        states.colorSetting.customUser.is = true;
+        // 移除现有的渐变
+        const defsNode = defs.node();
+        const existingGradient = defsNode.querySelector('#CUSTOM_USER_GRADIENT');
+        if (existingGradient) {
+          defsNode.removeChild(existingGradient);
+        }
+        states.colorSetting.customUser.bottom = e.target.value.toString();
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",states.colorSetting.customUser.bottom ,states.colorSetting.customUser.top);
+        drawMainSVG();
+        const newSettings = {id: 'userColor', state: states.colorSetting.customUser};
+        log("newUserSetting:",newSettings);
+        dbOperations.updateUserSettings(newSettings).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      }
     },
 
 
     addEventListeners: function () {
 
+      languageSelectDiv.addEventListener('click', settingsKit.toggleLanguageSelectShow);
       colorSelectDiv.addEventListener('click', settingsKit.toggleColorSelectShow);
       feedbackDiv.addEventListener('click', () => {
         // 检测用户的语言设置
@@ -5758,41 +6399,78 @@
         }
       });
 
-      let feedbackTimeOut;
-      feedbackDiv.addEventListener('mouseenter', function (e) {
-        log("feedbackDiv mouseover");
-        clearTimeout(feedbackTimeOut);
-        let elements = [feedbackDiv, tooltipDiv];
-        elements.forEach(element => {
-          element.style.display = 'flex';
-        });
-      });
-      tooltipDiv.addEventListener('mouseenter', function (e) {
-        log("tooltipDiv mouseover");
-        clearTimeout(feedbackTimeOut);
-        tooltipDiv.style.display = 'block';
-      });
-      feedbackDiv.addEventListener('mouseleave', function () {
-        log("feedbackDiv mouseleave");
-        feedbackTimeOut = setTimeout(() => {
-          tooltipDiv.style.display = 'none';
-        }, 400);
-      });
-      tooltipDiv.addEventListener('mouseleave', function (e) {
-        log("tooltipDiv mouseleave");
-        feedbackTimeOut = setTimeout(() => {
-          tooltipDiv.style.display = 'none';
-        }, 400);
-      });
-      settingsDiv.addEventListener('click', function (e) {
-        log("settingsContainer click");
-        let elements = document.querySelectorAll('.actionDiv');
-        if(deleteDiv.style.display !== 'flex') {
+      function handleMouseEvents(mainDiv, picDiv) {
+        let disappearTimeOut;
+
+        mainDiv.addEventListener('mouseenter', function (e) {
+          log(mainDiv.id + " mouseover");
+          clearTimeout(disappearTimeOut);
+          let elements = [mainDiv, picDiv];
           elements.forEach(element => {
             element.style.display = 'flex';
           });
-        }
-        else{
+        });
+
+        picDiv.addEventListener('mouseenter', function (e) {
+          log(picDiv.id + " mouseover");
+          clearTimeout(disappearTimeOut);
+          picDiv.style.display = 'block';
+        });
+
+        mainDiv.addEventListener('mouseleave', function () {
+          log(mainDiv.id + " mouseleave");
+          disappearTimeOut = setTimeout(() => {
+            picDiv.style.display = 'none';
+          }, 400);
+        });
+
+        picDiv.addEventListener('mouseleave', function (e) {
+          log(picDiv.id + " mouseleave");
+          disappearTimeOut = setTimeout(() => {
+            picDiv.style.display = 'none';
+          }, 400);
+        });
+      }
+      handleMouseEvents(feedbackDiv, feedBackPicDiv);
+      handleMouseEvents(WeChatDiv, WeChatPicDiv);
+      handleMouseEvents(TencentDiv, TencentPicDiv);
+      // let feedbackTimeOut;
+      // feedbackDiv.addEventListener('mouseenter', function (e) {
+      //   log("feedbackDiv mouseover");
+      //   clearTimeout(feedbackTimeOut);
+      //   let elements = [feedbackDiv, feedBackPicDiv];
+      //   elements.forEach(element => {
+      //     element.style.display = 'flex';
+      //   });
+      // });
+      // feedBackPicDiv.addEventListener('mouseenter', function (e) {
+      //   log("feedBackPicDiv mouseover");
+      //   clearTimeout(feedbackTimeOut);
+      //   feedBackPicDiv.style.display = 'block';
+      // });
+      // feedbackDiv.addEventListener('mouseleave', function () {
+      //   log("feedbackDiv mouseleave");
+      //   feedbackTimeOut = setTimeout(() => {
+      //     feedBackPicDiv.style.display = 'none';
+      //   }, 400);
+      // });
+      // feedBackPicDiv.addEventListener('mouseleave', function (e) {
+      //   log("feedBackPicDiv mouseleave");
+      //   feedbackTimeOut = setTimeout(() => {
+      //     feedBackPicDiv.style.display = 'none';
+      //   }, 400);
+      // });
+
+
+
+      settingsDiv.addEventListener('click', function (e) {
+        log("settingsContainer click");
+        let elements = document.querySelectorAll('.actionDiv');
+        if (deleteDiv.style.display !== 'flex') {
+          elements.forEach(element => {
+            element.style.display = 'flex';
+          });
+        } else {
           elements.forEach(element => {
             element.style.display = 'none';
           });
@@ -5804,12 +6482,13 @@
       refreshTreeButton.addEventListener('click', this.refreshTree);
       undoButton.addEventListener('click', this.undo);
       redoButton.addEventListener('click', this.redo);
-      deleteDiv.addEventListener('click', function() {
+      deleteDiv.addEventListener('click', function () {
         settingsKit.handleTwoTypesOfDeleteConversationData(null, false);
-      });    },
+      });
+    },
     handleTwoTypesOfDeleteConversationData: async function (operatingLink, IsfromPanel) {
-      if(!operatingLink) {
-        if (states.treeUpdate.isDOMOperating || (!states.url.isForLiveValidURL&&!states.url.isForDeletedValidURL) || conversationData.url === null) {
+      if (!operatingLink) {
+        if (states.treeUpdate.isDOMOperating || (!states.url.isForLiveValidURL && !states.url.isForDeletedValidURL) || conversationData.url === null) {
           return;
         }
       }
@@ -5826,22 +6505,22 @@
           dbOperations.deleteConversationData(operatingURL)
             .then(() => dbOperations.initConversationData())
             .then(information => {
-              log("after_init_conversationData:",chatHistory);
+              log("after_init_conversationData:", chatHistory);
               controlPanelKit.updateCategorySelect();
-              log("before_filteredConversations:",filteredConversations);
+              log("before_filteredConversations:", filteredConversations);
 
               filteredConversations = filteredConversations.filter(aconv => {
                 return !(aconv.link === operatingURL)
               });
               controlPanelKit.renderConversations(filteredConversations);
-              log("after_filteredConversations:",filteredConversations);
+              log("after_filteredConversations:", filteredConversations);
             })
             .catch(error => {
               console.error(error);
             });
           log('Data deleted successfully');
           ButtonOperations.showUserNotification(translate("conversationDataDeleted"), 'alert');
-          if(IsfromPanel){
+          if (IsfromPanel) {
             return;
           }
           try {
@@ -6103,7 +6782,6 @@
       searchResultsCount.id = 'search-results-count';
       searchResultsCount.style.borderRadius = '3px';
       searchResultsCount.style.background = '#f1f1f1';
-      searchResultsCount.style.width = '80px';
       searchResultsCount.style.height = '32px';
       searchResultsCount.style.position = 'relative';
       searchResultsCount.style.fontSize = '10px';
@@ -6499,11 +7177,14 @@
   let categoryEditor = document.createElement('div');
   let categorySelect = document.createElement('select');
   let conversationContainer = document.createElement('div');
-  let togglePanel = document.createElement('div');
+  let right_Top_togglePanel = document.createElement('div');
+  let panelHeader = document.createElement('div');
+
+
   let filteredConversations = [];
   const controlPanelKit = {
     init: function () {
-      panelToggleButton.id = "panelToggleButton";
+      panelToggleButton.id = "panelToggleButtonSVGShow";
       panelToggleButton.innerText = translate("openAdminPanel");
       panelToggleButton.style.display = 'none';
       panelToggleButton.style.borderRadius = '12px'; // 更大的圆角
@@ -6548,11 +7229,11 @@
         .catch(error => console.error(error));
       let allCategoriesString = translate("allCategoriesFilter");
       let categories = [allCategoriesString];
-      for(let i = 0; i < chatHistory.length; i ++){
+      for (let i = 0; i < chatHistory.length; i++) {
         let curChat = chatHistory[i];
-        if(curChat.categories){
-          for(let j =0; j < curChat.categories.length; j++){
-            if(!categories.includes(curChat.categories[j]))
+        if (curChat.categories) {
+          for (let j = 0; j < curChat.categories.length; j++) {
+            if (!categories.includes(curChat.categories[j]))
               categories.push(curChat.categories[j]);
           }
         }
@@ -6565,15 +7246,12 @@
       // Append the select box to the 'categoryEditor' div
       categoryEditor.appendChild(categorySelect);
 
+      panelHeader.id = 'panelHeader';
       let translatedTitle = translate('conversationTitle');
       let translatedOption = translate('actionOptions');
       let translatedCategory = translate('conversationCategory');
       let translatedTags = translate('conversationTags');
 
-      let panelHeader = document.createElement('div');
-      panelHeader.id = 'panelHeader';
-      // panelHeader.innerHTML =
-      //   '<br><hr><hr><hr><hr><br><div class="conversation" style="display: flex; justify-content: space-between; align-items: center; background-color: #f3f4f6; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"><div class="topic-container" style="flex: 2; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;"><span class="category" style="background-color: #a0aec0; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px;">　　${translatedTitle}　　</span></div><div class="options-container" id="optionsContainer_03e7f1e764254835b3cb29c68e3827a8" style="flex: 0.7; text-align: center; background-color: #e2e8f0; padding: 5px; border-radius: 4px;">操作</div><div class="categories-container" id="categoriesContainer_03e7f1e764254835b3cb29c68e3827a8" style="flex: 1.5; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;"><span class="category" style="background-color: #a0aec0; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px;">分类</span></div><div class="tags-container" id="tagContainers_03e7f1e764254835b3cb29c68e3827a8" style="flex: 1.5; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;"><span class="chat-tree-tag" style="background-color: #a0aec0; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px;">标签</span></div></div><br><hr><hr><hr><hr>';
       panelHeader.innerHTML = `
   <br>
   <hr>
@@ -6622,27 +7300,27 @@
       // Append 'managePanel' to the document body or another container element
       document.body.appendChild(managePanel);
 
-      togglePanel.innerHTML = '×';
-      togglePanel.style.position = 'fixed';
-      togglePanel.style.fontSize = '30px';
-      togglePanel.style.top = '20px';
-      togglePanel.style.right = '20px';
-      togglePanel.style.cursor = 'pointer';
+      right_Top_togglePanel.innerHTML = '×';
+      right_Top_togglePanel.style.position = 'fixed';
+      right_Top_togglePanel.style.fontSize = '30px';
+      right_Top_togglePanel.style.top = '20px';
+      right_Top_togglePanel.style.right = '20px';
+      right_Top_togglePanel.style.cursor = 'pointer';
 
-      managePanel.appendChild(togglePanel);
+      managePanel.appendChild(right_Top_togglePanel);
       //controlPanelKit.renderConversations(chatHistory);
       controlPanelKit.addEventListeners();
     },
-    updateCategorySelect: function(){
+    updateCategorySelect: function () {
       log("inupdateSelect!");
       categorySelect.innerHTML = '';
       let allCategoriesString = translate("allCategoriesFilter");
       let categories = [allCategoriesString];
-      for(let i = 0; i < chatHistory.length; i ++){
+      for (let i = 0; i < chatHistory.length; i++) {
         let curChat = chatHistory[i];
-        if(curChat.categories){
-          for(let j =0; j < curChat.categories.length; j++){
-            if(!categories.includes(curChat.categories[j]))
+        if (curChat.categories) {
+          for (let j = 0; j < curChat.categories.length; j++) {
+            if (!categories.includes(curChat.categories[j]))
               categories.push(curChat.categories[j]);
           }
         }
@@ -6658,25 +7336,26 @@
 
       searchTopicBox.addEventListener("input", controlPanelKit.executeFilter);
       categorySelect.addEventListener('change', controlPanelKit.executeFilter);
-      togglePanel.addEventListener('click', function () {
+      right_Top_togglePanel.addEventListener('click', function () {
         managePanel.style.display = 'none';
-        panelToggleButton.style.display = 'block';
+        if (states.visualization.thumbnailSvg === "visible") {
+          panelToggleButton.style.display = 'block';
+        }
       });
     },
-    executeFilter:function(){
+    executeFilter: function () {
       const selectedCategory = categorySelect.value.toLowerCase(); // 注意转换为小写
       const query = searchTopicBox.value.toLowerCase();
       filteredConversations = chatHistory.filter(conv => {
         return conv.topic.toLowerCase().includes(query);
       });
-      if(selectedCategory !== translate('allCategoriesFilter').toLowerCase()) {
+      if (selectedCategory !== translate('allCategoriesFilter').toLowerCase()) {
         filteredConversations = filteredConversations.filter(conv => {
           return conv.categories.some(category => category.toLowerCase().includes(selectedCategory));
         });
         controlPanelKit.renderConversations(filteredConversations);
         log(`User selected category: ${selectedCategory}, filteredConversations:`, filteredConversations);
-      }
-      else {
+      } else {
         controlPanelKit.renderConversations(filteredConversations);
         log(`User selected category: ${selectedCategory}, filteredConversations:`, filteredConversations);
       }
@@ -6686,7 +7365,7 @@
       panelToggleButton.style.display = 'none';
     },
     renderConversations: function (conversations) {
-      log("in_renderConv:",conversations);
+      log("in_renderConv:", conversations);
       conversations.sort((a, b) => {
         // 比较isWholeConversationBookMarked字段
         if (a.isWholeConversationBookMarked && !b.isWholeConversationBookMarked) {
@@ -6732,7 +7411,7 @@
         const topicElem = document.createElement("h3");
         topicElem.classList.add("topic");
         const topicElem_2 = document.createElement("h3");
-        topicElem_2.innerText =  conversation_num.toString()+ '　';
+        topicElem_2.innerText = conversation_num.toString() + '　';
         topicElem.innerText = conv.topic;
         // 创建包含标题和按钮的一个容器
         const topicContainer = document.createElement("div");
@@ -6763,7 +7442,7 @@
     <path d="M11.2691 4.41115C11.5006 3.89177 11.6164 3.63208 11.7776 3.55211C11.9176 3.48263 12.082 3.48263 12.222 3.55211C12.3832 3.63208 12.499 3.89177 12.7305 4.41115L14.5745 8.54808C14.643 8.70162 14.6772 8.77839 14.7302 8.83718C14.777 8.8892 14.8343 8.93081 14.8982 8.95929C14.9705 8.99149 15.0541 9.00031 15.2213 9.01795L19.7256 9.49336C20.2911 9.55304 20.5738 9.58288 20.6997 9.71147C20.809 9.82316 20.8598 9.97956 20.837 10.1342C20.8108 10.3122 20.5996 10.5025 20.1772 10.8832L16.8125 13.9154C16.6877 14.0279 16.6252 14.0842 16.5857 14.1527C16.5507 14.2134 16.5288 14.2807 16.5215 14.3503C16.5132 14.429 16.5306 14.5112 16.5655 14.6757L17.5053 19.1064C17.6233 19.6627 17.6823 19.9408 17.5989 20.1002C17.5264 20.2388 17.3934 20.3354 17.2393 20.3615C17.0619 20.3915 16.8156 20.2495 16.323 19.9654L12.3995 17.7024C12.2539 17.6184 12.1811 17.5765 12.1037 17.56C12.0352 17.5455 11.9644 17.5455 11.8959 17.56C11.8185 17.5765 11.7457 17.6184 11.6001 17.7024L7.67662 19.9654C7.18404 20.2495 6.93775 20.3915 6.76034 20.3615C6.60623 20.3354 6.47319 20.2388 6.40075 20.1002C6.31736 19.9408 6.37635 19.6627 6.49434 19.1064L7.4341 14.6757C7.46898 14.5112 7.48642 14.429 7.47814 14.3503C7.47081 14.2807 7.44894 14.2134 7.41394 14.1527C7.37439 14.0842 7.31195 14.0279 7.18708 13.9154L3.82246 10.8832C3.40005 10.5025 3.18884 10.3122 3.16258 10.1342C3.13978 9.97956 3.19059 9.82316 3.29993 9.71147C3.42581 9.58288 3.70856 9.55304 4.27406 9.49336L8.77835 9.01795C8.94553 9.00031 9.02911 8.99149 9.10139 8.95929C9.16534 8.93081 9.2226 8.8892 9.26946 8.83718C9.32241 8.77839 9.35663 8.70162 9.42508 8.54808L11.2691 4.41115Z" stroke="#fe1616" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"></path></svg>
   </button>
 </div>
-`:
+` :
           `
 <div class="flex visible">   
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
@@ -6815,10 +7494,11 @@
 
           log("deleted_information_to_load!");
         })
-        buttons[5].addEventListener('click', function(){
+        buttons[5].addEventListener('click', function () {
           return handleBookMarks(conv, buttons[5]);
         });
-        async function handleBookMarks(conv, button){
+
+        async function handleBookMarks(conv, button) {
           //log("beforeClickIsBookMarked:", JSON.stringify(conv));
           //await sleep(1000);
 
@@ -6945,8 +7625,7 @@
           if (className === 'chatTreeTag') {
             dbOperations.addOrDeleteTagOrClassToURL(operatingURL, true, value, false);
             conv.chatTreeTags = conv.chatTreeTags.filter(tag => tag != value);
-          }
-          else{
+          } else {
             dbOperations.addOrDeleteTagOrClassToURL(operatingURL, false, value, false);
             conv.categories = conv.categories.filter(tag => tag != value);
           }
@@ -7033,4 +7712,182 @@
       });
     },
   };
+
+
+
+
+  const languageKits = {
+    init: function(e){
+      log("changeLanguageclick!");
+      if(!db){
+        return;
+      }
+
+      document.getElementById('search-results-count').innerText = '';
+
+      if(e) {
+        log("e.target.value:", e.target.value);
+        globalUserLang = e.target.value;
+        currentLangPack = getLang(globalUserLang).langPack;
+        log("currentLangPack:",currentLangPack);
+        languageSelectDiv.innerText = e.target.value;
+       // languageContainer.style.display = 'none';
+        languageKits.updateUIWithTranslations();
+        if(e.target.shouldNotSave){
+          return;
+        }
+        const newSetting = {id:"userLang", globalUserLang: globalUserLang};
+        dbOperations.updateUserSettings(newSetting).then(() => {
+          ButtonOperations.showUserNotification(translate("successSavingChanges"));
+        }).catch(error => {
+          console.error("Error saving Change:", error);
+        });
+      }
+    },
+    updateUIWithTranslations: function(){
+
+      // 获取optionsButtons元素
+      const optionsButtonsDiv = document.getElementById("optionsButtons");
+      controlPanelKit.updateCategorySelect();
+
+      if (!optionsButtonsDiv) {
+        console.error("optionsButtonsDiv not found");
+        return;
+      }
+
+      // 更新单选按钮标签
+      const radioLabels = optionsButtonsDiv.querySelectorAll("label");
+      const optionsTranslated = [translate("searchInContent"), translate("searchInComments"), translate("searchInBoth")];
+
+      radioLabels.forEach((label, index) => {
+        if (optionsTranslated[index]) {
+          log("Updating label:", label);
+          // 打印所有子节点以找到正确的文本节点索引
+          label.childNodes.forEach((child, idx) => {
+            log("Child node at index", idx, ":", child);
+          });
+          // 获取当前label中的文本节点并更新
+          const textNode = label.lastChild; // 也许我们可以直接获取最后一个子节点作为文本节点
+          if (textNode && textNode.nodeType === Node.TEXT_NODE) {
+            textNode.nodeValue = optionsTranslated[index];
+          } else {
+            console.error("No text node found for label", label);
+          }
+        }
+      });
+
+      // 更新导航按钮
+      const navButtonsElems = optionsButtonsDiv.querySelectorAll("button");
+      const navButtonsTranslated = [translate("goToPrevious"), translate("goToNext")];
+
+      navButtonsElems.forEach((button, index) => {
+        if (navButtonsTranslated[index]) {
+          button.innerText = navButtonsTranslated[index];
+        }
+      });
+      navPanelButton.textContent = translate("openAdminPanel");
+      //contentHeader.textContent = translate("nodeDetails");
+      commentLabel.innerText = translate("enterComment") + ":";
+      submitButton.innerText = translate("userCommentSave");
+      cancelButton.innerText = translate("userCommentCancel");
+      clearButton.innerText = translate("userCommentClear");
+      searchBtn.innerText = translate("searchButton");
+      panelToggleButton.innerText = translate("openAdminPanel");
+      searchTopicBox.setAttribute("placeholder", translate("searchPlaceholder"));
+      searchBox.setAttribute("placeholder", translate("searchPlaceholder"));
+      {
+        let translatedTitle = translate('conversationTitle');
+        let translatedOption = translate('actionOptions');
+        let translatedCategory = translate('conversationCategory');
+        let translatedTags = translate('conversationTags');
+
+        panelHeader.innerHTML = `
+  <br>
+  <hr>
+  <hr>
+  <hr>
+  <hr>
+  <br>
+  <div class="conversation" style="display: flex; justify-content: space-between; align-items: center; background-color: #f3f4f6; padding: 10px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <div class="topic-container" style="flex: 2; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;">
+      <span class="category" style="background-color: #83c5be; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px; width: 40%;">
+        ${translatedTitle}
+      </span>
+    </div>
+    <div class="options-container" style="flex: 0.7; text-align: center; background-color: #e2e8f0; padding: 5px; border-radius: 4px;">
+      ${translatedOption}
+    </div>
+    <div class="categories-container" style="flex: 1.5; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;">
+      <span class="category" style="background-color: #a0aec0; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px; width: 30%;">
+        ${translatedCategory}
+      </span>
+    </div>
+    <div class="tags-container" style="flex: 1.5; text-align: center; display: flex; justify-content: center; flex-wrap: wrap;">
+      <span class="chat-tree-tag" style="background-color: #a0aec0; color: #ffffff; padding: 5px; border-radius: 4px; margin: 2px; width: 30%;">
+        ${translatedTags}
+      </span>
+    </div>
+  </div>
+  <br>
+  <hr>
+  <hr>
+  <hr>
+  <hr>
+`;
+      }
+      {
+        if (globalUserLang.startsWith('zh')) {
+          feedBackPicDiv.innerHTML = `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 29%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <span class="block text-center font-medium normal-case text-white text-sm mb-2">点击参与问卷调查 (腾讯问卷)</span>
+        <div style="width: 100px; height: 100px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 100px; height: 100px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>`;
+        } else {
+          feedBackPicDiv.innerHTML = `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 28%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <p class="block text-center font-medium normal-case text-white text-sm mb-2">Click to take the survey</br>(Google Forms)</p>
+        <div style="width: 100px; height: 100px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 100px; height: 100px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>`;
+        }
+      }
+      WeChatPicDiv.innerHTML =
+        `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 0%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <span class="block text-center font-medium normal-case text-white text-sm mb-2">作者微信</span>
+        <div style="width: 380px; height: 440px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/wechatpic.jpg" alt="问卷二维码" style="width: 340px; height: 420px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>
+        `
+      TencentPicDiv.innerHTML =
+        `
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 20%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+        <span class="block text-center font-medium normal-case text-white text-sm mb-2">QQ群二维码, 欢迎进群交流</span>
+        <div style="width: 300px; height: 300px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/QQ_Group_Pic.jpg" alt="问卷二维码" style="width: 250px; height: 300px; display: block; margin: auto;">
+        </div>
+        <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
+        <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
+    </div>
+</div>
+        `
+    }
+  }
+
 })();

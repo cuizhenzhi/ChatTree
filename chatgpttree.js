@@ -2,7 +2,7 @@
 // @name         ChatGPT ChatTree 🌳
 // @name:zh-CN   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2023.10.27.01
+// @version      2023.11.08.01
 // @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
 // @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
 // @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
@@ -53,6 +53,7 @@
 // @require  https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js
 // @require      https://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js
+// @require             https://cdn.jsdelivr.net/gh/kudoai/chatgpt.js@516ad148b02335b98db82c89dec02e5fa28c7d56/dist/chatgpt-2.3.13.min.js
 // @run-at document-end
 // @homepageURL         https://github.com/cuizhenzhi/ChatTree
 // @supportURL   https://github.com/cuizhenzhi/ChatTree/issues
@@ -60,10 +61,11 @@
 // @icon data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" stroke-width="8" fill="none" stroke="white" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="rgb(25, 195, 125)"/><path d="M40 61 V89 Q40 90 41 90 H59 Q60 90 60 89 V61 Q60 60 61 61 Q66 65 69 61 70 60 71 61 75 65 79 61 80 60 81 61 85 65 89 61 90 60 89 59 75 55 61 41 60 40 60.5 40.5 Q66 45 69 41 70 40 71 41 75 45 79 41 80 40 79 39 70 35 61 26 60 25 61 26 Q65 30 69 26 70 25 69 24 60 20 51 11 50 10 49 11 40 20 31 24 30 25 31 26 Q35 30 39 26 40 25 39 26 30 35 21 39 20 40 21 41 Q25 45 29 41 30 40 31 41 35 45 39 41 40 40 39 41 25 55 11 59 10 60 11 61 Q15 65 19 61 20 60 21 61 25 65 29 61 30 60 31 61 35 65 39 61 40 60 40 61"></path></svg>
 // ==/UserScript==
 
-(function () {
+(function (node) {
   "use strict";
+  //chatgpt.logout();
 
-  const isDevelopmentMode = false;
+  const isDevelopmentMode = true;
 
   function log(...messages) {
     if (isDevelopmentMode) {
@@ -615,7 +617,6 @@
             font-size: 1.5em;
         }
        .language-container {
-       color: black;
           width: 200px;
           margin: 20px auto;
           position: relative;
@@ -754,6 +755,7 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: background-color 0.2s;
+    color: black;
 }
 
 .language-dropdown:focus {
@@ -2361,7 +2363,7 @@
 
 
   let DEFAULT_USER_TOP_COLOR = "#ff7f00", DEFAULT_USER_BOTTOM_COLOR = "#ffc085",
-    DEFAULT_CHATGPT_TOP_COLOR = "#0a87d8",DEFAULT_CHATGPT_BOTTOM_COLOR = "#34aeeb";
+    DEFAULT_CHATGPT_TOP_COLOR = "#0a87d8", DEFAULT_CHATGPT_BOTTOM_COLOR = "#34aeeb";
 
 
   const states = {
@@ -2386,7 +2388,7 @@
       thumbnailSvg: 0,
       panelToggleButton: 0,
     },
-    colorSetting:  {
+    colorSetting: {
       customUser: {
         is: false,
         url: "url(#CUSTOM_USER_GRADIENT)",
@@ -2402,7 +2404,34 @@
     },
   };
 
-  const Default_RootNode_Content = "Chat Starts Here";
+  const selector = {
+    allDivs: ".w-full.text-token-text-primary.border-b",
+    gptContentDiv: ".markdown.prose",
+    userContentDiv: "div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words",
+    fowardBackwardButton: ".text-xs.flex.items-center.justify-center.gap-1.absolute",
+  };
+
+  const Default_RootNode_Content_2 = {
+    "content_type": "text",
+    "parts": [
+      "CHAT STARTS HERE"
+    ],
+    "author": {
+      "role": "chatGPT",
+      "metadata": {}
+    },
+    "metadata": {
+      "finish_details": {
+        "type": "stop",
+      },
+      "is_complete": true,
+      "timestamp_": "absolute"
+    },
+    "recipient": "all",
+    "status": "finished_successfully",
+    "weight": 1
+  };
+  const Default_RootNode_Content = "CHAT STARTS HERE";
   const DB_NAME = 'ChatTreeDB';
   const CONVERSATIONS_STORE_NAME = 'conversations';
   const SEARCH_HISTORY_STORE_NAME = 'searchHistory';
@@ -2410,38 +2439,48 @@
   let db;
 
   class DialogueNode {
-    constructor(content, type) {
+    constructor(content, type, uuid = -1, parent = -1) {
       this.content = content;
       this.type = type;
-      this.uuid = generateUUID();
+      this.uuid = uuid === -1 ? generateUUID() : uuid;
       this.children = [];
       this.comment = '';
+      this.parent = parent;
+      // this.content_type = content_type;
     }
   }
 
-  let conversationData = {
-    url: null,
+  let GPT_Avatar_Config = {
+    gpt4_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(171, 104, 255); width: 36px; height: 36px; \"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
+    gpt3_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
+  }
+
+  let USER_Avatar_Config = {
+    USER_DEFAULT_HTML: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"icon-md\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path><circle cx=\"12\" cy=\"7\" r=\"4\"></circle></svg></div>"
+  }
+
+  let DEFAULT_CONVERSATION_DATA = {
     rootNode: new DialogueNode(Default_RootNode_Content, "chatGPT"),
-    uuid2pathMap: new Map(),
     uuid2nodeMap: new Map(),
-    path2nodeMap: new Map(),
     bookMarked: new Map(),
+    commentMap: new Map(),
     timestamp: Date.now(),
+    isNovemberSeventh: true,
+    isWholeConversationBookMarked: false,
+    categories: [],
+    chatTreeTags: [],
     participants: {
       user: {
         name: "UserName",
         avatarURL: "UserAvatarURL",
-        avatarHTML: "💕",
+        avatarHTML: "User",
       },
       gpt: {
         type: "GPT-3",
       }
     }
   };
-  let GPT_Avatar_Config = {
-    gpt4_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(171, 104, 255); width: 36px; height: 36px; \"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
-    gpt3_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
-  }
+  let conversationData = DEFAULT_CONVERSATION_DATA;
 
   let root, treeLayout, svg, svgThumbnail, defs, gLinks, gNodes,
     nodeDrag, canvasDrag, zoom, searchHistoryRecord, chatHistory = [], curMouseOnUUID = null;
@@ -2650,18 +2689,19 @@
         }
       }
     },
+
     //🤖chatGPT版本
     updateTree: async function (url) {
       let gotNotice = prompt("Would you like to delete all comments or load the original conversation? If YES, enter 'Y' in capital letter. Otherwise, simply cancel this box.");
-      if(gotNotice === "Y"){
-        log("gotNotice:",gotNotice);
+      if (gotNotice === "Y") {
+        log("gotNotice:", gotNotice);
         let rootNodeContent = conversationData.rootNode.content ? conversationData.rootNode.content : Default_RootNode_Content;
         conversationData = {
           url: conversationData.url,
           rootNode: new DialogueNode(rootNodeContent, "chatGPT"),
           uuid2pathMap: new Map(),
           uuid2nodeMap: new Map(),
-          path2nodeMap: new Map(),
+          //path2nodeMap: new Map(),
           timestamp: Date.now(),
           participants: {
             user: {
@@ -2803,7 +2843,7 @@
         .catch(error => console.error(error));
       let mainSvg = document.getElementById("mainSvg")
       let mainSvgShown = mainSvg.getAttribute("visibility");
-      if(mainSvgShown === 'hidden'){
+      if (mainSvgShown === 'hidden') {
         toggleSvgShow(1);
       }
     },
@@ -2833,7 +2873,7 @@
           continue;
         }
         if (path[i] < result.childIndicesPath[i]) {
-          if(result.childIndicesPath[i] === 0){
+          if (result.childIndicesPath[i] === 0) {
             confirm("Due to potential issues with the chatgpt page, the previously saved path might be outdated or untraceable. To retrieve this path, please refresh the entire tree via the central ChatTree button. If you wish to perform a complete tree update in order to get the accurate path, enter 'Y' as instructed in the previous prompt.")
             return;
           }
@@ -2844,7 +2884,7 @@
           continue;
         }
         if (path[i] > result.childIndicesPath[i]) {
-          if(result.childIndicesPath[i] === result.childrenCountPath[i]){
+          if (result.childIndicesPath[i] === result.childrenCountPath[i]) {
             confirm("Due to potential issues with the chatgpt page, the previously saved path might be outdated or untraceable. To retrieve this path, please refresh the entire tree via the central ChatTree button. If you wish to perform a complete tree update in order to get the accurate path, enter 'Y' as instructed in the previous prompt.")
             return;
           }
@@ -3062,31 +3102,15 @@
       checkCurrentState();
     },
     handleURLChange: function (url) {
-      log("In handleURLChange, Data:", conversationData);
+      //log("In handleURLChange, Data:", conversationData);
       if (urlOperations.isNonUniqueURL(url)) {
+        log("nonuniqueURL");
         states.url.isForLiveValidURL = false;
         states.url.isForDeletedValidURL = false;
         states.url.url = '';
         states.treeUpdate.isDOMOperating = false;
-        conversationData = {
-          url: null,
-          rootNode: new DialogueNode(Default_RootNode_Content, "chatGPT"),
-          uuid2pathMap: new Map(),
-          uuid2nodeMap: new Map(),
-          path2nodeMap: new Map(),
-          bookMarked: new Map(),
-          timestamp: Date.now(),
-          participants: {
-            user: {
-              name: "UserName",
-              avatarURL: "UserAvatarURL",
-              avatarHTML: "User",
-            },
-            gpt: {
-              type: "GPT-3",
-            }
-          }
-        };
+        conversationData = DEFAULT_CONVERSATION_DATA;
+
         root = d3.hierarchy(conversationData.rootNode);
         const widthPerNode = 30;
         const heightPerNode = 30;
@@ -3095,6 +3119,7 @@
         settingsKit.refreshTree();
         log("请刷新页面或者转到具有对话信息的页面从而获取正确的链接");
       } else if (urlOperations.isForDeletedValidURL(url)) {
+        log("DeletedValidURL");
         states.url.isForLiveValidURL = false;
         states.url.isForDeletedValidURL = true;
         states.treeUpdate.isDOMOperating = false;
@@ -3133,23 +3158,69 @@
           console.error("Error loading data:", error);
         });
       } else {
+        log("liveValidURL");
+
         states.url.isForLiveValidURL = true;
-        states.url.isForDeletedValidURL = true;
+        states.url.isForDeletedValidURL = false;
         states.treeUpdate.isDOMOperating = false;
         states.url.url = url;
-        dbOperations.loadConversationsData(url).then(loadeddata => {
-          log("Loaded data for URL:", loadeddata);
-          conversationData = loadeddata;
-          root = d3.hierarchy(conversationData.rootNode);
-          const widthPerNode = 30;
-          const heightPerNode = 30;
-          treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
 
-          treeLayout(root);
-          settingsKit.refreshTree();
+        fetchRawChatMessages(url.slice(26)).then(data => {
+          dbOperations.loadConversationsData(url).then(loadeddata => {
+            log("Loaded data for URL:", loadeddata);
+            conversationData = loadeddata;
+            if (!conversationData.isNovemberSeventh) {
+              let result = conver_to_new_style();
+              conversationData.bookMarked = result.bookMarked;
+              conversationData.commentMap = result.commentMap;
+              //delete conversationData.uuid2pathMap;
+              delete conversationData.path2nodeMap;
+              dbOperations.saveConversationsData(conversationData).then(() => {
+                log("Convert To November_Type!");
+              });
+            }
+
+            log("RAW DATA:",data);
+            log("New URL Catched!");
+            let processResult = processChatMessage(data);
+            conversationData.rootNode = conversationRootNode;
+            conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
+            conversationData.uuid2pathMap = processResult.uuid2pathMap;
+            dbOperations.saveConversationsData(conversationData).then(()=>{
+
+              controlPanelKit.renderConversations(chatHistory);
+              controlPanelKit.updateCategorySelect();
+            });
+            log("to draw svg:", conversationData);
+            //conversationData = loadeddata;
+            root = d3.hierarchy(conversationData.rootNode);
+            const widthPerNode = 30;
+            const heightPerNode = 30;
+            treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+            treeLayout(root);
+            //drawMainSVG();
+            settingsKit.refreshTree();
+          }).catch(error => {
+            console.error("Error loading data:", error);
+          });
+
         }).catch(error => {
-          console.error("Error loading data:", error);
-        });
+          log("error:", error);
+        })
+        // fetchRawChatMessages().then(data => {
+        //   log(data);  // 打印原始聊天数据
+        //   const timestamp = data.create_time * 1000;
+        //   // const timestamp2 = data.update_time * 1000; // 转换为毫秒
+        //   // const date2 = new Date(timestamp2);
+        //   // log("update_time:",timestamp2);
+        //   // log("update_time:",date2);
+        //   processChatMessage(data);
+        // }).catch(error => {
+        //   console.error(error);
+        // });
+        //return;
+
+
       }
     }
   };
@@ -3232,26 +3303,26 @@
 
               languageSelect.addEventListener('change', languageKits.init);
               //setTimeout()
-             log('Got userLang:', userLang);
-                if(userLang && userLang.globalUserLang) {
-                  globalUserLang = userLang.globalUserLang;
-                  languageKits.init({
-                    target: {
-                      value: globalUserLang,
-                      shouldNotSave: true,
-                    }
-                  })
-                }
-                ButtonOperations.showUserNotification(translate("chatTreeRunning"));
-
-                const options = languageSelect.querySelectorAll('option');
-                options.forEach(option => {
-                  if (option.value === globalUserLang) {
-                    option.selected = true;
-                  } else {
-                    option.selected = false;
+              log('Got userLang:', userLang);
+              if (userLang && userLang.globalUserLang) {
+                globalUserLang = userLang.globalUserLang;
+                languageKits.init({
+                  target: {
+                    value: globalUserLang,
+                    shouldNotSave: true,
                   }
-                });
+                })
+              }
+              ButtonOperations.showUserNotification(translate("chatTreeRunning"));
+
+              const options = languageSelect.querySelectorAll('option');
+              options.forEach(option => {
+                if (option.value === globalUserLang) {
+                  option.selected = true;
+                } else {
+                  option.selected = false;
+                }
+              });
             })
             .catch(error => console.error(error));
 
@@ -3274,7 +3345,7 @@
             .then(userColor => {
               log('Got userColor:', userColor);
               if (userColor && userColor.state && userColor.state.is) {
-                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",userColor.state.bottom ,userColor.state.top);
+                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT", userColor.state.bottom, userColor.state.top);
                 states.colorSetting.customUser = userColor.state;
                 states.colorSetting.customUser.url = 'url(#CUSTOM_USER_GRADIENT)';
               }
@@ -3285,7 +3356,7 @@
             .then(chatGPTColor => {
               log('Got chatGPTColor:', chatGPTColor);
               if (chatGPTColor && chatGPTColor.state && chatGPTColor.state.is) {
-                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT",chatGPTColor.state.bottom ,chatGPTColor.state.top);
+                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", chatGPTColor.state.bottom, chatGPTColor.state.top);
                 states.colorSetting.customChatGPT = chatGPTColor.state;
                 states.colorSetting.customChatGPT.url = 'url(#CUSTOM_CHATGPT_GRADIENT)';
               }
@@ -3299,7 +3370,7 @@
                 log("canNotEnter?", canNotEnterNavbar);
                 states.mainButton.canNotEnterNavbar = canNotEnterNavbar.canNotEnterNavbar;
 
-                  toggleMainBtnMovingAccessbility.innerHTML = canNotEnterNavbar.canNotEnterNavbar ? greenForNotEnter : redForEnterable;
+                toggleMainBtnMovingAccessbility.innerHTML = canNotEnterNavbar.canNotEnterNavbar ? greenForNotEnter : redForEnterable;
 
               } else {
                 throw new Error("Unexpected structure from getUserSettings");
@@ -3394,6 +3465,7 @@
               };
             }
             chatHistory = information.conversations;
+            //log("information.conversations:",information.conversations);
           };
         };
 
@@ -3515,8 +3587,14 @@
         data.timestamp = Date.now();
         const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
         const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        log("in save data, conversations:",objectStore);
         const request = objectStore.put(data);
-        request.onsuccess = () => resolve();
+        request.onsuccess = () => {
+          dbOperations.initConversationData().then(()=>{
+            log("update panel.");
+          })
+          resolve();
+        }
         request.onerror = event => reject("Error saving data:", event.target.errorCode);
       });
     },
@@ -3606,31 +3684,13 @@
           let result = event.target.result;
           log(" resultOfRequest:", result);
           if (!result) {
-            let conversationData = {
-              url: url,
-              rootNode: new DialogueNode(Default_RootNode_Content, "chatGPT"),
-              uuid2pathMap: new Map(),
-              uuid2nodeMap: new Map(),
-              path2nodeMap: new Map(),
-              bookMarked: new Map(),
-              timestamp: Date.now(),
-              participants: {
-                user: {
-                  name: "UserName",
-                  avatarURL: "UserAvatarURL",
-                  avatarHTML: "User",
-                },
-                gpt: {
-                  type: "GPT-3",
-                }
-              }
-            };
-            conversationData.uuid2nodeMap.set(conversationData.rootNode.uuid, conversationData.rootNode);
-            conversationData.uuid2pathMap.set(conversationData.rootNode.uuid, []);
-            conversationData.path2nodeMap.set('', conversationData.rootNode);
-            log("在load中: data", conversationData);
+            let conversationData = DEFAULT_CONVERSATION_DATA;
+            conversationData.url = url;
+            //conversationData.uuid2nodeMap.set(conversationData.rootNode.uuid, conversationData.rootNode);
+            //conversationData.uuid2pathMap.set(conversationData.rootNode.uuid, []);
+            //conversationData.path2nodeMap.set('', conversationData.rootNode);
+            //log("在load中: data", conversationData);
             resolve(conversationData);
-
             // const addRequest = objectStore.add(conversationData);
             // addRequest.onsuccess = () => {
             //   log("返回data:", conversationData);
@@ -3640,8 +3700,12 @@
           } else {
             log("dataExisting!");
             conversationData = result;
+            log("loaded conversationData:", conversationData);
             if (!conversationData.bookMarked) {
               conversationData.bookMarked = new Map();
+            }
+            if (!conversationData.commentMap) {
+              conversationData.commentMap = new Map();
             }
             if (!conversationData.participants) {
               conversationData.participants = {
@@ -3655,12 +3719,12 @@
                 }
               }
             }
-            root = d3.hierarchy(conversationData.rootNode);
-            const widthPerNode = 30;
-            const heightPerNode = 30;
-            treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-            treeLayout(root);
-            settingsKit.refreshTree();
+            // root = d3.hierarchy(conversationData.rootNode);
+            // const widthPerNode = 30;
+            // const heightPerNode = 30;
+            // treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+            // treeLayout(root);
+            //settingsKit.refreshTree();
             resolve(result);
           }
         };
@@ -3787,7 +3851,8 @@
 
 
     getAllDivs: function () {
-      return document.querySelectorAll('div[data-testid^="conversation-turn-"]');
+      //log("allDivs:",document.querySelectorAll(selector.allDivs));
+      return document.querySelectorAll(selector.allDivs);
 
     },
     clickButtonAtDivLevel: function (buttonIndex, divLevel = -1,) {
@@ -3796,7 +3861,8 @@
         return;
       }
       let conversationDiv = allChatDivs[divLevel];
-      const buttonInfoDiv = conversationDiv.querySelector('.text-xs.flex.items-center');
+      const buttonInfoDiv = conversationDiv.querySelector(selector.fowardBackwardButton);
+      //log("buttonInfo:",buttonInfoDiv);
       let buttons = buttonInfoDiv.querySelectorAll("button");
       if (buttons) {
         log("In clickButtonAtDivLevel", "divLevel: ", divLevel, "buttons:", buttons);
@@ -3817,7 +3883,7 @@
         let div = allChatDivs[i];
         //text-xs flex items-center justify-center gap-1 absolute left-0 top-2 -ml-4 -translate-x-full gizmo:top-1 gizmo:-ml-6 group:hover-visible visible
         //text-xs flex items-center justify-center gap-1 self-center pt-2 visible
-        const buttonInfoDiv = div.querySelector('.text-xs.flex.items-center');
+        const buttonInfoDiv = div.querySelector(selector.fowardBackwardButton);
         if (buttonInfoDiv) {
           let span = buttonInfoDiv.querySelector("span");
           if (span) {
@@ -3837,12 +3903,12 @@
             childrenCountPath.push(1);
           }
         } else {
-          log("!didNot find the targetDiv of buttons!");
+          //log("!didNot find the targetDiv of buttons!");
           childIndicesPath.push(1);
           childrenCountPath.push(1);
         }
       }
-      log("divlength:", allChatDivs.length, "childIndices:", childIndicesPath, "childrenCount", childrenCountPath);
+      //log("divlength:", allChatDivs.length, "childIndices:", childIndicesPath, "childrenCount", childrenCountPath);
       for (let i = 0; i < childrenCountPath.length; i++) {
         if (childIndicesPath[i] !== 1) hasLeftButtonUnClicked = true;
         if (childIndicesPath[i] !== childrenCountPath[i]) hasRightButtonUnClicked = true;
@@ -3855,17 +3921,16 @@
       };
     },
 
-
     getTextContent: function (div, i) {
       let isUser = null;
       let isGPT = null;
       //isUser = div.querySelector('div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words');
-      isGPT = div.querySelector(".markdown.prose");
+      isGPT = div.querySelector(selector.gptContentDiv);
 
       if (isGPT) {
-        isGPT = div.querySelector(".markdown.prose");
+        isGPT = div.querySelector(selector.gptContentDiv);
       } else {
-        isUser = div.querySelector('div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words');
+        isUser = div.querySelector(selector.userContentDiv);
       }
       let userType = isUser ? "用户" : "chatGPT";
       if (!userType) {
@@ -3893,6 +3958,11 @@
 
   function arrayToKey(arr) {
     return arr.join('|');
+  }
+  function keyToArray(str) {
+    const numArray = str.split('|').map(function(item) {
+      return parseInt(item, 10);
+    });
   }
 
   function generateUUID() {
@@ -4024,8 +4094,6 @@
       treeMainBtn.addEventListener("click", ButtonOperations.onClick);
 
 
-
-
       titleDiv.classList.add('sticky', 'top-0', 'z-[16]');
       titleDiv.setAttribute('data-projection-id', '6');
       titleDiv.style.opacity = '1';
@@ -4077,20 +4145,19 @@
 
     },
 
-    toggleStickyMainBtn: function(){
+    toggleStickyMainBtn: function () {
 
 
       //log("rightClick!");
-      if (states.mainButton.canNotEnterNavbar){//要可能被固定
+      if (states.mainButton.canNotEnterNavbar) {//要可能被固定
         states.mainButton.canNotEnterNavbar = false;
-        toggleMainBtnMovingAccessbility.innerHTML =redForEnterable  ;
+        toggleMainBtnMovingAccessbility.innerHTML = redForEnterable;
         ButtonOperations.showUserNotification("ChatTree now can be fixed in the nav bar!")
-      }
-      else{//要变得可以到处移动
+      } else {//要变得可以到处移动
         states.mainButton.canNotEnterNavbar = true;
         navMainButton.style.display = 'none';
         toggleMainBtnMovingAccessbility.innerHTML = greenForNotEnter;
-        if(treeMainBtn.style.display ==='none') {//如果此时不见了, 要先展示出来. 如果此时本来就block, 就不动
+        if (treeMainBtn.style.display === 'none') {//如果此时不见了, 要先展示出来. 如果此时本来就block, 就不动
           treeMainBtn.style.left = window.innerWidth - 300 + 'px';
           treeMainBtn.style.top = '20px';
           treeMainBtn.style.display = 'block';
@@ -4102,7 +4169,7 @@
       }).catch(error => {
         console.error("Error saving Change:", error);
       });
-      log("newSettings:",newSettings);
+      log("newSettings:", newSettings);
       //log("log(\"Now Turns To:\", states.mainButton.isAlwaysMovable); Now Turns To:", states.mainButton.canNotEnterNavbar);
     },
     // handleNavbarMouseEvent: function (event)  {
@@ -4116,7 +4183,6 @@
       //   navbar.addEventListener('mouseenter', ButtonOperations.handleNavbarMouseEvent);
       //   navbar.addEventListener('mouseleave', ButtonOperations.handleNavbarMouseEvent);
       // }
-
 
 
       if (e.button !== 0) return;
@@ -4411,8 +4477,31 @@
             return;
           }
           setTimeout(() => {
+            fetchRawChatMessages(conversationData.url.slice(26)).then(data => {
+
+                let processResult = processChatMessage(data);
+                conversationData.rootNode = conversationRootNode;
+                conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
+                conversationData.uuid2pathMap = processResult.uuid2pathMap;
+              dbOperations.saveConversationsData(conversationData).then(()=>{
+
+                controlPanelKit.renderConversations(chatHistory);
+                controlPanelKit.updateCategorySelect();
+              });
+              log("to draw svg:", conversationData);
+                //conversationData = loadeddata;
+                root = d3.hierarchy(conversationData.rootNode);
+                const widthPerNode = 30;
+                const heightPerNode = 30;
+                treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+                treeLayout(root);
+                //drawMainSVG();
+                settingsKit.refreshTree();
+            }).catch(error => {
+              log("error:", error);
+            })
             //if (confirm("This will delete previous comments!")) {
-            treeOperation.initializeChatTree()
+            //treeOperation.initializeChatTree()
             //}
           }, 100);
         } else {
@@ -4701,7 +4790,9 @@
     }
   }
   initSvgAndGradient.Visualizationinit(conversationData.rootNode);
-
+  let canvas, ctx;
+  let canvasWidth, canvasHeight;
+  let canvasOffset = 1500;
   //dragAndZoomKits
   const dragAndZoomKits = {
 
@@ -4754,7 +4845,123 @@
         settingsKit.performAction(newOperation);
     },
 
-    canvasDragStarted: function () {
+    setCanvasSize: function () {
+      const links = gLinks.selectAll(".link").data();
+      const nodes = gNodes.selectAll(".node").data();
+
+      let minX = Number.MAX_VALUE;
+      let minY = Number.MAX_VALUE;
+      let maxX = Number.MIN_VALUE;
+      let maxY = Number.MIN_VALUE;
+
+      links.forEach(link => {
+        minX = Math.min(minX, link.source.x, link.target.x);
+        minY = Math.min(minY, link.source.y, link.target.y);
+        maxX = Math.max(maxX, link.source.x, link.target.x);
+        maxY = Math.max(maxY, link.source.y, link.target.y);
+      });
+
+      nodes.forEach(node => {
+        minX = Math.min(minX, node.x);
+        minY = Math.min(minY, node.y);
+        maxX = Math.max(maxX, node.x);
+        maxY = Math.max(maxY, node.y);
+      });
+      // 设置 Canvas 的大小，考虑边界位置
+      const canvasWidth = maxX - minX;
+      const canvasHeight = maxY - minY;
+      canvas.width = canvasWidth;
+      canvas.height = canvasHeight;
+    },
+
+    svgDragStarted: function () {
+
+      if (!canvas) {
+        canvas = document.createElement('canvas');
+        canvasWidth = svg.node().getBoundingClientRect().width + 2 * canvasOffset;
+        canvasHeight = svg.node().getBoundingClientRect().height + 2 * canvasOffset;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
+        //dragAndZoomKits.setCanvasSize();
+        document.body.appendChild(canvas);
+        ctx = canvas.getContext('2d');
+      }
+
+      gNodes.attr("opacity", 0); // 隐藏所有节点
+      gLinks.attr("opacity", 0); // 隐藏所有链接
+      // 绘制SVG内容到canvas
+      drawSvgContentToCanvas();
+
+      function createRadialGradient(ctx, x, y, radius, colorStart, colorEnd) {
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
+        gradient.addColorStop(0, colorStart);
+        gradient.addColorStop(1, colorEnd);
+        return gradient;
+      }
+
+      function drawCircleWithLinearGradient(ctx, x, y, radius, colorStart, colorEnd) {
+        const gradient = ctx.createLinearGradient(x, y - radius, x, y + radius);
+        gradient.addColorStop(1, colorStart);
+        gradient.addColorStop(0, colorEnd);
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, 2 * Math.PI);
+        ctx.fill();
+      }
+
+      function drawSvgContentToCanvas() {
+
+        const currentTransform = d3.zoomTransform(svg.node());
+
+
+        const links = gLinks.selectAll(".link").data();
+        const nodes = gNodes.selectAll(".node").data();
+
+        ctx.save();
+        // 使用SVG的当前transform和偏移量来调整canvas上的内容
+        ctx.translate(currentTransform.x, currentTransform.y);
+        ctx.scale(currentTransform.k, currentTransform.k);
+
+
+        // 计算根据缩放调整后的偏移量
+        const adjustedOffset = canvasOffset / currentTransform.k;
+
+        // 绘制线
+        links.forEach(link => {
+          ctx.beginPath();
+          ctx.moveTo(link.source.x + adjustedOffset, link.source.y + adjustedOffset);
+          const midX = (link.source.x + link.target.x + 2 * adjustedOffset) / 2;
+          ctx.bezierCurveTo(midX, link.source.y + adjustedOffset, midX, link.target.y + adjustedOffset, link.target.x + adjustedOffset, link.target.y + adjustedOffset);
+          ctx.stroke();
+        });
+
+        nodes.forEach(node => {
+          ctx.beginPath();
+
+          ctx.arc(node.x + adjustedOffset, node.y + adjustedOffset, 10, 0, 2 * Math.PI, false);
+
+          const GPTGradient = createRadialGradient(ctx, node.x, node.y, 10, states.colorSetting.customChatGPT.bottom, states.colorSetting.customChatGPT.top);
+          const UserGradient = createRadialGradient(ctx, node.x, node.y, 10, states.colorSetting.customUser.bottom, states.colorSetting.customUser.top);
+
+          if (node.data.type.toLowerCase() === "chatgpt") {
+            drawCircleWithLinearGradient(ctx, node.x + adjustedOffset, node.y + adjustedOffset, 10, states.colorSetting.customChatGPT.bottom, states.colorSetting.customChatGPT.top);
+          } else {
+            drawCircleWithLinearGradient(ctx, node.x + adjustedOffset, node.y + adjustedOffset, 10, states.colorSetting.customUser.bottom, states.colorSetting.customUser.top);
+          }
+          ctx.fill();
+
+        });
+        ctx.restore();
+
+      }
+
+      // 显示canvas，不隐藏SVG
+      canvas.style.position = "absolute";
+      canvas.style.top = (svg.node().getBoundingClientRect().top - canvasOffset) + "px";
+      canvas.style.left = (svg.node().getBoundingClientRect().left - canvasOffset) + "px";
+      canvas.style.visibility = "visible";
+
       const currentTransform = d3.zoomTransform(svg.node());
       this.initialTranslateX = currentTransform.x;
       this.initialTranslateY = currentTransform.y;
@@ -4762,13 +4969,36 @@
       this.initialPageY = d3.event.sourceEvent.pageY;
     },
 
-    canvasDragged: function () {
+    svgDragged: function () {
+      const dx = (d3.event.sourceEvent.pageX - this.initialPageX);
+      const dy = (d3.event.sourceEvent.pageY - this.initialPageY);
+      //const newTranslateX = this.initialTranslateX + dx;
+      //const newTranslateY = this.initialTranslateY + dy;
+      canvas.style.top = (svg.node().getBoundingClientRect().top + dy - canvasOffset) + "px";
+      canvas.style.left = (svg.node().getBoundingClientRect().left + dx - canvasOffset) + "px";
+
+      //svg.call(zoom.transform, d3.zoomIdentity.translate(newTranslateX, newTranslateY).scale(d3.zoomTransform(svg.node()).k));
+      //drawMainSVG();
+    },
+
+    svgDragEnded: function () {
       const dx = (d3.event.sourceEvent.pageX - this.initialPageX);
       const dy = (d3.event.sourceEvent.pageY - this.initialPageY);
       const newTranslateX = this.initialTranslateX + dx;
       const newTranslateY = this.initialTranslateY + dy;
+
+      gNodes.attr("opacity", 1); // 显示所有节点
+      gLinks.attr("opacity", 1); // 显示所有链接
+      // 更新SVG的位置
       svg.call(zoom.transform, d3.zoomIdentity.translate(newTranslateX, newTranslateY).scale(d3.zoomTransform(svg.node()).k));
-      drawThumbnailSVG();
+
+      // 清除canvas的内容
+      ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+      canvas.remove();
+      canvas = null;
+
+      drawMainSVG();
     },
     zoomed: function () {
       const transform = d3.event.transform;
@@ -4784,8 +5014,9 @@
         .on("end", dragAndZoomKits.nodeDragEnded);
 
       canvasDrag = d3.drag()
-        .on("start", this.canvasDragStarted)
-        .on("drag", this.canvasDragged);
+        .on("start", this.svgDragStarted)
+        .on("drag", this.svgDragged)
+        .on("end", this.svgDragEnded);
 
       zoom = d3.zoom()
         .scaleExtent([0.1, 10])
@@ -4808,6 +5039,8 @@
     const yRange = d3.extent(root.descendants(), d => d.y);
     const treeWidth = xRange[1] - xRange[0];
     const treeHeight = yRange[1] - yRange[0];
+
+
 
 
     const thumbScale = 0.2;
@@ -4955,6 +5188,9 @@
     d3.selectAll(".node circle.用户")
       .style("fill", userGradient);
 
+    log("root:", root);
+    log("conversationData.bookMarked:", conversationData.bookMarked);
+    log("Filtered Data:", nodesEnter.filter(d => conversationData.bookMarked.get(d.data.uuid)));
 
     nodesEnter.append("text")
       .attr("class", "emoji-tag")
@@ -4962,8 +5198,26 @@
       .attr("y", d => -4)
       .text("📌")
       .attr("visibility", "hidden")
-      .filter(d => conversationData.bookMarked.get(d.data.uuid))
+      .filter(d => {
+        // 在这里打印uuid和从Map中获取的值
+        const bookmarkedValue = conversationData.bookMarked.get(d.data.uuid);
+        // log(`UUID: ${d.data.uuid}, Bookmarked Value:`, bookmarkedValue);
+        return bookmarkedValue !== undefined; // 例如，如果你只想保留映射中有值的项
+      })
       .attr("visibility", "visible");
+
+    nodes
+      .selectAll(".emoji-tag")
+      .filter(d => {
+        // 在这里打印uuid和从Map中获取的值
+        const bookmarkedValue = conversationData.bookMarked.get(d.data.uuid);
+        //log(`UUID: ${d.data.uuid}, Bookmarked Value:`, bookmarkedValue);
+
+        // 你仍然需要返回一个布尔值来决定是否保留元素
+        return bookmarkedValue !== undefined; // 例如，如果你只想保留映射中有值的项
+      })
+      .attr("visibility", "visible");
+
     nodesEnter.on("contextmenu", nodesInAndOutKit.onContextMenu)
     nodesEnter.on("mouseover", nodesInAndOutKit.handleMouseOver);
     nodesEnter.on("mouseout", nodesInAndOutKit.handleMouseOut);
@@ -4974,8 +5228,8 @@
 
 
     nodes.exit().remove();
-    drawThumbnailSVG();
-    updateStylesBasedOnTheme();
+    //drawThumbnailSVG();
+    //updateStylesBasedOnTheme();
 
   }
 
@@ -5002,7 +5256,8 @@
         });
     },
     showNode: function (d) {
-      const existingComment = d.data.comment;
+      const existingComment = conversationData.commentMap.get(d.data.uuid);
+      //d.data.comment;
       if (existingComment && existingComment !== '') {
         commentTextarea.value = existingComment;
       } else {
@@ -5047,19 +5302,30 @@
 
     createTalkingPersonElement: function (d) {
       const talkingPerson1 = document.createElement('div');
-      talkingPerson1.style.float = 'left';
       talkingPerson1.style.marginRight = '8px';
       talkingPerson1.style.background = 'none';
       talkingPerson1.style.height = 'auto';
+      talkingPerson1.classList.add("relative", "flex")
       if (d.data.type === "用户") {
-        talkingPerson1.innerHTML = conversationData.participants.user.avatarHTML;
-        const img = talkingPerson1.querySelector('img');
-        if (img) {
-          img.style.display = 'block';
-          img.style.margin = '0';
-          img.style.height = '35px';
-          img.style.width = '35px';
-        }
+        //talkingPerson1.innerHTML = conversationData.participants.user.avatarHTML;
+        //talkingPerson1 = document.createElement('div');
+        let url = conversationData.participants.user.avatarURL ? conversationData.participants.user.avatarURL : -1;
+        if(url === -1){
+          talkingPerson1.innerHTML = USER_Avatar_Config.USER_DEFAULT_HTML;
+        }else{
+        talkingPerson1.innerHTML = `
+        <img alt="User" loading="lazy" width="36" height="36" decoding="async" data-nimg="1"
+                                class="rounded-sm"
+                                src="${conversationData.participants.user.avatarURL}"
+                                style="color: transparent;">
+`}
+        // const img = talkingPerson1.querySelector('img');
+        // if (img) {
+        //   img.style.display = 'block';
+        //   img.style.margin = '0';
+        //   img.style.height = '35px';
+        //   img.style.width = '35px';
+        // }
 
       } else if (d.data.type === "chatGPT") {
         talkingPerson1.innerHTML = (conversationData.participants.gpt.type === "GPT-3") ? GPT_Avatar_Config.gpt3_Inner_Html : GPT_Avatar_Config.gpt4_Inner_Html;
@@ -5068,37 +5334,389 @@
       }
       return talkingPerson1;
     },
-    updateSelectedNodeContentDiv: function (d, targetDiv) {
+    updateSelectedNodeContentDiv: async function (d, targetDiv) {
       const talkingPerson1 = nodesInAndOutKit.createTalkingPersonElement(d);
 
-      // let commentHTML = d.data.comment ? `<span class="comment-text">注释: ${d.data.comment}</span><br>` : '';
-      // if (d.data.type === "chatGPT") {
-      //   targetDiv.innerHTML = commentHTML;
-      //   targetDiv.appendChild(talkingPerson1);
-      //   targetDiv.innerHTML += `<span class="content-text">${d.data.content}</span>`;
-      // } else {
-      //   targetDiv.innerHTML = commentHTML;
-      //   targetDiv.appendChild(talkingPerson1);
-      //   let contentSpan = document.createElement('span');
-      //   contentSpan.className = 'content-text';
-      //   contentSpan.textContent = d.data.content;
-      //   targetDiv.appendChild(contentSpan);
-      // }
-      let commentHTML = d.data.comment ? `<span class="comment-text">注释: ${d.data.comment}</span><br>` : '';
+
+      function createAllPicsDiv() {
+        const div = document.createElement('div');
+        div.className = "flex-wrap";
+        return div;
+      }
+
+      function createOnePic(sourceURL) {
+        let contentWidth;
+        if (targetDiv.id === "nodeContent") {
+          let contentDiv = document.getElementById("contentDiv");
+          contentWidth = contentDiv.offsetWidth;
+        } else {
+          contentWidth = targetDiv.offsetWidth || 600;
+        }
+        const button = document.createElement('button');
+        button.type = "button";
+        button.className = 'm-1';
+        button.style.width = contentWidth / 2 - 60 + 'px';
+        button.innerHTML =
+          `
+        <img alt="Generated by DALL·E" loading="lazy" src="${sourceURL}">
+    `
+        return button;
+      }
+
+      function createDownloadBtn() {
+        const btn = document.createElement('button');
+        btn.classList.add("flex-wrap", "h-6", "w-6", "items-center", "justify-center", "rounded", "bg-black/50");
+        btn.innerHTML =
+          `
+        <svg width="24" height="24" viewBox="-5.5 2 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm text-white">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7.70711 10.2929C7.31658 9.90237 6.68342 9.90237 6.29289 10.2929C5.90237 10.6834 5.90237 11.3166 6.29289 11.7071L11.2929 16.7071C11.6834 17.0976 12.3166 17.0976 12.7071 16.7071L17.7071 11.7071C18.0976 11.3166 18.0976 10.6834 17.7071 10.2929C17.3166 9.90237 16.6834 9.90237 16.2929 10.2929L13 13.5858L13 4C13 3.44771 12.5523 3 12 3C11.4477 3 11 3.44771 11 4L11 13.5858L7.70711 10.2929ZM5 19C4.44772 19 4 19.4477 4 20C4 20.5523 4.44772 21 5 21H19C19.5523 21 20 20.5523 20 20C20 19.4477 19.5523 19 19 19L5 19Z" fill="currentColor"></path>
+        </svg>
+`;
+        btn.addEventListener('click', function () {
+          // 创建一个隐藏的下载链接并触发下载
+          let downloadLink = document.createElement('a');
+          downloadLink.href = btn.dataset.sourceUrl; // 从按钮的 dataset 中获取 URL
+          downloadLink.setAttribute('download', '');  // 这将使链接触发下载
+          downloadLink.style.display = 'none';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+        });
+        return btn;
+      }
+
+      let commentHTML = conversationData.commentMap.get(d.data.uuid) ? `<span class="comment-text">注释: ${conversationData.commentMap.get(d.data.uuid)}</span><br>` : '';
       targetDiv.innerHTML = commentHTML;
       targetDiv.appendChild(talkingPerson1);
 
-      let contentSpan = document.createElement('span');
-      contentSpan.className = 'content-text';
+      let realContentDiv = document.createElement('div');
 
-      if (d.data.type === "chatGPT") {
-        contentSpan.innerHTML = d.data.content; // 如果需要保留HTML标签
-      } else {
-        contentSpan.textContent = d.data.content; // 如果只需要纯文本
+      if(d.data.uuid === conversationData.rootNode.uuid){
+        log("rootNode:",d);
+        let contentSpan = document.createElement('span');
+        contentSpan.innerText = conversationData.rootNode.content; // 如果只需要纯文本
+        realContentDiv.appendChild(contentSpan);
+        targetDiv.appendChild(realContentDiv);
+        return;
       }
 
-      targetDiv.appendChild(contentSpan);
+      log("d.data.content:", d.data.content);
 
+      for (let i = 0; i < d.data.content.length; i++) {
+        if ((d.data.content[i].author.name === "dalle.text2im" && d.data.content[i].content_type === 'text') ||
+          (d.data.content[i].author.role === "assistant" && d.data.content[i].recipient === "dalle.text2im")) {
+          continue;
+        }
+        if (d.data.content[i].content_type === "text") {
+          log("the ", i, "th one is text.");
+          let accumulatedParts = [...d.data.content[i].parts[0]];
+          let combinedText;
+          let text2HTML;
+          if (d.data.content[i].author.role !== "user") {
+            log("d.data.content[i].author.role !== \"user\"");
+            if (i + 1 < d.data.content.length) {
+              while (d.data.content[i + 1].content_type === "text") {
+                log("处理 ", i + 1, "中");
+                accumulatedParts.push(d.data.content[i + 1].parts[0]);
+                i++;
+                if (i + 1 === d.data.content.length) {
+                  break;
+                }
+              }
+            }
+            combinedText = accumulatedParts.join('');
+            text2HTML = markdownToHTML(combinedText);
+            let contentSpan = document.createElement('span');
+            contentSpan.innerHTML = text2HTML;
+            realContentDiv.appendChild(contentSpan);
+          } else {
+            log("d.data.content[i].author.role === \"user\"");
+            text2HTML = accumulatedParts.join('');
+            log("text2HTML:", text2HTML);
+            let contentSpan = document.createElement('span');
+            contentSpan.innerText = text2HTML; // 如果只需要纯文本
+            realContentDiv.appendChild(contentSpan);
+          }
+        } else if (d.data.content[i].content_type === "multimodal_text") {//这个对象里, parts数组里, 可能有多组图片群
+          log("the ", i, "th one is multimodal_text.");
+          for (let j = 0; j < d.data.content[i].parts.length; j++) {
+            if (d.data.content[i].parts[j].content_type && d.data.content[i].parts[j].content_type === "image_asset_pointer") {//开始载入图片
+              let allPicsDiv = createAllPicsDiv();
+              allPicsDiv.id = "allPicsDiv";
+              realContentDiv.appendChild(allPicsDiv);
+              while (d.data.content[i].parts[j].content_type && d.data.content[i].parts[j].content_type === "image_asset_pointer") {
+                // const regex = /file-[\w-]+/;
+                // const matchedstring = d.data.content[i].asset_pointer.match(regex);
+                const matchedstring = d.data.content[i].parts[j].asset_pointer.slice(15);  // 从第16个字符开始截取到字符串结尾
+                if (matchedstring) {
+                  //log(matchedstring);  // file-0rbJDxE2JZqAUM8R9Jz8eUOS
+                  let sourceURL = pictureURL.get(matchedstring);
+                  if (!sourceURL) {
+                    try {
+                      sourceURL = await fetchPictureURL(matchedstring);
+                      pictureURL.set(matchedstring, sourceURL);
+                    } catch (error) {
+                      console.error(error);
+                      return;  // 如果有错误，提前退出函数
+                    }
+                  }
+                  let picDiv = createOnePic(sourceURL);
+                  let downloadBtn = createDownloadBtn();
+                  downloadBtn.dataset.sourceUrl = sourceURL;  // 在所有情况下都设置
+                  allPicsDiv.appendChild(picDiv);
+                  allPicsDiv.appendChild(downloadBtn);
+                } else {
+                  log("No match found");
+                }
+                j++;
+                if (j === d.data.content[i].parts.length) {
+                  break;
+                }
+              }//退出当前图片群, 且当前j没有加入
+              if (j < d.data.content[i].parts.length) {
+                let accumulatedParts = [...d.data.content[i].parts[j]];
+                j++;
+                let text2HTML;
+                for (; j < d.data.content[i].parts.length; j++) {
+                  accumulatedParts.push(d.data.content[i].parts[j]);
+                }
+                let combinedText;
+                if (d.data.content[i].author.role !== "user") {
+                  log("d.data.content[i].author.role !== \"user\"");
+                  combinedText = accumulatedParts.join('');
+                  text2HTML = markdownToHTML(combinedText);
+                  let contentSpan = document.createElement('span');
+                  contentSpan.innerHTML = text2HTML;
+                  realContentDiv.appendChild(contentSpan);
+                } else {
+                  log("d.data.content[i].author.role === \"user\"");
+                  text2HTML = accumulatedParts.join('');
+                  log("text2HTML:", text2HTML);
+                  let contentSpan = document.createElement('span');
+                  contentSpan.innerText = text2HTML; // 如果只需要纯文本
+                  realContentDiv.appendChild(contentSpan);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      function markdownToHTML(markdown) {
+        markdown = markdown.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // 1. Convert code blocks
+//         markdown = markdown.replace(/```(\w+)?\s*([\s\S]*?)```/g, function (match, lang, code) {
+//           lang = lang || 'plaintext';
+//           // Escape HTML tags inside the code block
+//           const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+//           return `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${lang}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-${lang}">${escapedCode}
+// </code></div></div></pre>`;
+//         });
+        const codeBlocks = [];
+
+        markdown = markdown.replace(/(?:\n\n|^)```(\w+)?\s*([\s\S]*?)\n```(?:\n\n)/gm, function (match, lang, code, index) {
+          lang = lang || 'plaintext';
+          const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const codeHtml = `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${lang}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-${lang}">${escapedCode}</code></div></div></pre>`;
+          // Push the current code block's HTML to the array and replace with a placeholder
+          codeBlocks.push(codeHtml);
+          return `CODEBLOCK${codeBlocks.length - 1}\n`;
+        });
+
+        markdown = markdown.replace(/(?:\n\n|^)```(\w+)?\s*([\s\S]*)$/, function (match, lang, code, index) {
+          lang = lang || 'plaintext';
+          const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          const codeHtml = `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${lang}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-${lang}">${escapedCode}</code></div></div></pre>`;
+          // Push the current code block's HTML to the array and replace with a placeholder
+          codeBlocks.push(codeHtml);
+          return `CODEBLOCK${codeBlocks.length - 1}\n`;
+        });
+        markdown = markdown.replace(/```/g, '`');
+        // markdown = markdown.replace(/(?:\n\n|^)```(\w+)?\s*([\s\S]*?)\n\n```(?:\n\n|$)/gm, function (match, pre, lang, code, post, index) {
+        //   lang = lang || 'plaintext';
+        //   const escapedCode = code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        //   const codeHtml = `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${lang}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="!whitespace-pre hljs language-${lang}">${escapedCode}</code></div></div></pre>`;
+        //   // Push the current code block's HTML to the array and replace with a placeholder
+        //   codeBlocks.push(codeHtml);
+        //   return `CODEBLOCK${codeBlocks.length - 1}`;
+        // });
+        // 2. Convert headers
+        markdown = markdown.replace(/^#####\s+(.+)$/gm, '<h5>$1</h5>');
+        markdown = markdown.replace(/^####\s+(.+)$/gm, '<h4>$1</h4>');
+        markdown = markdown.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+        markdown = markdown.replace(/^##\s+(.+)$/gm, '<h2>$1</h2>');
+        markdown = markdown.replace(/^#\s+(.+)$/gm, '<h1>$1</h1>');
+
+        // 3. Convert horizontal rules
+        markdown = markdown.replace(/^(---)$/gm, '<hr>');
+
+        // 4. Convert links
+        markdown = markdown.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_new">$1</a>');
+
+        // 5. Convert unordered lists marked with single dash
+        //markdown = markdown.replace(/^- ([^\n]+)(\n|$)/gm, '<li>$1</li>');
+        //markdown = markdown.replace(/(<li>.*?<\/li>)(?=<li>|$)/gs, '<ul>$1</ul>');
+
+        // 6. Convert inline code and escape HTML
+        // markdown = markdown.replace(/`([^`]+)`/g, function (match, code) {
+        //   return '<code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+        // });
+        // 对于内联代码的匹配，我们使用否定的前瞻和后顾来确保反引号前后没有其他反引号
+        markdown = markdown.replace(/(?<!`)`([^`\n]+)`(?!`)/g, function (match, code) {
+          return '<code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+        });
+
+// 7. Convert bold text
+        markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+// 8. Convert paragraphs
+        markdown = markdown.replace(/^(?!<li>|<h[1-6]>|<ul>|<pre>|<hr>|<a>|<\/?code>)([\s\S]+?)(?=\n\n|$)/gm, '<p>$1</p>');
+        markdown = markdown.replace(/CODEBLOCK(\d+)/g, function (match, n) {
+          return codeBlocks[n];
+        });
+        return markdown;
+      }
+
+//       function markdownToHTML(markdown) {
+//         // Convert bold text
+//         markdown = markdown.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+//
+//         markdown = markdown.replace(/```(\w+)?\s*([\s\S]*?)```/g, function (match, lang, code) {
+//           // 如果没有指定语言，我们可以默认使用'plaintext'，或者选择不显示
+//           lang = lang || 'plaintext';
+//           return `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${lang}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code>${code.trim()}
+// </code></div></div></pre>`;
+//         });
+//
+//         // Convert inline code and escape HTML
+//         markdown = markdown.replace(/`([^`]+)`/g, function (match, code) {
+//           return '<code>' + code.replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</code>';
+//         });
+//
+//         // Convert ordered lists
+//         markdown = markdown.replace(/\d+\.\s+(.+)(\n|$)/g, '<li>$1</li>');
+//         markdown = '<ol>' + markdown + '</ol>';
+//
+//         // Convert unordered lists (assuming they are marked with - )
+//         markdown = markdown.replace(/^-\s+(.+)(\n|$)/gm, '<li>$1</li>');
+//         markdown = '<ul>' + markdown + '</ul>';
+//
+//         // Convert paragraphs
+//         markdown = markdown.replace(/([^\n]+)(\n|$)/g, '<p>$1</p>');
+//
+//         return markdown;
+//       }
+
+
+      // Convert code blocks
+//         markdown = markdown.replace(/```([\s\S]*?)```/g, function (match, code) {
+//           return `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>javascript</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code>${code.trim()}
+// </code></div></div></pre>`;
+//         });
+
+//         // Convert code blocks with language detection
+//         markdown = markdown.replace(/```(\\w*)\\n([\\s\\S]*?)```/g, function(match, language, code) {
+//           return `<pre><div class="bg-black rounded-md"><div class="flex items-center relative text-gray-200 bg-gray-800 gizmo:dark:bg-token-surface-primary px-4 py-2 text-xs font-sans justify-between rounded-t-md"><span>${language || 'plain text'}</span><button class="flex ml-auto gizmo:ml-0 gap-2 items-center"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>Copy code</button></div><div class="p-4 overflow-y-auto"><code class="language-\${language}">${code.trim()}
+// </code></div></div></pre>`;
+//         });
+
+
+      //
+      // if(d.data.content[i].content_type && d.data.content[i].content_type === "image_asset_pointer"){
+      //   let allPicsDiv = createAllPicsDiv();
+      //   allPicsDiv.id = "allPicsDiv";
+      //   realContentDiv.appendChild(allPicsDiv);
+      //   while(d.data.content[i] && d.data.content[i].content_type === "image_asset_pointer"){
+      //     // const regex = /file-[\w-]+/;
+      //     // const matchedstring = d.data.content[i].asset_pointer.match(regex);
+      //     const matchedstring = d.data.content[i].asset_pointer.slice(15);  // 从第16个字符开始截取到字符串结尾
+      //
+      //     if (matchedstring) {
+      //       log(matchedstring);  // file-0rbJDxE2JZqAUM8R9Jz8eUOS
+      //       let sourceURL = pictureURL.get(matchedstring) ;
+      //       if (!sourceURL) {
+      //         try {
+      //           sourceURL = await fetchPictureURL(matchedstring);
+      //           pictureURL.set(matchedstring, sourceURL);
+      //         } catch (error) {
+      //           console.error(error);
+      //           return;  // 如果有错误，提前退出函数
+      //         }
+      //       }
+      //
+      //       let picDiv = createOnePic(sourceURL);
+      //       let downloadBtn = createDownloadBtn();
+      //       downloadBtn.dataset.sourceUrl = sourceURL;  // 在所有情况下都设置
+      //       allPicsDiv.appendChild(picDiv);
+      //       allPicsDiv.appendChild(downloadBtn);
+      //     } else {
+      //       log("No match found");
+      //     }
+      //     i++;
+      //   }
+      //   if ( i < d.data.content.length) {
+      //     let contentSpan = document.createElement('div');
+      //     contentSpan.className = 'content-text';
+      //     contentSpan.innerHTML = d.data.content[i]; // 如果只需要纯文本
+      //     realContentDiv.appendChild(contentSpan);
+      //   }
+      // }
+      // if(d.data.content_type === "text"){
+      //     let div = document.createElement('div');
+      //       div.innerHTML = d.data.content[0];
+      //   div.className = 'content-text';
+      //   realContentDiv.appendChild(div);
+      // }
+      // else {
+      //   for(let i = 0 ; i < d.data.content.length; i ++){
+      //     if(d.data.content[i].content_type && d.data.content[i].content_type === "image_asset_pointer"){
+      //       let allPicsDiv = createAllPicsDiv();
+      //       allPicsDiv.id = "allPicsDiv";
+      //       realContentDiv.appendChild(allPicsDiv);
+      //       while(d.data.content[i] && d.data.content[i].content_type === "image_asset_pointer"){
+      //         // const regex = /file-[\w-]+/;
+      //         // const matchedstring = d.data.content[i].asset_pointer.match(regex);
+      //         const matchedstring = d.data.content[i].asset_pointer.slice(15);  // 从第16个字符开始截取到字符串结尾
+      //
+      //         if (matchedstring) {
+      //           log(matchedstring);  // file-0rbJDxE2JZqAUM8R9Jz8eUOS
+      //           let sourceURL = pictureURL.get(matchedstring) ;
+      //           if (!sourceURL) {
+      //             try {
+      //               sourceURL = await fetchPictureURL(matchedstring);
+      //               pictureURL.set(matchedstring, sourceURL);
+      //             } catch (error) {
+      //               console.error(error);
+      //               return;  // 如果有错误，提前退出函数
+      //             }
+      //           }
+      //
+      //           let picDiv = createOnePic(sourceURL);
+      //           let downloadBtn = createDownloadBtn();
+      //           downloadBtn.dataset.sourceUrl = sourceURL;  // 在所有情况下都设置
+      //           allPicsDiv.appendChild(picDiv);
+      //           allPicsDiv.appendChild(downloadBtn);
+      //         } else {
+      //           log("No match found");
+      //         }
+      //         i++;
+      //       }
+      //       if ( i < d.data.content.length) {
+      //         let contentSpan = document.createElement('div');
+      //         contentSpan.className = 'content-text';
+      //         contentSpan.innerHTML = d.data.content[i]; // 如果只需要纯文本
+      //         realContentDiv.appendChild(contentSpan);
+      //       }
+      //     }
+      //     else{
+      //       let contentSpan = document.createElement('div');
+      //       contentSpan.className = 'content-text';
+      //       contentSpan.innerHTML = d.data.content[i]; // 如果只需要纯文本
+      //       realContentDiv.appendChild(contentSpan);
+      //     }
+      //   }
+      // }
+
+      targetDiv.appendChild(realContentDiv);
     },
     handleClick: function (e) {
       if (e.target.closest('button.flex.ml-auto.gizmo\\:ml-0.gap-2.items-center')) {
@@ -5217,24 +5835,13 @@
       let windowElem = document.createElement('div');
       windowElem.className = "temporalityContentLayoutDiv";
       windowElem.id = d.data.uuid + "-window";
-      windowElem.style.position = 'absolute';
-      windowElem.style.width = '600px';
-      windowElem.style.maxHeight = '500px';
-      windowElem.style.padding = '20px';
-      windowElem.style.fontFamily = 'Arial, sans-serif';
-      windowElem.style.fontSize = '16px';
-      windowElem.style.lineHeight = '1.6';
-      windowElem.style.border = '1px solid #ccc';
-      windowElem.style.borderRadius = '5px';
-      windowElem.style.boxShadow = '0px 0px 10px rgba(0,0,0,0.2)';
-      windowElem.style.overflow = 'auto';
-      windowElem.style.opacity = '0.8';
-
+      windowElem.style = `position: absolute; width: 600px; padding: 20px; font-size: 16px; lineHeight: 1.6; border: 1px solid #ccc; borderRadius: 5px; boxShadow: 0px 0px 10px rgba(0,0,0,0.2); overflow: auto; opacity: 0.8; max-Height: 500px;`;
+      //fontFamily: Arial, sans-serif;
       nodesInAndOutKit.updateSelectedNodeContentDiv(d, windowElem);
       const htmlClass = document.documentElement.getAttribute('class');
-      windowElem.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass);
+      windowElem.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass === "gizmo dark" || htmlClass === "dark" ? "dark" : "light");
 
-      windowElem.style.backgroundColor = htmlClass === "dark" ?
+      windowElem.style.backgroundColor = htmlClass === "gizmo dark" || htmlClass === "dark" ?
         d.data.type === "chatGPT" ? 'rgb(68,70,84)' : 'rgb(51,53,65)' :
         d.data.type === "chatGPT" ? 'rgb(247,247,248)' : 'rgb(256,256,256)';
       windowElem.style.boxShadow = htmlClass === "dark" ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
@@ -5335,20 +5942,9 @@
 
       const htmlClass = document.documentElement.getAttribute('class');
 
+      contentDiv.style = `position :fixed; top: 10px; right: 10px; width: 400px; padding: 10px; border :8px solid #ddd; display :none; lineHeight :1.6; overflow :hidden; userSelect: text; font-size: 14px;`;
       contentDiv.id = 'contentDiv';
-      contentDiv.style.position = 'fixed';
-      contentDiv.style.top = '10px';
-      contentDiv.style.right = '10px';
-      contentDiv.style.width = '400px';
-      contentDiv.style.padding = '10px';
-      contentDiv.style.borderRadius = '8px';
-      contentDiv.style.border = '8px solid #ddd';
-      contentDiv.style.display = 'none';
-      contentDiv.style.fontFamily = 'Arial, sans-serif';
-      contentDiv.style.fontSize = '14px';
-      contentDiv.style.lineHeight = '1.6';
-      contentDiv.style.overflow = 'hidden';
-      contentDiv.style.userSelect = 'text';
+      contentDiv.style.borderRadius= '8px';
       let windowHeight = window.innerHeight;
       contentDiv.style.height = windowHeight - 20 + 'px';
 
@@ -5545,40 +6141,6 @@
         }
       }
 
-      // function moveContentDiv(e) {
-      //   if (isRightMouseDown || isLeftMouseDown) {
-      //     const dx = e.clientX - initialMouseX;
-      //     const dy = e.clientY - initialMouseY;
-      //
-      //     let newLeft = initialDivX + dx;
-      //     let newTop = initialDivY + dy;
-      //
-      //     let maxWidth = window.innerWidth;
-      //     let maxHeight = window.innerHeight;
-      //     let elementWidth = contentDiv.offsetWidth;
-      //     let elementHeight = contentDiv.offsetHeight;
-      //
-      //     // 检查右边界
-      //     if (newLeft > maxWidth - elementWidth) {
-      //       newLeft = maxWidth - elementWidth;
-      //     }
-      //
-      //     // 检查上边界
-      //     if (newTop < 0) {
-      //       newTop = 0;
-      //     }
-      //
-      //     contentDiv.style.left = newLeft + 'px';
-      //     contentDiv.style.top = newTop + 'px';
-      //
-      //     document.body.style.cursor = isRightMouseDown ? 'move' : 'grabbing';
-      //     talkingPerson.style.cursor = 'grabbing';
-      //
-      //     ContentKit.positionCommentFormRelativeToContentDiv();
-      //   }
-      // }
-
-
       closeButton.addEventListener('click', function () {
         contentDiv.style.display = 'none';
         if (commentForm.style.display === 'block') {
@@ -5731,7 +6293,15 @@
               contentDiv.style.top = (oBoxT + dy) + 'px';
             }
           }
+          //log("contentDiv:",contentDiv);
+          let imagesBtns = contentDiv.querySelectorAll('.m-1');
+          //log("images:",images);
+          let contentWidth = contentDiv.offsetWidth;
 
+          imagesBtns.forEach(btn => {
+            btn.style.width = `${contentWidth / 2 - 60}px`;
+            btn.style.height = `${contentWidth / 2 - 60}px`;
+          });
           document.body.style.cursor = cursors[d];
         }
 
@@ -5830,10 +6400,11 @@
             if (confirm(translate("emptyCommentPrompt"))) {
               ButtonOperations.showUserNotification(translate("commentSetToEmpty"));
               selectedNodeData.data.comment = '';
+              conversationData.commentMap.delete(selectedMapNode.uuid);
               log("renew selectedNodeData:", selectedNodeData);
-              log("selectedNodeData.comment:", selectedNodeData.data.comment);
+              //log("selectedNodeData.comment:", selectedNodeData.data.comment);
               selectedMapNode.comment = '';
-              const existingComment = selectedNode.data.comment;
+              const existingComment = "";
 
               if (existingComment && existingComment !== '') {
                 commentTextarea.value = existingComment;
@@ -5846,7 +6417,6 @@
                 });
               log("newData", conversationData);
               commentForm.style.display = 'none';
-              selectedNodeData.data.comment = "";
               nodesInAndOutKit.updateSelectedNodeContentDiv(selectedNodeData, selectedNodeContent);
             } else {
               ButtonOperations.showUserNotification(translate("enterCommentFirst"), "alert");
@@ -5855,9 +6425,11 @@
             ButtonOperations.showUserNotification(translate("commentSaved"));
             try {
               selectedNodeData.data.comment = commentValue;
+              conversationData.commentMap.set(selectedNodeData.data.uuid, commentValue);
+              log("conversationData:",conversationData);
               log("renew selectedNodeData:", selectedNodeData);
               log("selectedNodeData.comment:", selectedNodeData.data.comment);
-              selectedMapNode.comment = commentValue;
+              //selectedMapNode.comment = commentValue;
               const existingComment = selectedNode.data.comment;
 
               if (existingComment && existingComment !== '') {
@@ -5909,7 +6481,6 @@
 
   let languageContainer = document.createElement('div');
   let languageSelect = document.createElement('select');
-
 
 
   let scaleIncrementSmall = 0.1;
@@ -6005,7 +6576,7 @@
       WeChatDiv.id = "WeChatDiv";
       WeChatDiv.className = "rightMiddleDiv";
       WeChatDiv.innerHTML =
-      `
+        `
       <svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" viewBox="-7.582815 -10.290675 65.71773 61.74405"><defs><linearGradient gradientUnits="userSpaceOnUse" gradientTransform="scale(1.06228 .94137)" id="a" y2=".1504" x2="17.2422" y1="32.4312" x1="17.2422"><stop offset="0%" stop-color="#78D431"/><stop offset="100%" stop-color="#9EEE69"/><stop offset="100%" stop-color="#9EEE69"/></linearGradient><linearGradient gradientUnits="userSpaceOnUse" gradientTransform="scale(1.05667 .94637)" id="b" y2="14.6966" x2="33.4727" y1="41.634" x1="33.4727"><stop offset="0%" stop-color="#E4E6E6"/><stop offset="100%" stop-color="#F5F5FF"/></linearGradient></defs><g fill="none"><path fill="url(#a)" d="M0 15.3063c0 4.5919 2.4846 8.787 6.3245 11.5648.3388.2267.5082.5669.5082 1.0204 0 .1134-.0565.2835-.0565.3968-.2823 1.1338-.7906 3.0046-.847 3.0613-.0565.17-.113.2834-.113.4535 0 .3402.2824.6236.6212.6236.113 0 .2259-.0567.3388-.1134l4.0093-2.3243c.2823-.17.6211-.2834.96-.2834.1693 0 .3952 0 .5646.0567 1.8635.5669 3.8963.8503 5.9857.8503 10.1078 0 18.2957-6.8595 18.2957-15.3063S28.4035 0 18.2958 0C8.1879 0 0 6.8595 0 15.3063"/><path fill="url(#b)" d="M35.3424 39.6205c1.7463 0 3.4363-.2284 4.9572-.6854.1127-.057.2817-.057.4507-.057.2817 0 .5633.1142.7887.2284l3.3236 1.942c.1126.057.169.1142.2816.1142.2817 0 .507-.2285.507-.514 0-.1143-.0563-.2285-.0563-.3999 0-.0571-.4507-1.5992-.676-2.5702-.0563-.1142-.0563-.2285-.0563-.3427 0-.3427.169-.6283.4506-.8568 3.211-2.3417 5.239-5.8258 5.239-9.7097 0-7.0824-6.8163-12.851-15.2098-12.851s-15.2097 5.7115-15.2097 12.851c0 7.0824 6.8162 12.8511 15.2097 12.8511z"/><path fill="#187E28" d="M14.5484 10.3647c0 1.3223-1.0389 2.369-2.3512 2.369-1.3124 0-2.3513-1.0467-2.3513-2.369 0-1.3223 1.039-2.369 2.3513-2.369 1.3123 0 2.3512 1.0467 2.3512 2.369m12.1972 0c0 1.3223-1.039 2.369-2.3513 2.369-1.3123 0-2.3512-1.0467-2.3512-2.369 0-1.3223 1.039-2.369 2.3512-2.369 1.3124 0 2.3513 1.0467 2.3513 2.369"/><path fill="#858C8C" d="M38.502 22.8023c0 1.1517.9143 2.073 2.0573 2.073 1.143 0 2.0573-.9213 2.0573-2.073 0-1.1516-.9144-2.0729-2.0573-2.0729-1.143 0-2.0574.9213-2.0574 2.073m-10.1398 0c0 1.1516.9144 2.0729 2.0573 2.0729 1.143 0 2.0574-.9213 2.0574-2.073 0-1.1516-.9144-2.0729-2.0574-2.0729-1.143 0-2.0573.9213-2.0573 2.073"/></g></svg>
       `
       ;
@@ -6020,14 +6591,14 @@
       rightMiddleContainer.appendChild(TencentDiv);
 
 
-      languageContainer.className="language-container";
+      languageContainer.className = "language-container";
       languageContainer.style.position = 'fixed';
       languageContainer.style.display = 'none';
       languageSelect.id = 'languageSelect';
-      languageSelect.className= "language-dropdown";
+      languageSelect.className = "language-dropdown";
       let languages = ['ar', 'bg', 'ckb', 'cs', 'da', 'de', 'el', 'en', 'eo', 'es', 'fi', 'fr', 'fr-CA'
-      , 'he', 'hu', 'id', 'it', 'ja', 'ka', 'ko', 'nb', 'nl', 'pl', 'pt-PT', 'pt-BR', 'ro', 'ru', 'sk'
-      , 'sr', 'sv', 'th', 'tr', 'uk', 'ug', 'vi', 'zh-CN', 'zh-TW', 'zh-HK', 'zh-SG']
+        , 'he', 'hu', 'id', 'it', 'ja', 'ka', 'ko', 'nb', 'nl', 'pl', 'pt-PT', 'pt-BR', 'ro', 'ru', 'sk'
+        , 'sr', 'sv', 'th', 'tr', 'uk', 'ug', 'vi', 'zh-CN', 'zh-TW', 'zh-HK', 'zh-SG']
       languages.forEach(lang => {
         let option = document.createElement('option');
         option.value = lang;
@@ -6207,7 +6778,7 @@
         userColorBottomPicker.value = states.colorSetting.customUser.bottom;
       }
 
-     },
+    },
 
     colorAndOpacityKit: {
 
@@ -6301,29 +6872,29 @@
         });
       },
 
-      onChatGPTColorTopPickerChangeDone: function(e){
+      onChatGPTColorTopPickerChangeDone: function (e) {
         log("ChangeDone!");
         states.colorSetting.customChatGPT.is = true;
         // 移除现有的渐变
-       // const existingGradient = defs.querySelector('#CUSTOM_USER_GRADIENT');
+        // const existingGradient = defs.querySelector('#CUSTOM_USER_GRADIENT');
         const defsNode = defs.node();
         const existingGradient = defsNode.querySelector('#CUSTOM_CHATGPT_GRADIENT');
         if (existingGradient) {
           defsNode.removeChild(existingGradient);
         }
         states.colorSetting.customChatGPT.top = e.target.value.toString();
-        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", states.colorSetting.customChatGPT.bottom ,states.colorSetting.customChatGPT.top);
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", states.colorSetting.customChatGPT.bottom, states.colorSetting.customChatGPT.top);
         drawMainSVG();
 
         const newSettings = {id: 'chatGPTColor', state: states.colorSetting.customChatGPT};
-        log("newGPTSetting:",newSettings);
+        log("newGPTSetting:", newSettings);
         dbOperations.updateUserSettings(newSettings).then(() => {
           ButtonOperations.showUserNotification(translate("successSavingChanges"));
         }).catch(error => {
           console.error("Error saving Change:", error);
         });
       },
-      onChatGPTColorBottomPickerChangeDone: function(e){
+      onChatGPTColorBottomPickerChangeDone: function (e) {
         log("ChangeDone!");
         states.colorSetting.customChatGPT.is = true;
         // 移除现有的渐变
@@ -6333,17 +6904,17 @@
           defsNode.removeChild(existingGradient);
         }
         states.colorSetting.customChatGPT.bottom = e.target.value.toString();
-        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT",states.colorSetting.customChatGPT.bottom ,states.colorSetting.customChatGPT.top);
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", states.colorSetting.customChatGPT.bottom, states.colorSetting.customChatGPT.top);
         drawMainSVG();
         const newSettings = {id: 'chatGPTColor', state: states.colorSetting.customChatGPT};
-        log("newGPTSetting:",newSettings);
+        log("newGPTSetting:", newSettings);
         dbOperations.updateUserSettings(newSettings).then(() => {
           ButtonOperations.showUserNotification(translate("successSavingChanges"));
         }).catch(error => {
           console.error("Error saving Change:", error);
         });
       },
-      onUserColorTopPickerChangeDone: function(e){
+      onUserColorTopPickerChangeDone: function (e) {
         log("ChangeDone!");
         states.colorSetting.customUser.is = true;
         // 移除现有的渐变
@@ -6353,17 +6924,17 @@
           defsNode.removeChild(existingGradient);
         }
         states.colorSetting.customUser.top = e.target.value.toString();
-        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",states.colorSetting.customUser.bottom ,states.colorSetting.customUser.top);
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT", states.colorSetting.customUser.bottom, states.colorSetting.customUser.top);
         drawMainSVG();
         const newSettings = {id: 'userColor', state: states.colorSetting.customUser};
-        log("newUserSetting:",newSettings);
+        log("newUserSetting:", newSettings);
         dbOperations.updateUserSettings(newSettings).then(() => {
           ButtonOperations.showUserNotification(translate("successSavingChanges"));
         }).catch(error => {
           console.error("Error saving Change:", error);
         });
       },
-      onUserColorBottomPickerChangeDone: function(e){
+      onUserColorBottomPickerChangeDone: function (e) {
         log("ChangeDone!");
         states.colorSetting.customUser.is = true;
         // 移除现有的渐变
@@ -6373,10 +6944,10 @@
           defsNode.removeChild(existingGradient);
         }
         states.colorSetting.customUser.bottom = e.target.value.toString();
-        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT",states.colorSetting.customUser.bottom ,states.colorSetting.customUser.top);
+        initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT", states.colorSetting.customUser.bottom, states.colorSetting.customUser.top);
         drawMainSVG();
         const newSettings = {id: 'userColor', state: states.colorSetting.customUser};
-        log("newUserSetting:",newSettings);
+        log("newUserSetting:", newSettings);
         dbOperations.updateUserSettings(newSettings).then(() => {
           ButtonOperations.showUserNotification(translate("successSavingChanges"));
         }).catch(error => {
@@ -6399,12 +6970,26 @@
         }
       });
 
+      // 全局保存所有的PicDivs
+      let allPicDivs = [];
+
       function handleMouseEvents(mainDiv, picDiv) {
         let disappearTimeOut;
+
+        // 当一个PicDiv被展示时，隐藏所有其他的PicDivs
+        function hideOtherPicDivs(currentPicDiv) {
+          for (let div of allPicDivs) {
+            if (div !== currentPicDiv) {
+              div.style.display = 'none';
+            }
+          }
+        }
 
         mainDiv.addEventListener('mouseenter', function (e) {
           log(mainDiv.id + " mouseover");
           clearTimeout(disappearTimeOut);
+          hideOtherPicDivs(picDiv); // 隐藏其他PicDivs
+
           let elements = [mainDiv, picDiv];
           elements.forEach(element => {
             element.style.display = 'flex';
@@ -6414,6 +6999,7 @@
         picDiv.addEventListener('mouseenter', function (e) {
           log(picDiv.id + " mouseover");
           clearTimeout(disappearTimeOut);
+          hideOtherPicDivs(picDiv); // 隐藏其他PicDivs
           picDiv.style.display = 'block';
         });
 
@@ -6430,7 +7016,11 @@
             picDiv.style.display = 'none';
           }, 400);
         });
+
+        // 将当前的PicDiv加入到集中管理的数组中
+        allPicDivs.push(picDiv);
       }
+
       handleMouseEvents(feedbackDiv, feedBackPicDiv);
       handleMouseEvents(WeChatDiv, WeChatPicDiv);
       handleMouseEvents(TencentDiv, TencentPicDiv);
@@ -6460,7 +7050,6 @@
       //     feedBackPicDiv.style.display = 'none';
       //   }, 400);
       // });
-
 
 
       settingsDiv.addEventListener('click', function (e) {
@@ -6534,7 +7123,7 @@
               treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
               treeLayout(root);
               settingsKit.refreshTree();
-              drawMainSVG();
+              //drawMainSVG();
             }).catch(error => {
               console.error("Error loading data:", error);
             });
@@ -7016,23 +7605,33 @@
       let results = [];
       while (queue.length > 0) {
         let current = queue.shift();
+        if(current.uuid === conversationRootNode.uuid){
+          queue.push(...current.children);
+          continue;
+        }
+        //log("In BFSSearch, current_content:",current.content);
         if (searchOption === translate("searchInContent") && current.content) {
-          if (current.content.match(new RegExp(searchTerm, 'i')))
-            results.push(current);
-        } else if (searchOption === translate("searchInComments") && current.comment) {
-          if (current.comment.match(new RegExp(searchTerm, 'i')))
-            results.push(current);
-        } else if (searchOption === translate("searchInBoth") && (current.content || current.comment)) {
-          if (current.content) {
-            if (current.content.match(new RegExp(searchTerm, 'i'))) {
-              results.push(current);
+          log("搜索内容");
+          for (let i = 0; i < current.content.length; i++) {
+            for (let j = 0; j < current.content[i].parts.length; j++) {
+              if (!current.content[i].parts[j].content_type && current.content[i].parts[j].match(new RegExp(searchTerm, 'i')))
+                results.push(current);
             }
           }
-          if (current.comment) {
-            if (current.comment.match(new RegExp(searchTerm, 'i'))) {
-              results.push(current);
+        } else if (searchOption === translate("searchInComments")) {
+          log("搜索评论");
+          if (conversationData.commentMap.get(current.uuid))
+            results.push(current);
+        } else if (searchOption === translate("searchInBoth") && (current.content)) {
+          log("搜索两者");
+          for (let i = 0; i < current.content.length; i++) {
+            for (let j = 0; j < current.content[i].parts.length; j++) {
+              if (!current.content[i].parts[j].content_type && current.content[i].parts[j].match(new RegExp(searchTerm, 'i')))
+                results.push(current);
             }
           }
+          if (conversationData.commentMap.get(current.uuid))
+            results.push(current);
         }
         if (current.children) {
           queue.push(...current.children);
@@ -7714,29 +8313,27 @@
   };
 
 
-
-
   const languageKits = {
-    init: function(e){
+    init: function (e) {
       log("changeLanguageclick!");
-      if(!db){
+      if (!db) {
         return;
       }
 
       document.getElementById('search-results-count').innerText = '';
 
-      if(e) {
+      if (e) {
         log("e.target.value:", e.target.value);
         globalUserLang = e.target.value;
         currentLangPack = getLang(globalUserLang).langPack;
-        log("currentLangPack:",currentLangPack);
+        log("currentLangPack:", currentLangPack);
         languageSelectDiv.innerText = e.target.value;
-       // languageContainer.style.display = 'none';
+        // languageContainer.style.display = 'none';
         languageKits.updateUIWithTranslations();
-        if(e.target.shouldNotSave){
+        if (e.target.shouldNotSave) {
           return;
         }
-        const newSetting = {id:"userLang", globalUserLang: globalUserLang};
+        const newSetting = {id: "userLang", globalUserLang: globalUserLang};
         dbOperations.updateUserSettings(newSetting).then(() => {
           ButtonOperations.showUserNotification(translate("successSavingChanges"));
         }).catch(error => {
@@ -7744,7 +8341,7 @@
         });
       }
     },
-    updateUIWithTranslations: function(){
+    updateUIWithTranslations: function () {
 
       // 获取optionsButtons元素
       const optionsButtonsDiv = document.getElementById("optionsButtons");
@@ -7775,8 +8372,6 @@
           }
         }
       });
-
-      // 更新导航按钮
       const navButtonsElems = optionsButtonsDiv.querySelectorAll("button");
       const navButtonsTranslated = [translate("goToPrevious"), translate("goToNext")];
 
@@ -7838,23 +8433,24 @@
       {
         if (globalUserLang.startsWith('zh')) {
           feedBackPicDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 29%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 12%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
     <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
         <span class="block text-center font-medium normal-case text-white text-sm mb-2">点击参与问卷调查 (腾讯问卷)</span>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 100px; height: 100px; display: block; margin: auto;">
+        <div style="width: 300px; height: 270px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/000pureCode.png" alt="问卷二维码" style="width: 250px; height:250px; display: block; margin: auto;">
         </div>
         <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
         <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
     </div>
-</div>`;
+</div>
+`;
         } else {
           feedBackPicDiv.innerHTML = `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 28%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 7%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
     <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
         <p class="block text-center font-medium normal-case text-white text-sm mb-2">Click to take the survey</br>(Google Forms)</p>
-        <div style="width: 100px; height: 100px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 100px; height: 100px; display: block; margin: auto;">
+        <div style="width: 300px; height: 260px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/google_form.png" alt="Survey Code" style="width: 250px; height: 250px; display: block; margin: auto;">
         </div>
         <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
         <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
@@ -7864,11 +8460,11 @@
       }
       WeChatPicDiv.innerHTML =
         `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 0%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 13%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">
     <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
         <span class="block text-center font-medium normal-case text-white text-sm mb-2">作者微信</span>
-        <div style="width: 380px; height: 440px; margin: auto;">
-            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/wechatpic.jpg" alt="问卷二维码" style="width: 340px; height: 420px; display: block; margin: auto;">
+        <div style="width: 300px; height: 320px; margin: auto;">
+            <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/wechatpic.jpg" alt="问卷二维码" style="width: 250px; height: 300px; display: block; margin: auto;">
         </div>
         <span style="position: absolute; right: 0px; transform-origin: 100% 0px; transform: translateY(50%) rotate(-90deg) translateX(50%); top: 10.5px;">
         <div width="10" height="5" viewbox="0 0 30 10" preserveaspectratio="none" class="relative top-[-3px] h-2 w-2 rotate-45 transform border-r border-b border-black/10 bg-black shadow-xs" style="display: block;"></div></span>
@@ -7877,7 +8473,7 @@
         `
       TencentPicDiv.innerHTML =
         `
-<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 20%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
+<div data-radix-popper-content-wrapper="" style="position: fixed; right: 60px; bottom: 22%; min-width: max-content; z-index: auto; --radix-popper-anchor-width:30px; --radix-popper-anchor-height:33px; --radix-popper-available-width:1091px; --radix-popper-available-height:59px; --radix-popper-transform-origin:83px 13.5px;">    <div data-side="left" data-align="center" data-state="delayed-open" class="relative rounded-lg border border-black/10 bg-black p-1 shadow-xs transition-opacity" style="--radix-tooltip-content-transform-origin:var(--radix-popper-transform-origin); --radix-tooltip-content-available-width:var(--radix-popper-available-width); --radix-tooltip-content-available-height:var(--radix-popper-available-height); --radix-tooltip-trigger-width:var(--radix-popper-anchor-width); --radix-tooltip-trigger-height:var(--radix-popper-anchor-height);">
         <span class="block text-center font-medium normal-case text-white text-sm mb-2">QQ群二维码, 欢迎进群交流</span>
         <div style="width: 300px; height: 300px; margin: auto;">
             <img src="https://cdn.jsdelivr.net/gh/cuizhenzhi/pic_bed/img/QQ_Group_Pic.jpg" alt="问卷二维码" style="width: 250px; height: 300px; display: block; margin: auto;">
@@ -7890,4 +8486,396 @@
     }
   }
 
+//   function fetchRawChatDetails() {
+//     return new Promise((resolve, reject) => {
+//       chatgpt.getAccessToken().then(token => {
+//         log("get Token:",token);
+//         const xhr = new XMLHttpRequest();
+//         xhr.open('GET', endpoints.openAI.chats, true);  // `endpoints` object should be accessible from the original script
+//         xhr.setRequestHeader('Content-Type', 'application/json');
+//         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+//         xhr.onload = () => {
+//           if (xhr.status !== 200) {
+//             reject('Request failed. Cannot retrieve chat details.');
+//           } else {
+//             resolve(JSON.parse(xhr.responseText));
+//           }
+//         };
+//         xhr.onerror = () => {
+//           reject('Request error.');
+//         };
+//         xhr.send();
+//       });
+//     });
+//   }
+//
+// // 使用上述函数
+//   fetchRawChatDetails().then(data => {
+//     log(data);  // 打印原始聊天数据
+//
+//   }).catch(error => {
+//     console.error(error);
+//   });
+  function fetchRawChatMessages(chatId = "") {
+    if(chatId === ""){
+      return;
+    }
+    return new Promise((resolve, reject) => {
+      chatgpt.getAccessToken().then(token => {
+        //token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJwdGN5ZGRkbjl6QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctNlZoeUlReGlGQWlPbW1hVXg5WHlETGNHIiwidXNlcl9pZCI6InVzZXItdUd2M3FNZkU5emhHcndUdEJ1SGFheGszIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhcHBsZXwwMDAxMjMuNjQ4NjIzMDE5NmZlNDhiM2I4MTQxNTlmMmJmZDE3NTQuMTIyOSIsImF1ZCI6WyJodHRwczovL2FwaS5vcGVuYWkuY29tL3YxIiwiaHR0cHM6Ly9vcGVuYWkub3BlbmFpLmF1dGgwYXBwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2OTc4ODYyNTMsImV4cCI6MTY5ODc1MDI1MywiYXpwIjoiVGRKSWNiZTE2V29USHROOTVueXl3aDVFNHlPbzZJdEciLCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIG1vZGVsLnJlYWQgbW9kZWwucmVxdWVzdCBvcmdhbml6YXRpb24ucmVhZCBvcmdhbml6YXRpb24ud3JpdGUgb2ZmbGluZV9hY2Nlc3MifQ.KDeLRadnLd9vzMzbrhJC7u65mwQHY0E7Hd3wOTzJpnAN0qLvzKTGA_tDdmglcW4qIJcZddTFU2Hn7YJt1DC3MSXfZNdC1sqKk0Uj9ep-iodiNCmCo9O1V-9JTh0GcW75BmbSOe5L4hAguJYhAhz2xaGs1zfr6gFBXrqdNxjzKiN-mrKtm4hjkWTdWdf-KZC2ZPun81h2k30x2hsBDxIJIwv8PeAYIZKzQJJdAA9V6X1WXQZX1vI79rp3tnIk-WAJgtW-U1F_UgR8bKRivfgUYSa2NCpCPimnU_LDLvipE8jZMrSTxU8amdb_0Z22YiUvTL-wFWVg6m5IKg-82x-zBQ";
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `${endpoints.openAI.chat}/${chatId}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        xhr.onload = () => {
+          if (xhr.status !== 200) {
+            reject('Request failed. Cannot retrieve chat messages.');
+          } else {
+            resolve(JSON.parse(xhr.responseText)); // 返回整个原始数据
+          }
+        };
+        xhr.onerror = () => {
+          reject('Request error.');
+        };
+        xhr.send();
+      });
+    });
+  }
+  function fetchAccountDetails() {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', endpoints.openAI.session, true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.onload = () => {
+        // if (xhr.status !== 200) return reject('🤖 chatgpt.js >> Request failed. Cannot retrieve access token.');
+        // console.info('Token expiration: ' + new Date(JSON.parse(xhr.responseText).expires).toLocaleString().replace(',', ' at'));
+        // chatgpt.openAIaccessToken = {
+        //   token: JSON.parse(xhr.responseText).accessToken,
+        //   expireDate: JSON.parse(xhr.responseText).expires
+        // };
+        let getResponse = JSON.parse(xhr.responseText);
+        return resolve(getResponse); // 直接返回响应文本或数据
+        //return resolve(chatgpt.openAIaccessToken.token);
+      };
+      xhr.send();
+    });
+  }
+
+  let pictureURL = new Map();
+
+  async function fetchPictureURL(asset_pointer = "file-P2IMiUABxJbug9oU8Vh3sBBZ") {
+    return new Promise((resolve, reject) => {
+      chatgpt.getAccessToken().then(token => {
+        const xhr = new XMLHttpRequest();
+        let requestURL = "https://chat.openai.com/backend-api/files/" + asset_pointer + "/download";
+        log("requestURL:", requestURL);
+        xhr.open('GET', requestURL, true);
+        xhr.setRequestHeader('Content-Type', 'application/json'); // 可以考虑删除此行
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        log("XHR sent!");
+        xhr.onload = () => {
+          if (xhr.status !== 200) {
+            reject('Request failed. Cannot retrieve the file.');
+          } else {
+            let getResponse = JSON.parse(xhr.responseText);
+            resolve(getResponse.download_url); // 直接返回响应文本或数据
+          }
+        };
+        xhr.onerror = () => {
+          reject('Request error.');
+        };
+        xhr.send();
+      });
+    });
+  }
+
+  let fileHeader = "https://chat.openai.com/backend-api/files";
+
+  // function fetchPictureURL(asset_pointer = "file-P2IMiUABxJbug9oU8Vh3sBBZ") {
+  //   return new Promise((resolve, reject) => {
+  //     chatgpt.getAccessToken().then(token => {
+  //       const xhr = new XMLHttpRequest();
+  //       let requestURL = "https://chat.openai.com/backend-api/files/" + asset_pointer + "/download";
+  //       xhr.open('GET', requestURL, true);
+  //       xhr.setRequestHeader('Content-Type', 'application/json');
+  //
+  //
+  //       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+  //       xhr.onload = () => {
+  //         if (xhr.status !== 200) {
+  //           reject('Request failed. Cannot retrieve chat messages.');
+  //         } else {
+  //           resolve(JSON.parse(xhr.responseText)); // 返回整个原始数据 //.download_url
+  //         }
+  //       };
+  //       xhr.onerror = () => {
+  //         reject('Request error.');
+  //       };
+  //       xhr.send();
+  //     });
+  //   });
+  // }
+  fetchPictureURL().then(data => {
+    log("fetchURL: ", data);  // 打印原始聊天数据
+  }).catch(error => {
+    console.error(error);
+  });
+
+// 使用上述函数
+//   fetchRawChatMessages().then(data => {
+//     log(data);  // 打印原始聊天数据
+//     const timestamp = data.create_time * 1000;
+//     // const timestamp2 = data.update_time * 1000; // 转换为毫秒
+//     // const date2 = new Date(timestamp2);
+//     // log("update_time:",timestamp2);
+//     // log("update_time:",date2);
+//     processChatMessage(data);
+//   }).catch(error => {
+//     console.error(error);
+//   });
+  let conversationRootNode;
+
+  function processChatMessage(data) {
+    log("In ProcessChatMessage, mapping:", data.mapping);
+    const tokenMap = new Map(Object.entries(data.mapping));
+
+    let accessToken = chatgpt.getAccessToken();
+    log(tokenMap); // 这会显示一个 Map 对象，它的内容与原始的 mapping 对象相同
+    fetchAccountDetails().then(userData => {
+      log("user DATA:",userData);
+      conversationData.participants.user.name = userData.user.name;
+      conversationData.participants.user.avatarURL = userData.user.image;
+    })
+    conversationData.url = "https://chat.openai.com/c/" + data.conversation_id;
+    let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
+    log("GPTINFOR:",gptInfoDiv);
+    //log(gptInfoDiv);
+    if (gptInfoDiv) {
+      conversationData.participants.gpt.type = gptInfoDiv.innerText;
+    }
+    log("conversationData.participants.gpt.type:",conversationData.participants.gpt.type);
+    //conversationData.participants.gpt =
+    // url: conversationData.url,
+    //   timestamp: Date.now(),
+    //   participants: {
+    //   user: {
+    //     name: conversationData.participants.user.name,
+    //       avatarURL: conversationData.participants.user.avatarURL,
+    //       avatarHTML: conversationData.participants.user.avatarHTML,
+    //   },
+    //   gpt: {
+    //     type: conversationData.participants.gpt.type,
+    //   }
+    // },
+    let uuid2nodeMap = new Map();
+    let uuid2pathMap = new Map();
+    //我们实际上现在在做一个map到map的转换. 也就是说, 从服务器获取的map要先存储下来, 然后根据这个map来自己做一个新的map.
+    //所以说, 两个map的信息不能丢, 都要同时拿在手里.
+
+    for (let [key, value] of tokenMap) {
+      //log(`Key: ${key}, Value: ${value}`);
+      if (!value.parent) {
+        //log("got ParentNode:",key, value);
+        //得到了头节点/root节点
+        let tokenRootNode = tokenMap.get(tokenMap.get(key).children[0]);
+
+        conversationData.title = data.title;
+        if (tokenRootNode) {
+          log("rootNode:", tokenRootNode);
+          conversationRootNode = new DialogueNode(data.title? data.title : Default_RootNode_Content, "chatGPT", tokenRootNode.id, -1);
+          uuid2nodeMap.set(tokenRootNode.id, conversationRootNode)
+        } else {
+          log("Creating RootNode Wrong! Exit Updating Map!");
+          return;
+        }
+
+        function DFSUpdateMap(tokenNode, curRootNode, parentID) {
+          // if(tokenNode.message.weight === 0 && tokenNode.id !== tokenRootNode.id){
+          //   tokenNode = tokenMap.get(tokenNode.children[0]);
+          // }
+
+          for (let i = 0; i < tokenNode.children.length; i++) {
+            let child = tokenMap.get(tokenNode.children[i]);
+            let a_node_content = [];
+            let nodeID = child.id;
+            let parent = child.parent
+            if (child.message.author.role.toLowerCase() !== "user") {
+              updateChildContent(child);
+              a_node_content.push(child.message.content);
+              let grandSon;
+              while (child.message.author.role.toLowerCase() !== "user" && child.children.length > 0) {
+                grandSon = tokenMap.get(child.children[0]);
+                if (grandSon.message.author.role.toLowerCase() === "user")
+                  break;
+                updateChildContent(grandSon);
+                a_node_content.push(grandSon.message.content);
+                child = grandSon;
+              }
+              if (child.message.author.role.toLowerCase() === "user") {
+                child = tokenMap.get(child.parent);
+              }
+            } else {
+              updateChildContent(child);
+              a_node_content.push(child.message.content);
+            }
+            let type = child.message.author.role.toLowerCase() === "user" ? "用户" : "chatGPT";
+            let newDialogueNode = new DialogueNode(a_node_content, type, nodeID, parentID);
+            curRootNode.children.push(newDialogueNode);
+            uuid2nodeMap.set(child.id, newDialogueNode);
+            if (child.children.length > 0) {
+              DFSUpdateMap(child, newDialogueNode, nodeID);
+            }
+          }
+
+        }
+
+        function updateChildContent(child) {
+          child.message.content.author = child.message.author;
+          child.message.content.create_time = child.message.create_time;
+          child.message.content.metadata = child.message.metadata;
+          child.message.content.recipient = child.message.recipient;
+          child.message.content.status = child.message.status;
+          child.message.content.weight = child.message.weight;
+        }
+
+
+        DFSUpdateMap(tokenRootNode, conversationRootNode, tokenRootNode.id);
+
+
+        uuid2pathMap.set(conversationRootNode.uuid, "");
+        DFSUpdatePathMap(conversationRootNode, [], uuid2pathMap);
+
+
+        log("uuid2nodeMap:", uuid2nodeMap);
+        log("uuid2pathMap:", uuid2pathMap);
+        root = d3.hierarchy(conversationRootNode);
+        const widthPerNode = 30;
+        const heightPerNode = 30;
+        treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+        treeLayout(root);
+        drawMainSVG();
+        break;
+      }
+    }
+
+    //const arrayOfEntries = [...mappingMap];
+    //log("array:",arrayOfEntries);
+    return {
+      uuid2nodeMap: uuid2nodeMap,
+      uuid2pathMap: uuid2pathMap
+    };
+
+  }
+
+  function DFSUpdatePathMap(conversationRootNode, fatherPath, uuid2pathMap) {
+    if (conversationRootNode.children.length > 0) {
+      for (let i = 0; i < conversationRootNode.children.length; i++) {
+        let child = conversationRootNode.children[i];
+        // 使用 slice() 创建 fatherPath 的副本，并在这个副本上 push 新元素
+        let childPath = fatherPath.slice(); // 先复制现有数组
+        childPath.push(i + 1); // 然后添加新元素
+        //log("passing path:", childPath);
+        uuid2pathMap.set(child.uuid, childPath);
+        DFSUpdatePathMap(child, childPath, uuid2pathMap); // 传递副本给递归调用
+      }
+    }
+  }
+
+  function DFSUpdatePathMap_1(conversationRootNode, fatherPath, uuid2pathMap) {
+    if (conversationRootNode.children.length > 0) {
+      for (let i = 0; i < conversationRootNode.children.length; i++) {
+        let child = conversationRootNode.children[i];
+        // 使用 slice() 创建 fatherPath 的副本，并在这个副本上 push 新元素
+        let childPath = fatherPath.slice(); // 先复制现有数组
+        childPath.push(i + 1); // 然后添加新元素
+        //log("passing path:", childPath);
+        let stringPath = arrayToKey(childPath);
+        uuid2pathMap.set(child.uuid, stringPath);
+        DFSUpdatePathMap_1(child, childPath, uuid2pathMap); // 传递副本给递归调用
+      }
+    }
+  }
+
+  function DFSUpdatePathMap_2(fatherPath, conversationRootNode, path2uuid) {
+    //log("in DFSUpdatePathMap_2", fatherPath, conversationRootNode, path2uuid);
+    if (conversationRootNode.children.length > 0) {
+      for (let i = 0; i < conversationRootNode.children.length; i++) {
+        let child = conversationRootNode.children[i];
+        //log("the ",i, "child:", child);
+        // 使用 slice() 创建 fatherPath 的副本，并在这个副本上 push 新元素
+        let childPath = fatherPath.slice(); // 先复制现有数组
+        childPath.push(i + 1); // 然后添加新元素
+        //log("passing path:", childPath);
+        let stringPath = arrayToKey(childPath);
+        path2uuid.set(stringPath, child.uuid);
+        DFSUpdatePathMap_2(childPath, child, path2uuid); // 传递副本给递归调用
+      }
+    }
+  }
+
+  function conver_to_new_style() {
+    log("in conver_to_new_style:");
+    log("conversationRootNode:", conversationRootNode);
+    let path2uuid = new Map();
+    path2uuid.set("", conversationRootNode.uuid);
+    path2uuid = new Map();
+
+    log("start DFSUpdatePathMap_2");
+    DFSUpdatePathMap_2([], conversationRootNode, path2uuid);
+    log("stop DFSUpdatePathMap_2");
+    let commentMap = new Map();
+    let bookMarkedMap = new Map();
+
+    function transfer_comment(OldRootNode) {
+      if (OldRootNode.children.length > 0) {
+        for (let i = 0; i < OldRootNode.children.length; i++) {
+          let child = OldRootNode.children[i];
+          if (child.comment !== "") {
+            let path = conversationData.uuid2pathMap.get(child.uuid);
+            let newUUID = path2uuid.get(arrayToKey(path));
+            commentMap.set(newUUID, child.comment);
+            //console.log("comment:",child.comment);
+          }
+          transfer_comment(child); // 传递副本给递归调用
+        }
+      }
+    }
+    //console.log("OldRootNode:",conversationData.rootNode);
+
+    transfer_comment(conversationData.rootNode);
+    log("commentMap:", commentMap);
+    transfer_bookeMark (conversationData.rootNode);
+    log("bookMarkedMap:", bookMarkedMap);
+
+
+    function transfer_bookeMark(OldRootNode) {
+      conversationData.bookMarked.forEach((value, key) => {
+        log("conversationData:", conversationData);
+        log("conversationData.uuid2pathMap:", conversationData.uuid2pathMap);
+        //log(`Key: ${key}, Value: ${value}`);
+        let path = conversationData.uuid2pathMap.get(key);
+        log("path:", path);
+        let newUUID = path2uuid.get(arrayToKey(path));
+        log("newUUID:", newUUID);
+        bookMarkedMap.set(newUUID, true);
+      });
+    }
+    // let uuid2path = new Map();
+    // path2uuid.bookMarked.forEach((value, key) => {
+    //   let path = keyToArray(value);
+    //   uuid2path.set(value, path);
+    // });
+
+
+    //conversationData.isNovemberSeventh = true;
+    log("out conver_to_new_style");
+    // conversationData.uuid2nodeMap
+    conversationData.isNovemberSeventh = true;
+    return {
+      rootNode: conversationRootNode,
+      bookMarked: bookMarkedMap,
+      commentMap: commentMap,
+      //path2uuid: path2uuid
+    }
+  }
 })();

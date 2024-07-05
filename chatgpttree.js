@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name         ChatGPT ChatTree 🌳
 // @name:zh-CN   ChatGPT ChatTree 🌳
+// @name:es   ChatGPT ChatTree 🌳
+// @name:ar   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2023.11.08.01
+// @version      2024.06.29.01
 // @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
 // @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
 // @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
@@ -44,7 +46,7 @@
 // @description:zh-HK ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您與ChatGPT的每一次互動🚀 🔄實時ChatGPT對話樹更新+可視化🔄 💡ChatGPT對話提示，自定義註釋，書籤💡🔍 ChatGPT智能搜索：快速定位特定對話🔍 📋ChatGPT互動管理面板，界面友好，全面ChatGPT互動管理選項，分類、標籤和更多📋
 // @description:zh-SG ChatGPT ChatTree 🌳，🚀永久、不受限制地管理您与ChatGPT的每一次互动🚀 🔄实时ChatGPT对话树更新+可视化🔄 💡ChatGPT对话提示，自定义注释，书签💡🔍 ChatGPT智能搜索：快速定位特定对话🔍 📋ChatGPT互动管理面板，界面友好，全面ChatGPT互动管理选项，分类、标签和更多📋
 // @author   cuizhenzhi
-// @match    *://chat.openai.com/*
+// @match    *://chatgpt.com/*
 // @grant    GM_addStyle
 // @grant    GM_getResourceText
 // @require  https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js
@@ -53,32 +55,159 @@
 // @require  https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js
 // @require      https://code.jquery.com/jquery-3.5.1.min.js
 // @require      https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js
-// @require             https://cdn.jsdelivr.net/gh/kudoai/chatgpt.js@516ad148b02335b98db82c89dec02e5fa28c7d56/dist/chatgpt-2.3.13.min.js
 // @run-at document-end
 // @homepageURL         https://github.com/cuizhenzhi/ChatTree
 // @supportURL   https://github.com/cuizhenzhi/ChatTree/issues
 // @license GPL-2.0-only
 // @icon data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" stroke-width="8" fill="none" stroke="white" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="rgb(25, 195, 125)"/><path d="M40 61 V89 Q40 90 41 90 H59 Q60 90 60 89 V61 Q60 60 61 61 Q66 65 69 61 70 60 71 61 75 65 79 61 80 60 81 61 85 65 89 61 90 60 89 59 75 55 61 41 60 40 60.5 40.5 Q66 45 69 41 70 40 71 41 75 45 79 41 80 40 79 39 70 35 61 26 60 25 61 26 Q65 30 69 26 70 25 69 24 60 20 51 11 50 10 49 11 40 20 31 24 30 25 31 26 Q35 30 39 26 40 25 39 26 30 35 21 39 20 40 21 41 Q25 45 29 41 30 40 31 41 35 45 39 41 40 40 39 41 25 55 11 59 10 60 11 61 Q15 65 19 61 20 60 21 61 25 65 29 61 30 60 31 61 35 65 39 61 40 60 40 61"></path></svg>
+// @downloadURL https://update.greasyfork.org/scripts/476683/ChatGPT%20ChatTree%20%F0%9F%8C%B3.user.js
+// @updateURL https://update.greasyfork.org/scripts/476683/ChatGPT%20ChatTree%20%F0%9F%8C%B3.meta.js
 // ==/UserScript==
 
 (function (node) {
+// @require             https://cdn.jsdelivr.net/gh/kudoai/chatgpt.js@516ad148b02335b98db82c89dec02e5fa28c7d56/dist/chatgpt-2.3.13.min.js
+
   "use strict";
   //chatgpt.logout();
-
+  console.log("chatgpt chattree!");
   const isDevelopmentMode = true;
+  // 定义支持的类别
+  const LogCategories = {
+    //DEFAULT: 'DEFAULT',
+    IMPORTANT: 'IMPORTANT',
+    DEBUG: 'DEBUG',
+    INFO: 'INFO',
+    WARNING: 'WARNING',
+    ERROR: 'ERROR',
+    SUCCESS: 'SUCCESS',
+  };
+  const LogStyles = {
+    IMPORTANT: 'background-color: #007bff; color: white; padding: 8px; font-size: 16px;',
+    //DEBUG: 'background-color: #f0f0f0; color: #333; border: 1px solid #ccc; padding: 5px;',
+    INFO: 'background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; padding: 0px;',
+    WARNING: 'background-color: yellow; color: black; border: 1px solid red; padding: 5px;',
+    ERROR: 'color: red; font-weight: bold; font-size: 16px;',
+    SUCCESS: 'background-color: green; color: white; border: 1px solid black;',
+  }
 
-  function log(...messages) {
-    if (isDevelopmentMode) {
-      console.log(...messages);
+  class Logger {
+    constructor(moduleName) {
+      this.moduleName = moduleName;
+      this.log(LogCategories.SUCCESS, `${this.moduleName} logger created!`);
+    }
+
+    log(category = LogCategories.DEBUG, ...message) {
+      // 发布模块信息
+      //console.log(`[${this.moduleName}] ${category}: ${message}`);
+      let metadata = {
+        moduleName: this.moduleName,
+        category: category,
+        style: LogStyles[category],
+        //mesage: message,
+      }
+
+      let info = [metadata, ...message];
+      // 调用全局 log 函数
+
+      //console.log('Global log function, info:', info);
+      log(...info);
     }
   }
 
-  function error(...messages) {
-    console.error(...messages);
+  function log(...messages) {
+    // 如果不是开发模式，则直接返回
+    if (!isDevelopmentMode) {
+      return;
+    }
+
+    // 默认使用的类别
+    let defaultCategory = LogCategories.DEBUG;
+    let defaultStyle = LogStyles.DEBUG;
+    // 检查是否提供了类别参数
+    let category = defaultCategory;
+    let style = defaultStyle;
+    let metadata = {};
+    metadata.moduleName = 'undefined';
+    //console.log(messages[0], messages[0].category, LogCategories[messages[0].category])
+
+    if (messages.length > 0 && typeof messages[0] === 'object' && LogCategories[messages[0].category]) {
+      metadata = messages.shift();
+      category = metadata.category;
+      style = metadata.style;
+    }
+    if (LogCategories[messages[0]]) {
+      category = messages[0];
+      style = LogStyles[category];
+      messages.shift();
+    }
+    // 根据类别进行不同的处理
+    switch (category) {
+      case LogCategories.IMPORTANT:
+        console.log(`%c[IMPORTANT]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        // 这里可以添加额外的处理逻辑
+        break;
+      case LogCategories.DEBUG:
+        //console.debug(`%c[DEBUG]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        console.debug(`[DEBUG]\n ${metadata.moduleName}\n`, ...messages);
+        break;
+      case LogCategories.INFO:
+        console.info(`%c[INFO]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        break;
+      case LogCategories.WARNING:
+        console.warn(`%c[WARNING]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        break;
+      case LogCategories.ERROR:
+        console.error(`%c[ERROR]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        break;
+      case LogCategories.SUCCESS:
+        console.log(`%c[SUCCESS]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg === 'object' ? JSON.stringify(msg) : msg).join('\n')}`, style);
+        break;
+      default:
+        console.log(`[${category.toUpperCase()}]`, ...messages);
+    }
+
+
+    /* 以下输出方式: 如果不是字符串形式, 则正常输出
+    *   // 根据类别进行不同的处理
+  switch (category) {
+    case LogCategories.IMPORTANT:
+      console.log(`%c[IMPORTANT]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg !== 'string' ? (console.log(msg), '') : msg).join('\n')}`, style);
+      // 这里可以添加额外的处理逻辑
+      break;
+    case LogCategories.DEBUG:
+      console.debug(`[DEBUG]\n ${metadata.moduleName}`);
+      messages.forEach(msg => {
+        if (typeof msg !== 'string') {
+          console.log(msg);
+        } else {
+          console.debug(msg);
+        }
+      });
+      break;
+    case LogCategories.INFO:
+      console.info(`%c[INFO]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg !== 'string' ? (console.log(msg), '') : msg).join('\n')}`, style);
+      break;
+    case LogCategories.WARNING:
+      console.warn(`%c[WARNING]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg !== 'string' ? (console.log(msg), '') : msg).join('\n')}`, style);
+      break;
+    case LogCategories.ERROR:
+      console.error(`%c[ERROR]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg !== 'string' ? (console.log(msg), '') : msg).join('\n')}`, style);
+      break;
+    case LogCategories.SUCCESS:
+      console.log(`%c[SUCCESS]\n ${metadata.moduleName}\n ${messages.map(msg => typeof msg !== 'string' ? (console.log(msg), '') : msg).join('\n')}`, style);
+      break;
+    default:
+      console.log(`[${category.toUpperCase()}]`, ...messages);
+  }
+  * */
+  }
+
+  function isDark() {
+    return document.documentElement.classList.contains('dark');
   }
 
   GM_addStyle(`
-  
+
         #searchTopicContainer {
             margin-bottom: 20px;
         }
@@ -96,7 +225,7 @@
             transition: border 0.1s ease-in-out; /* 添加过渡效果 */
             border-radius: 4px; /* 添加边框圆角 */
         }
-        
+
         .conversation:hover {
             border: 2px solid black; /* 鼠标悬停时改变边框样式 */
             box-shadow: 0px 0px 10px black; /* 添加外边框阴影效果 */
@@ -143,31 +272,31 @@
 
 
 
-        
+
         .topicContainer{
-          width: 35%; 
+          width: 35%;
           overflow: hidden;
         }
-        
+
         .optionsContainer{
-          width: 12%; 
+          width: 12%;
           display: flex;
-          justify-content: center; 
+          justify-content: center;
         }
 
         .tagContainers {
             width: 26%;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
         }
 
         .categoriesContainer {
             width: 26%;
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
         }
 
@@ -182,7 +311,7 @@
             height: 100%;
             z-index: 999;  /* 根据需要设置，以确保该元素位于其他元素之上 */
         }
-        
+
 
 
         #panelToggleButtonSVGShow {
@@ -587,13 +716,13 @@
             transition: background-color 0.3s; /* 平滑过渡效果 */
             user-select: none;
         }
-        
+
         .rightAlwaysShownDiv {
-        
+
             position: fixed;
             bottom: 70%;
             display: flex;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
             font-size: 1.5em;
             width: 40px;
@@ -608,12 +737,12 @@
             transition: background-color 0.3s; /* 平滑过渡效果 */
             user-select: none;
         }
-        
+
         #colorSelectDiv {
             bottom: 64%;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
-            color: deepskyblue; 
+            color: deepskyblue;
             font-size: 1.5em;
         }
        .language-container {
@@ -626,31 +755,31 @@
         #feedbackDiv {
             bottom: 40%;
             display: flex;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
             color: deepskyblue;
             font-size: 1.5em;
         }
-      
+
         #WeChatDiv {
             bottom: 46%;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
-            color: deepskyblue; 
+            color: deepskyblue;
             font-size: 1.5em;
         }
         #TencentDiv {
             bottom: 52%;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
-            color: deepskyblue; 
+            color: deepskyblue;
             font-size: 1.5em;
-        }  
+        }
        #languageSelectDiv {
             bottom: 58%;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
-            color: deepskyblue; 
+            color: deepskyblue;
             font-size: 12px;
         }
         .rightMiddleDiv:hover  {
@@ -665,15 +794,15 @@
           right: 60px;
           z-Index: 10000;
         }
-        
+
        .actionDiv {
             display: none;
-            right: 10px; 
+            right: 10px;
             cursor: pointer;
             color: deepskyblue;
             font-size: 1.5em;
         }
-  
+
         @keyframes spin {
             0% {
                 transform: rotate(0deg);
@@ -696,7 +825,7 @@
             justify-content: center; /* 水平居中 */
             align-items: center; /* 垂直居中 */
         }
-        
+
         #plusDiv {
             bottom: 60px;
             right: 60px;
@@ -736,10 +865,10 @@
         #settingsDiv:hover, .actionDiv:hover {
             background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
         }
-        
-        
-        
-        
+
+
+
+
 
 
 .language-dropdown {
@@ -2353,27 +2482,87 @@
   };
   let globalUserLang;
   //let  = getLang().userLang;
-
-  let currentLangPack = getLang().langPack;
-
-  //log("currentLangPack", currentLangPack);
+  let currentLangPack = getLang().langPack;//log("currentLangPack", currentLangPack);
   function translate(key) {
     return currentLangPack[key] || key;
   }
 
+  const domain = 'https://chatgpt.com';
+  const endpoints = {
+    assets: 'https://raw.githubusercontent.com/KudoAI/chatgpt.js/main',
+    openAI: {
+      session: `${domain}/api/auth/session`,
+      chats: `${domain}/backend-api/conversations`,
+      chat: `${domain}/backend-api/conversation`,
+      share_create: `${domain}/backend-api/share/create`,
+      share: `${domain}/backend-api/share`,
+      instructions: `${domain}/backend-api/user_system_messages`
+    }
+  };
+  let chatgpt = {
+    openAIaccessToken: {},
+
+    getAccessToken: function () {
+      return new Promise((resolve, reject) => {
+        if (Object.keys(chatgpt.openAIaccessToken).length > 0 && // populated
+          (Date.parse(chatgpt.openAIaccessToken.expireDate) - Date.parse(new Date()) >= 0)) // not expired
+          return resolve(chatgpt.openAIaccessToken.token);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', endpoints.openAI.session, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.onload = () => {
+          if (xhr.status !== 200) return reject('🤖 chatgpt.js >> Request failed. Cannot retrieve access token.');
+          console.info('Token expiration: ' + new Date(JSON.parse(xhr.responseText).expires).toLocaleString().replace(',', ' at'));
+          chatgpt.openAIaccessToken = {
+            token: JSON.parse(xhr.responseText).accessToken,
+            expireDate: JSON.parse(xhr.responseText).expires
+          };
+          return resolve(chatgpt.openAIaccessToken.token);
+        };
+        xhr.send();
+      });
+    }
+  };
+
+  class ButtonCreator {
+    static createButton(options = {}) {
+      const {
+        id,
+        text,
+        innerHTML,
+        eventListeners = [],
+        additionalStyles = {},
+      } = options;
+
+      const button = document.createElement('button');
+      button.id = id;
+      button.textContent = text;
+      if (!button.textContent)
+        button.innerHTML = innerHTML;
+      eventListeners.forEach(({type, handler}) => {
+        button.addEventListener(type, handler);
+      });
+
+      Object.assign(button.style, additionalStyles);
+
+      return button;
+    }
+  }
 
   let DEFAULT_USER_TOP_COLOR = "#ff7f00", DEFAULT_USER_BOTTOM_COLOR = "#ffc085",
     DEFAULT_CHATGPT_TOP_COLOR = "#0a87d8", DEFAULT_CHATGPT_BOTTOM_COLOR = "#34aeeb";
-
-
+  let GPT_Avatar_Config = {
+    gpt4_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(171, 104, 255); width: 36px; height: 36px; \"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
+    gpt3_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
+  }
   const states = {
     mainButton: {
-      isDragging: false,
-      isMouseOver: false,
-      isThereNavbar: false,
-      isMouseInNavbar: false,
-      isMainTreeBtnInNavbar: false,
-      canNotEnterNavbar: true
+      isDragging: false,  //
+      isMouseOver: false,  //
+      isThereNavbar: false,  //用来定义是否存在历史记录栏
+      isMouseInNavbar: false,  //用来定义拖动mainbtn时鼠标是否在navbar内
+      isMainTreeBtnInNavbar: false,  //历史记录栏里的treemainbtn是否显示 , 用来定义navbar的mainbtn的可见性
+      canNotEnterNavbar: false //小圣诞树是绿色/红色, 用来定义maintreeBtn的固定性
     },
     url: {
       isForLiveValidURL: false,
@@ -2403,12 +2592,15 @@
       },
     },
   };
-
   const selector = {
-    allDivs: ".w-full.text-token-text-primary.border-b",
-    gptContentDiv: ".markdown.prose",
-    userContentDiv: "div.flex.flex-col.items-start.gap-3.overflow-x-auto.whitespace-pre-wrap.break-words",
-    fowardBackwardButton: ".text-xs.flex.items-center.justify-center.gap-1.absolute",
+    allDivs: "div.w-full.text-token-text-primary",
+    gptContentDiv: "div[data-message-author-role='assistant']",
+    userContentDiv: "div[data-message-author-role='user']",
+    fowardBackwardButton: ".flex.items-center.justify-center.rounded-lg.text-token-text-secondary",
+    branchesInfo: ".text-sm.font-semibold.tabular-nums",
+    mainNavbar: ".flex-shrink-0.overflow-x-hidden",//侧边栏里有style属性的那个div, 用来确定是否有必要判断maintreebtn从移动到固定
+    navbarSize: '.flex.h-full.min-h-0.flex-col',//侧边栏的**实际大小和边缘监测**用的div,
+    historyDiv: '.flex-col.flex-1.transition-opacity.duration-500.-mr-2.pr-2.overflow-y-auto',
   };
 
   const Default_RootNode_Content_2 = {
@@ -2450,15 +2642,9 @@
     }
   }
 
-  let GPT_Avatar_Config = {
-    gpt4_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(171, 104, 255); width: 36px; height: 36px; \"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
-    gpt3_Inner_Html: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg width=\"41\" height=\"41\" viewBox=\"0 0 41 41\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"icon-md\" role=\"img\"><text x=\"-9999\" y=\"-9999\">ChatGPT</text><path d=\"M37.5324 16.8707C37.9808 15.5241 38.1363 14.0974 37.9886 12.6859C37.8409 11.2744 37.3934 9.91076 36.676 8.68622C35.6126 6.83404 33.9882 5.3676 32.0373 4.4985C30.0864 3.62941 27.9098 3.40259 25.8215 3.85078C24.8796 2.7893 23.7219 1.94125 22.4257 1.36341C21.1295 0.785575 19.7249 0.491269 18.3058 0.500197C16.1708 0.495044 14.0893 1.16803 12.3614 2.42214C10.6335 3.67624 9.34853 5.44666 8.6917 7.47815C7.30085 7.76286 5.98686 8.3414 4.8377 9.17505C3.68854 10.0087 2.73073 11.0782 2.02839 12.312C0.956464 14.1591 0.498905 16.2988 0.721698 18.4228C0.944492 20.5467 1.83612 22.5449 3.268 24.1293C2.81966 25.4759 2.66413 26.9026 2.81182 28.3141C2.95951 29.7256 3.40701 31.0892 4.12437 32.3138C5.18791 34.1659 6.8123 35.6322 8.76321 36.5013C10.7141 37.3704 12.8907 37.5973 14.9789 37.1492C15.9208 38.2107 17.0786 39.0587 18.3747 39.6366C19.6709 40.2144 21.0755 40.5087 22.4946 40.4998C24.6307 40.5054 26.7133 39.8321 28.4418 38.5772C30.1704 37.3223 31.4556 35.5506 32.1119 33.5179C33.5027 33.2332 34.8167 32.6547 35.9659 31.821C37.115 30.9874 38.0728 29.9178 38.7752 28.684C39.8458 26.8371 40.3023 24.6979 40.0789 22.5748C39.8556 20.4517 38.9639 18.4544 37.5324 16.8707ZM22.4978 37.8849C20.7443 37.8874 19.0459 37.2733 17.6994 36.1501C17.7601 36.117 17.8666 36.0586 17.936 36.0161L25.9004 31.4156C26.1003 31.3019 26.2663 31.137 26.3813 30.9378C26.4964 30.7386 26.5563 30.5124 26.5549 30.2825V19.0542L29.9213 20.998C29.9389 21.0068 29.9541 21.0198 29.9656 21.0359C29.977 21.052 29.9842 21.0707 29.9867 21.0902V30.3889C29.9842 32.375 29.1946 34.2791 27.7909 35.6841C26.3872 37.0892 24.4838 37.8806 22.4978 37.8849ZM6.39227 31.0064C5.51397 29.4888 5.19742 27.7107 5.49804 25.9832C5.55718 26.0187 5.66048 26.0818 5.73461 26.1244L13.699 30.7248C13.8975 30.8408 14.1233 30.902 14.3532 30.902C14.583 30.902 14.8088 30.8408 15.0073 30.7248L24.731 25.1103V28.9979C24.7321 29.0177 24.7283 29.0376 24.7199 29.0556C24.7115 29.0736 24.6988 29.0893 24.6829 29.1012L16.6317 33.7497C14.9096 34.7416 12.8643 35.0097 10.9447 34.4954C9.02506 33.9811 7.38785 32.7263 6.39227 31.0064ZM4.29707 13.6194C5.17156 12.0998 6.55279 10.9364 8.19885 10.3327C8.19885 10.4013 8.19491 10.5228 8.19491 10.6071V19.808C8.19351 20.0378 8.25334 20.2638 8.36823 20.4629C8.48312 20.6619 8.64893 20.8267 8.84863 20.9404L18.5723 26.5542L15.206 28.4979C15.1894 28.5089 15.1703 28.5155 15.1505 28.5173C15.1307 28.5191 15.1107 28.516 15.0924 28.5082L7.04046 23.8557C5.32135 22.8601 4.06716 21.2235 3.55289 19.3046C3.03862 17.3858 3.30624 15.3413 4.29707 13.6194ZM31.955 20.0556L22.2312 14.4411L25.5976 12.4981C25.6142 12.4872 25.6333 12.4805 25.6531 12.4787C25.6729 12.4769 25.6928 12.4801 25.7111 12.4879L33.7631 17.1364C34.9967 17.849 36.0017 18.8982 36.6606 20.1613C37.3194 21.4244 37.6047 22.849 37.4832 24.2684C37.3617 25.6878 36.8382 27.0432 35.9743 28.1759C35.1103 29.3086 33.9415 30.1717 32.6047 30.6641C32.6047 30.5947 32.6047 30.4733 32.6047 30.3889V21.188C32.6066 20.9586 32.5474 20.7328 32.4332 20.5338C32.319 20.3348 32.154 20.1698 31.955 20.0556ZM35.3055 15.0128C35.2464 14.9765 35.1431 14.9142 35.069 14.8717L27.1045 10.2712C26.906 10.1554 26.6803 10.0943 26.4504 10.0943C26.2206 10.0943 25.9948 10.1554 25.7963 10.2712L16.0726 15.8858V11.9982C16.0715 11.9783 16.0753 11.9585 16.0837 11.9405C16.0921 11.9225 16.1048 11.9068 16.1207 11.8949L24.1719 7.25025C25.4053 6.53903 26.8158 6.19376 28.2383 6.25482C29.6608 6.31589 31.0364 6.78077 32.2044 7.59508C33.3723 8.40939 34.2842 9.53945 34.8334 10.8531C35.3826 12.1667 35.5464 13.6095 35.3055 15.0128ZM14.2424 21.9419L10.8752 19.9981C10.8576 19.9893 10.8423 19.9763 10.8309 19.9602C10.8195 19.9441 10.8122 19.9254 10.8098 19.9058V10.6071C10.8107 9.18295 11.2173 7.78848 11.9819 6.58696C12.7466 5.38544 13.8377 4.42659 15.1275 3.82264C16.4173 3.21869 17.8524 2.99464 19.2649 3.1767C20.6775 3.35876 22.0089 3.93941 23.1034 4.85067C23.0427 4.88379 22.937 4.94215 22.8668 4.98473L14.9024 9.58517C14.7025 9.69878 14.5366 9.86356 14.4215 10.0626C14.3065 10.2616 14.2466 10.4877 14.2479 10.7175L14.2424 21.9419ZM16.071 17.9991L20.4018 15.4978L24.7325 17.9975V22.9985L20.4018 25.4983L16.071 22.9985V17.9991Z\" fill=\"currentColor\"></path></svg></div>",
-  }
-
   let USER_Avatar_Config = {
     USER_DEFAULT_HTML: "<div class=\"relative p-1 rounded-sm h-9 w-9 text-white flex items-center justify-center\" style=\"background-color: rgb(25, 195, 125); width: 36px; height: 36px;\"><svg stroke=\"currentColor\" fill=\"none\" stroke-width=\"2\" viewBox=\"0 0 24 24\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"icon-md\" height=\"1em\" width=\"1em\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\"></path><circle cx=\"12\" cy=\"7\" r=\"4\"></circle></svg></div>"
   }
-
   let DEFAULT_CONVERSATION_DATA = {
     rootNode: new DialogueNode(Default_RootNode_Content, "chatGPT"),
     uuid2nodeMap: new Map(),
@@ -2484,370 +2670,794 @@
 
   let root, treeLayout, svg, svgThumbnail, defs, gLinks, gNodes,
     nodeDrag, canvasDrag, zoom, searchHistoryRecord, chatHistory = [], curMouseOnUUID = null;
+  const urlOperations = {
+    log(category, ...message) {
+      this.logger.log(category, ...message);
+    },
+    initUrlOperations: function () {
+      this.logger = new Logger('urlOperations');
+    },
 
+    getCurrentURL: function () {
+      return window.location.href;
+    },
 
-  const waitForDomChange = (element) => {
-    return new Promise(resolve => {
-      const observer = new MutationObserver((mutationsList, observer) => {
+    isForLiveValidURL: function (url) {
+      const pattern = /^https:\/\/chatgpt\.com\/c\/[a-z0-9\-]+\/?$/;
 
-        observer.disconnect();
-        resolve();
-      });
-      observer.observe(element, {childList: true, subtree: true});
-    });
+      const pattern2 = /^https:\/\/chatgpt\.com\/g\/[a-zA-Z0-9\-]+\/c\/[0-9a-z\-]+$/;
+
+      return !!pattern.test(url) || !!pattern2.test(url);
+    },
+
+    isForDeletedValidURL: function (url) {
+      const pattern = /^https:\/\/chatgpt\.com\/chattree\/[a-z0-9\-]+\/?$/;
+      return pattern.test(url);
+    },
+
+    changeBetweenChattreeWithCAndOneMeansChattreeToC: function (chattreetoc, url) {
+      function replaceFirstChattreeWithC(url) {
+        return url.replace(/^https:\/\/chatgpt\.com\/chattree/, `${domain}/c`);
+      }
+
+      function replaceFirstCWithChattree(url) {
+        return url.replace(/^https:\/\/chatgpt\.com\/c/, `${domain}/chattree`);
+      }
+
+      if (chattreetoc) {
+        return replaceFirstChattreeWithC(url);
+      } else {
+        return replaceFirstCWithChattree(url);
+      }
+    },
+
+    isNonUniqueURL: function (url) {
+      const nonUniquePatterns = [
+        /^https:\/\/chatgpt\.com\/?$/,
+        /^https:\/\/chatgpt\.com\/\?model=.+$/
+      ];
+      return nonUniquePatterns.some(pattern => pattern.test(url));
+    },
+    getCurURLInfo: function () {
+      let curURL = window.location.href;
+      let validURL = this.isForLiveValidURL(curURL);
+      let nonUniqueURL = !this.isNonUniqueURL(curURL);
+      return {
+        curURL: curURL,
+        validURL: validURL,
+        nonUniqueURL: nonUniqueURL,
+      };
+    },
+    observeTargetChanges: function () {
+      let lastURL = window.location.href;
+      this.log(LogCategories.INFO, "fistURL:", lastURL);
+      if (urlOperations.isForLiveValidURL(lastURL) || urlOperations.isForDeletedValidURL(lastURL)) {
+        //log("is_anyKind_of_valid");
+        urlOperations.handleURLChange(lastURL);
+        states.url.url = lastURL;
+      }
+
+      const self = this;
+
+      function callback(mutationsList, observer) {
+
+        const currentURL = window.location.href;
+        //log("currentURL:", currentURL);
+        if (urlOperations.isForLiveValidURL(currentURL)) {
+          if (currentURL !== lastURL) {
+            self.log(LogCategories.INFO, "URL changed:", currentURL);
+            lastURL = currentURL;
+            urlOperations.handleURLChange(currentURL);
+            states.treeUpdate.isDOMOperating = false;
+          } else {
+            //this.log("Current URL:", currentURL);
+          }
+        } else if (urlOperations.isForDeletedValidURL(currentURL)) {
+          //log("URL changed:", currentURL, " detected. Please refresh the page.");
+          urlOperations.handleURLChange(currentURL);
+        } else if (urlOperations.isNonUniqueURL(currentURL)) {
+          self.log(LogCategories.WARNING, "Non-unique URL:", currentURL, " detected. Please refresh the page.");
+          urlOperations.handleURLChange(currentURL);
+        }
+      };
+
+      setInterval(() => {
+        callback();
+        //console.log("Current URL:", window.location.href);
+      }, 2000);
+    },
+    handleURLChange: function (url) {
+      //log("In handleURLChange, Data:", conversationData);
+      if (urlOperations.isNonUniqueURL(url)) {
+        this.log(LogCategories.WARNING, "nonuniqueURL: ", url);
+        states.url.isForLiveValidURL = false;
+        states.url.isForDeletedValidURL = false;
+        states.url.url = '';
+        states.treeUpdate.isDOMOperating = false;
+        conversationData = DEFAULT_CONVERSATION_DATA;
+
+        root = d3.hierarchy(conversationData.rootNode);
+        const widthPerNode = 30;
+        const heightPerNode = 30;
+        treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+        treeLayout(root);
+        settingsKit.refreshTree();
+        //this.log("请刷新页面或者转到具有对话信息的页面从而获取正确的链接");
+      } else if (urlOperations.isForDeletedValidURL(url)) {
+        //this.log(LogCategories.INFO, "DeletedValidURL");
+        states.url.isForLiveValidURL = false;
+        states.url.isForDeletedValidURL = true;
+        states.treeUpdate.isDOMOperating = false;
+        states.url.url = url;
+        document.documentElement.setAttribute('class', 'light');
+        // const htmlClass = document.documentElement.getAttribute('class');
+        // let wholeScreenDiv = document.getElementById("__next"); // 修正单词拼写
+        // if (wholeScreenDiv && htmlClass && htmlClass === 'black') {
+        //   wholeScreenDiv.style.background = 'rgb(51,53,65)';
+        // } else {
+        //   document.documentElement.className = 'light'; // 使用 className
+        // }
+
+        //rgb(51,53,65)
+        url = urlOperations.changeBetweenChattreeWithCAndOneMeansChattreeToC(1, url);
+        //log("delete_url_to_new_url", url);
+        dbOperations.loadConversationsData(url).then(loadeddata => {
+          this.log("Loaded data for URL:", loadeddata);
+          let interval;
+          interval = setInterval(() => {
+            if (document.title === "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content) {
+              clearInterval(interval);
+            }
+            document.title = "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content;
+          }, 1500);
+          conversationData = loadeddata;
+          root = d3.hierarchy(conversationData.rootNode);
+          const widthPerNode = 30;
+          const heightPerNode = 30;
+          treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+
+          treeLayout(root);
+          settingsKit.refreshTree();
+        }).catch(error => {
+          console.error("Error loading data:", error);
+        });
+      } else {
+        this.log(LogCategories.INFO, "liveValidURL");
+
+        states.url.isForLiveValidURL = true;
+        states.url.isForDeletedValidURL = false;
+        states.treeUpdate.isDOMOperating = false;
+        states.url.url = url;
+
+        fetchRawChatMessages(url.slice(-36)).then(data => {
+          dbOperations.loadConversationsData(url).then(loadeddata => {
+            this.log("Loaded data for URL:", loadeddata);
+            conversationData = loadeddata;
+            if (!conversationData.isNovemberSeventh) {
+              let result = conver_to_new_style();
+              conversationData.bookMarked = result.bookMarked;
+              conversationData.commentMap = result.commentMap;
+              //delete conversationData.uuid2pathMap;
+              delete conversationData.path2nodeMap;
+              dbOperations.saveConversationsData(conversationData).then(() => {
+                this.log("Convert To November_Type!");
+              });
+            }
+
+            this.log("RAW DATA FROM OPENAI:", data);
+            //log("New URL Catched!");
+            let processResult = processChatMessage(data);
+            conversationData.rootNode = conversationRootNode;
+            conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
+            conversationData.uuid2pathMap = processResult.uuid2pathMap;
+            dbOperations.saveConversationsData(conversationData).then(() => {
+
+              controlPanelKit.renderConversations(chatHistory);
+              controlPanelKit.updateCategorySelect();
+            });
+            //log("to draw svg:", conversationData);
+            //conversationData = loadeddata;
+            root = d3.hierarchy(conversationData.rootNode);
+            const widthPerNode = 30;
+            const heightPerNode = 30;
+            treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+            treeLayout(root);
+            //drawMainSVG();
+            settingsKit.refreshTree();
+          }).catch(error => {
+            console.error("Error loading data:", error);
+          });
+
+        }).catch(error => {
+          this.log(LogCategories.ERROR, "error:", error);
+        })
+      }
+    }
+  };
+  urlOperations.initUrlOperations();
+  //const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(51, 230, 15, 0.74) 0%, rgba(250, 0, 187, 0.74) 100%)';
+  const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(117, 194, 102, 0.31) 0%, rgba(206, 44, 166, 0.31) 100%)';
+
+  //'linear-gradient(to top, rgba(210, 108, 196, 0.2) 0%, rgba(205, 209, 83, 0.2) 100%)'
+  const GlobalUserSettings = {
+    MainTreeBtnColorSettings: {id: 'mainTreeBtn', color: '#0FD126', opacity: 0.9},
+    MainTreeBtnPositionSettings: {id: 'mainTreeBtnPos', top: '20px', left: '800px'},
+    mainTreeBtnSticky: {id: 'mainTreeBtnSticky', canNotEnterNavbar: false},
+    MainSVGBackground: DEFAULT_MAINSVG_BACKGROUND,
   };
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  const treeOperation = {
-
-    initializeChatTree: async function () {
-      if (!states.url.isForLiveValidURL) {
-        ButtonOperations.showUserNotification(translate("mismatchedLink"));
-        return;
-      }
-      states.treeUpdate.isDOMOperating = true;
-      let operatingURL = states.url.url;
-      const button = document.querySelector('button.flex.w-full.items-center.gap-3.rounded-md.px-3.py-3.text-sm[data-headlessui-state=""]');
-
-      if (button) {
-
-        const relativeFlexElement = button.querySelector('.relative.flex');
-        if (relativeFlexElement) {
-          conversationData.participants.user.avatarHTML = relativeFlexElement.innerHTML;
-
-          const imgElement = relativeFlexElement.querySelector('img.rounded-sm');
-
-          if (imgElement) {
-            const imgSrc = imgElement.getAttribute('src');
-            conversationData.participants.user.avatarURL = imgSrc;
-          } else {
-            log('Image Element Not Found');
-          }
-        } else {
-          log('Relative Flex Element Not Found');
-        }
-
-        const fontSemiboldElement = button.querySelector('.font-semibold');
-        if (fontSemiboldElement) {
-          conversationData.participants.user.name = fontSemiboldElement.innerHTML;
-        } else {
-          log('Font Semibold Element Not Found');
-        }
-      } else {
-        let allDivs = DOMOperations.getAllDivs();
-        if (allDivs) {
-          let userDiv = allDivs[0];
-          const imageDiv = userDiv.querySelector('div.flex-shrink-0.flex.flex-col.relative.items-end');
-          if (imageDiv) {
-            const relativeFlexElement = imageDiv.querySelector('.relative.flex');
-            if (relativeFlexElement) {
-              conversationData.participants.user.avatarHTML = relativeFlexElement.innerHTML;
-
-              const imgElement = relativeFlexElement.querySelector('img.rounded-sm');
-
-              if (imgElement) {
-                const imgSrc = imgElement.getAttribute('src');
-                conversationData.participants.user.avatarURL = imgSrc;
-              } else {
-                log('Image Element Not Found');
-              }
-            } else {
-              log('Relative Flex Element Not Found');
-            }
-          }
-        }
-        log('Button Element Not Found');
-      }
-
-      if (conversationData.rootNode.content.toLowerCase() === "New Chat".toLowerCase()
-        || conversationData.rootNode.content.toLowerCase() === Default_RootNode_Content.toLowerCase()
-        || conversationData.rootNode.content.toLowerCase() === "Chat Start Here".toLowerCase()) {
-        try {
-          const targetElement = document.querySelector('.absolute.flex.right-1.z-10.dark\\:text-gray-300.text-gray-800.visible');
-          if (targetElement) {
-            let siblingElement = targetElement.parentElement.firstElementChild;
-            while (siblingElement) {
-              if (siblingElement.classList.contains('flex-1') &&
-                siblingElement.classList.contains('text-ellipsis') &&
-                siblingElement.classList.contains('max-h-5') &&
-                siblingElement.classList.contains('overflow-hidden') &&
-                siblingElement.classList.contains('break-all') &&
-                siblingElement.classList.contains('relative')) {
-                log(siblingElement.textContent || siblingElement.innerText);
-                conversationData.rootNode.content = siblingElement.textContent
-              }
-              siblingElement = siblingElement.nextElementSibling;
-            }
-          } else {
-            log('Target element not found.');
-          }
-
-          // async function testGetChatDetails() {
-          //   const token = await chatgpt.getAccessToken();
-          //   chatgpt.getChatDetails(token, ['id', 'title'])
-          //     .then(data => {
-          //       log("Successfully got chat details:", data);
-          //     })
-          //     .catch(error => {
-          //       console.error("Error in getChatDetails:", error);
-          //     });
-          // }
-          //
-          // await testGetChatDetails();
-          // 使用 chatgpt.js 库的 getChatData 方法获取聊天数据
-          // const chatData = await chatgpt.getChatData('active', 'all', 'all', 'all');
-          // //log(chatData);  // 在控制台打印聊天数据
-          // conversationData.rootNode.content = chatData.title;
-
-          // 如果需要，你可以在这里添加其他操作，例如将聊天数据发送到你的服务器
-        } catch (error) {
-          console.error('Error getting chat data:', error);  // 如果出现错误，在控制台打印错误信息
-        }
-      }
-      let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
-      //log(gptInfoDiv);
-      if (gptInfoDiv) {
-        conversationData.participants.gpt.type = gptInfoDiv.innerText;
-      }
-      log("url:", operatingURL);
-      let result = DOMOperations.getButtonInfo();
-      let hasLeftButton = result.hasLeftButtonUnClicked;
-      while (hasLeftButton) {
-        if (states.url.url !== operatingURL || !states.treeUpdate.isDOMOperating) {
-          log("监测到链接变换! 退出initializeChatTree 函数!");
-          states.treeUpdate.isDOMOperating = false;
-          return;
-        }
-        let allChatDivs = DOMOperations.getAllDivs();
-        if (allChatDivs.length === 0) {
-          log("监测到没有divs:退出初始化!");
-          states.treeUpdate.isDOMOperating = false;
-          return;
-        }
-        let j = 0;
-        for (; j < allChatDivs.length; j++) {
-          if (result.childIndicesPath[j] !== 1) {
-            DOMOperations.clickButtonAtDivLevel(0, j);
-            log("clicking the ", j, "th div!");
-            await waitForDomChange(document.body);
-            break;
-          }
-        }
-        if (j === allChatDivs.length) {
-          break;
-        }
-        result = DOMOperations.getButtonInfo();
-        log("result:", result);
-        hasLeftButton = result.hasLeftButtonUnClicked;
-      }
-      log("Initializing Over.");
-      await this.updateTree(operatingURL);
-
+  const dbOperations = {
+    log(category, ...message) {
+      // 使用 Logger 实例的 log 方法
+      //console.log("moduleLog called.");
+      this.logger.log(category, ...message);
     },
-    initializeSubChatTree: async function (fromWhichDivClickLeft) {
-      log("initializeSubChatTree");
-      let result = DOMOperations.getButtonInfo();
-      let allChatDivs = DOMOperations.getAllDivs();
-      if (allChatDivs.length === 0) {
-        log("监测到没有divs:退出初始化!");
-        states.treeUpdate.isDOMOperating = false;
-        return;
-      }
-      let hasLeftButton = false;
-      for (let i = fromWhichDivClickLeft; i < allChatDivs.length; i++) {
-        if (result.childIndicesPath[i] !== 1) {
-          hasLeftButton = true;
-          log("hasLeftButton === true");
-          break;
-        }
-      }
-      while (hasLeftButton) {
-        let j = fromWhichDivClickLeft;
-        for (; j < allChatDivs.length; j++) {
-          if (result.childIndicesPath[j] !== 1) {
-            DOMOperations.clickButtonAtDivLevel(0, j);
-            log("clicking the ", j, "th div!");
-            await waitForDomChange(document.body);
-            break;
-          }
-        }
-        if (j === allChatDivs.length) {
-          break;
-        }
-        result = DOMOperations.getButtonInfo();
-        allChatDivs = DOMOperations.getAllDivs();
-        log("result:", result);
-        for (let i = fromWhichDivClickLeft; i < allChatDivs.length; i++) {
-          if (result.childIndicesPath[i] !== 1) {
-            log("hasLeftButton === true");
-            hasLeftButton = true;
-            break;
-          }
-        }
-      }
-    },
+    initDatabase: function () {
 
-    //🤖chatGPT版本
-    updateTree: async function (url) {
-      let gotNotice = prompt("Would you like to delete all comments or load the original conversation? If YES, enter 'Y' in capital letter. Otherwise, simply cancel this box.");
-      if (gotNotice === "Y") {
-        log("gotNotice:", gotNotice);
-        let rootNodeContent = conversationData.rootNode.content ? conversationData.rootNode.content : Default_RootNode_Content;
-        conversationData = {
-          url: conversationData.url,
-          rootNode: new DialogueNode(rootNodeContent, "chatGPT"),
-          uuid2pathMap: new Map(),
-          uuid2nodeMap: new Map(),
-          //path2nodeMap: new Map(),
-          timestamp: Date.now(),
-          participants: {
-            user: {
-              name: conversationData.participants.user.name,
-              avatarURL: conversationData.participants.user.avatarURL,
-              avatarHTML: conversationData.participants.user.avatarHTML,
-            },
-            gpt: {
-              type: conversationData.participants.gpt.type,
-            }
-          },
-          isWholeConversationBookMarked: conversationData.isWholeConversationBookMarked || false,
-          chatTreeTags: conversationData.chatTreeTags || [],
-          categories: conversationData.categories || [],
-          bookMarked: conversationData.bookMarked
+      this.logger = new Logger('dbOperations');
+      //this.log(LogCategories.SUCCESS, 'DBLoggerCreated!');
+
+
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onerror = event => {
+          reject("Error opening database:", event);
         };
-        //conversationData = newConversationData;
-      }
 
-      let allpaths = [];
-      log("更新树");
-      let operatingURL = url;
-      if (states.url.url !== operatingURL) {
-        log("监测到链接变换! 退出initializeChatTree 函数!");
-        return;
-      }
-      let allChatDivs = DOMOperations.getAllDivs();
-      let hasRightButtonUnClicked = true;
-      let curRootDivChoice = 0;
-
-
-      while (hasRightButtonUnClicked) {
-        if (states.url.url !== operatingURL || !states.treeUpdate.isDOMOperating) {
-          log("监测到链接变换! 退出updateTree 函数!");
-          states.treeUpdate.isDOMOperating = false;
-          return;
-        }
-        hasRightButtonUnClicked = false;
-        allChatDivs = DOMOperations.getAllDivs();
-        if (allChatDivs.length === 0) {
-          log("监测到没有divs:退出更新!");
-          states.treeUpdate.isDOMOperating = false;
-          return;
-        }
-
-        let result = DOMOperations.getButtonInfo();
-        for (let i = curRootDivChoice; i < allChatDivs.length; i++) {
-          if (states.url.url !== operatingURL || !states.treeUpdate.isDOMOperating) {
-            log("监测到链接变换! 退出initializeChatTree 函数!");
-            states.treeUpdate.isDOMOperating = false;
-            return;
+        request.onupgradeneeded = event => {
+          this.log(LogCategories.INFO, "After LOADING db: ", db);
+          this.log(LogCategories.INFO, "升级数据库!");
+          db = event.target.result;
+          if (!db.objectStoreNames.contains(CONVERSATIONS_STORE_NAME)) {
+            db.createObjectStore(CONVERSATIONS_STORE_NAME, {keyPath: "url"});
           }
-          let contentResult = DOMOperations.getTextContent(allChatDivs[i], i);
-          let path = result.childIndicesPath.slice(0, i + 1);
-          // log("path", path, "content:", contentResult);
-          let isExisting = conversationData.path2nodeMap.get(arrayToKey(path));
-          if (isExisting) {
-            log("isExisting!", isExisting);
-            log("contentResult.contentText", contentResult.contentText);
-            if (isExisting.content === contentResult.contentText) {
-              allpaths.push(arrayToKey(path));
-              continue;
-            } else {
-              isExisting.content = contentResult.contentText
-              allpaths.push(arrayToKey(path));
-              continue;
+          if (!db.objectStoreNames.contains(SEARCH_HISTORY_STORE_NAME)) {
+            db.createObjectStore(SEARCH_HISTORY_STORE_NAME, {keyPath: "id"});
+            const initSearchHistory = {id: 'searchHistory', records: []};
+            const transaction = event.target.transaction;
+            const historyStore = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
+            historyStore.add(initSearchHistory);
+          }
+          if (!db.objectStoreNames.contains(USER_SETTINGS_STORE_NAME)) {
+            db.createObjectStore(USER_SETTINGS_STORE_NAME, {keyPath: "id"});
+            const transaction = event.target.transaction;
+            const userSettingsStore = transaction.objectStore(USER_SETTINGS_STORE_NAME);
+            const mainTreeBtnColorSettings = {id: 'mainTreeBtn', color: '#0FD126', opacity: 0.9};
+            userSettingsStore.add(mainTreeBtnColorSettings);
+            const mainTreeBtnPosSettings = {id: 'mainTreeBtnPos', top: '20px', right: '20px'};
+            userSettingsStore.add(mainTreeBtnPosSettings);
+            const mainTreeBtnSticky = {id: 'mainTreeBtnSticky', canNotEnterNavbar: false};
+            userSettingsStore.add(mainTreeBtnSticky);
+          }
+        };
+        request.onsuccess = event => {
+          db = event.target.result;
+          resolve();
+        };
+      });
+
+    },
+    usedatabase: function () {
+      dbOperations.getSearchHistory()
+        .then(records => {
+          this.log(LogCategories.INFO, '获取到搜索历史记录:', records);
+        })
+        .then(() => dbOperations.getUserSettings('mainTreeBtn'))
+        .then(mainTreeBtnSettings => {
+          this.log(LogCategories.INFO, '获取到主树按钮设置:', mainTreeBtnSettings);
+          GlobalUserSettings.MainTreeBtnColorSettings = mainTreeBtnSettings;
+          treeMainBtn.style.background = GlobalUserSettings.MainTreeBtnColorSettings.color;
+          treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings.opacity;
+          navMainButton.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
+          navMainButton.style.opacity = '1';
+        })
+        .then(() => dbOperations.getUserSettings('mainTreeBtnPos'))
+        .then(mainTreeBtnPos => {
+          this.log(LogCategories.INFO, '获取到主树按钮位置设置:', mainTreeBtnPos);
+          GlobalUserSettings.MainTreeBtnPositionSettings = mainTreeBtnPos;
+          treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top;
+          treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left;
+          if (mainTreeBtnPos.isInNavbar === true) {
+            navMainButton.style.display = 'block';
+            treeMainBtn.style.display = 'none';
+            states.mainButton.isMainTreeBtnInNavbar = true;
+          }
+        })
+        .then(() => dbOperations.getUserSettings('userLang'))
+        .then(userLang => {
+          languageSelect.addEventListener('change', languageKits.init);
+          this.log(LogCategories.INFO, '获取到用户语言设置:', userLang);
+          if (userLang && userLang.globalUserLang) {
+            globalUserLang = userLang.globalUserLang;
+          }
+          ButtonOperations.showUserNotification(translate("chatTreeRunning"));
+
+          const options = languageSelect.querySelectorAll('option');
+          options.forEach(option => {
+            option.selected = option.value === globalUserLang;
+          });
+        })
+        .then(() => dbOperations.getUserSettings('mainSVG'))
+        .then(mainSVGBackground => {
+          this.log(LogCategories.INFO, '获取到主SVG背景设置:', mainSVGBackground);
+          if (mainSVGBackground && mainSVGBackground.background) {
+            GlobalUserSettings.MainSVGBackground = mainSVGBackground.background;
+            let mainSvg = document.getElementById('mainSvg');
+            if (mainSvg) {
+              mainSvg.style.background = mainSVGBackground.background.toString();
             }
           }
-          let father = i > 0 ? conversationData.path2nodeMap.get(arrayToKey(result.childIndicesPath.slice(0, i))) : conversationData.rootNode;
-          let newDialogueNode = new DialogueNode(contentResult.contentText, contentResult.userType);
-          log("father :", father);
-          father.children.push(newDialogueNode);
-          log("newDialogueNode:", newDialogueNode);
-          log("dataRenewing:", conversationData);
-          conversationData.uuid2pathMap.set(newDialogueNode.uuid, path);
-          conversationData.uuid2nodeMap.set(newDialogueNode.uuid, newDialogueNode);
-          conversationData.path2nodeMap.set(arrayToKey(path), newDialogueNode);
-          log("father:", father);
-          allpaths.push(arrayToKey(path));
-        }
+        })
+        .then(() => dbOperations.getUserSettings('userColor'))
+        .then(userColor => {
+          this.log(LogCategories.INFO, '获取到用户颜色设置:', userColor);
+          if (userColor && userColor.state && userColor.state.is) {
+            initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT", userColor.state.bottom, userColor.state.top);
+            states.colorSetting.customUser = userColor.state;
+            states.colorSetting.customUser.url = 'url(#CUSTOM_USER_GRADIENT)';
+          }
+        })
+        .then(() => dbOperations.getUserSettings('chatGPTColor'))
+        .then(chatGPTColor => {
+          this.log(LogCategories.INFO, '获取到ChatGPT颜色设置:', chatGPTColor);
+          if (chatGPTColor && chatGPTColor.state && chatGPTColor.state.is) {
+            initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", chatGPTColor.state.bottom, chatGPTColor.state.top);
+            states.colorSetting.customChatGPT = chatGPTColor.state;
+            states.colorSetting.customChatGPT.url = 'url(#CUSTOM_CHATGPT_GRADIENT)';
+          }
+        })
+        .then(drawMainSVG)
+        .then(() => dbOperations.getUserSettings('mainTreeBtnSticky'))
+        .then(mainTreeBtnSticky => {
+          console.log("mainTreeBtnSticky: ", mainTreeBtnSticky);
+          if (mainTreeBtnSticky.id) {
+            states.mainButton.canNotEnterNavbar = mainTreeBtnSticky.canNotEnterNavbar;
+            toggleMainBtnMovingAccessbility.innerHTML = mainTreeBtnSticky.canNotEnterNavbar ? greenForNotEnter : redForEnterable;
+            // treeMainBtn.style.display = mainTreeBtnSticky.canNotEnterNavbar ? 'none' : 'block';
+            // navMainButton.style.display = mainTreeBtnSticky.canNotEnterNavbar ? 'block' : 'none';
+          } else {
+            throw new Error("从getUserSettings获取的结构不符合预期");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          toggleMainBtnMovingAccessbility.innerHTML = redForEnterable;
+        })
+        .then(() => dbOperations.initConversationData())
+        .then(information => {
+          this.log(LogCategories.INFO, "获取到对话数据:", information);
+          controlPanelKit.renderConversations(chatHistory);
+          controlPanelKit.updateCategorySelect();
+          filteredConversations = chatHistory;
+        })
+        .catch(error => console.error(error));
+    },
 
-        let curRootChoice = allChatDivs.length - 1;
-        for (; curRootChoice >= 0; curRootChoice--) {
-          // if (url !== states.url.url) {
-          //   log("发现url变化! 退出更新树");
-          //   states.treeUpdate.isDOMOperating = false;
-          //   return;
-          // }
-          if (result.childIndicesPath[curRootChoice] !== result.childrenCountPath[curRootChoice]) {
-            await DOMOperations.clickButtonAtDivLevel(1, curRootChoice);
-            let ableToContinue = false;
-            while (!ableToContinue) {
-              await sleep(50);
-              let result1 = DOMOperations.getButtonInfo();
-              let childIndecices = result1.childIndicesPath;
 
-              if (childIndecices.length !== result.childIndicesPath.length) {
-                ableToContinue = true;
-                break;
+    initConversationData: function () {
+      if (!db) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        let information = {
+          conversations: []
+        };
+
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+
+        // 获取现有的 "conversations_information" 对象（如果存在）
+        const getRequest = objectStore.get("conversations_information");
+
+        getRequest.onsuccess = event => {
+          if (getRequest.result) {
+            objectStore.delete("conversations_information");
+          }
+
+          // 现在，我们可以遍历对象存储中的每个对象
+          objectStore.openCursor().onsuccess = event => {
+            const cursor = event.target.result;
+
+            if (cursor) {
+              const url = cursor.value.url;
+
+              if (url && !url.includes("conversations_information")) {
+
+                if (cursor.value.rootNode.children.length === 0) {
+                  dbOperations.deleteConversationData(url)
+                    .then(this.log(LogCategories.WARNING, "a conversation is deleted!"))
+                    .catch(error => {
+                      console.error(error);
+                    });
+                } else {
+
+                  const id = url.split('/').pop();
+                  const safeId = id.replace(/-/g, '');
+
+                  information.conversations.push({
+                    id: safeId,
+                    topic: cursor.value.rootNode.content,
+                    link: url,
+                    categories: cursor.value.categories || [], // 新增字段
+                    chatTreeTags: cursor.value.chatTreeTags || [], // 新增字段
+                    isWholeConversationBookMarked: cursor.value.isWholeConversationBookMarked || false,
+                    timestamp: cursor.value.timestamp
+                  });
+                }
               }
-              for (let i = 0; i < childIndecices.length; i++) {
-                if (childIndecices[i] !== result.childIndicesPath[i]) {
-                  ableToContinue = true;
-                  break;
+              cursor.continue();
+            } else {
+              const putRequest = objectStore.put({
+                url: "conversations_information",
+                data: information
+              });
+
+              putRequest.onsuccess = event => {
+                this.log(LogCategories.SUCCESS, "Information updated successfully.");
+                resolve(information);
+              };
+
+              putRequest.onerror = event => {
+                console.error("Failed to update information.", event.target.error);
+                reject(event.target.error);
+              };
+            }
+            chatHistory = information.conversations;
+            //log("information.conversations:",information.conversations);
+          };
+
+        };
+
+        getRequest.onerror = event => {
+          console.error("Failed to get information.", event.target.error);
+          reject(event.target.error);
+        };
+      });
+    },
+
+    changeWholeConversationBookMarked: function (url, shouldBeBookMarked) {
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("加载数据:Database has not been initialized.");
+          return;
+        }
+        if (!url) {
+          reject("加载数据:No URL key specified.");
+          return;
+        }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const request = objectStore.get(url);
+
+        request.onsuccess = event => {
+          let result = event.target.result;
+          result.isWholeConversationBookMarked = shouldBeBookMarked;
+          dbOperations.saveConversationsData(result)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              //controlPanelKit.updateCategorySelect();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        };
+        request.onerror = event => reject("Error loading data:", event.target.errorCode);
+      });
+
+    },
+
+    addOrDeleteTagOrClassToURL: async function (url, isTag, value, isAdd) {
+
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("加载数据:Database has not been initialized.");
+          return;
+        }
+        if (!url) {
+          reject("加载数据:No URL key specified.");
+          return;
+        }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const request = objectStore.get(url);
+
+        request.onsuccess = event => {
+          let result = event.target.result;
+          //this.log("result:", result);
+          if (isAdd) {
+            if (!result.chatTreeTags) {
+              result.chatTreeTags = [];
+            }
+            if (!result.categories) {
+              result.categories = [];
+            }
+            if (isTag && !result.chatTreeTags.includes(value)) {
+              result.chatTreeTags.push(value);
+              //log("added!");
+            } else if (!isTag && !result.categories.includes(value)) {
+              result.categories.push(value);
+              //log("added!");
+            }
+          } else {
+            if (isTag && result.chatTreeTags.includes(value)) {
+              result.chatTreeTags = result.chatTreeTags.filter(tag => tag != value);
+              //log("deleted!");
+            } else if (!isTag && result.categories.includes(value)) {
+              result.categories = result.categories.filter(tag => tag != value);
+              //log("deleted!");
+            }
+          }
+          dbOperations.saveConversationsData(result)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              controlPanelKit.updateCategorySelect();
+              this.log(LogCategories.INFO, "In DBOper:", "url:", url, "isTag:", isTag, "value:", value, "isAdd:", isAdd);
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        };
+        request.onerror = event => reject("Error loading data:", event.target.errorCode);
+      });
+
+    },
+
+
+    saveConversationsData: function (data) {
+      if (data.url === null) {
+        this.log(LogCategories.ERROR, "保存对话数据:No URL key specified.");
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("保存数据:Database has not been initialized.");
+          return;
+        }
+        if (!data.url) {
+          reject("保存数据:No URL key specified.");
+          return;
+        }
+        data.timestamp = Date.now();
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        this.log(LogCategories.INFO, "in save data, conversations:", objectStore);
+        const request = objectStore.put(data);
+        request.onsuccess = () => {
+          dbOperations.initConversationData().then(() => {
+            this.log(LogCategories.INFO, "update panel.");
+          })
+          resolve();
+        }
+        request.onerror = event => reject("Error saving data:", event.target.errorCode);
+      });
+    },
+    getUserSettings: function (key) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readonly');
+        const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
+        const request = store.get(key);
+        request.onsuccess = function (event) {
+          const settings = event.target.result;
+          //this.log(LogCategories.SUCCESS, 'Got USER SETTING:', settings);
+          resolve(settings);
+        };
+        request.onerror = function (event) {
+          this.log(LogCategories.ERROR, '读取设置失败', event.target.errorCode);
+          reject(event.target.errorCode);
+        };
+      });
+    },
+    updateUserSettings: function (newSettings) {
+      let self = this;
+      return new Promise((resolve, reject) => {
+        //console.log("db:",db);
+        const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
+        const request = store.put(newSettings);
+
+        request.onsuccess = function (event) {
+          self.log(LogCategories.SUCCESS, '设置更新成功');
+          resolve();
+        };
+        request.onerror = function (event) {
+          self.log(LogCategories.ERROR, '更新设置失败', event.target.errorCode);
+          reject(event.target.errorCode);
+        };
+      });
+    },
+
+    changeConversationDataTopic: async function (url, newTopic) {
+      if (!url || !urlOperations.isForLiveValidURL(url)) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("加载数据:Database has not been initialized.");
+          return;
+        }
+        if (!url) {
+          reject("加载数据:No URL key specified.");
+          return;
+        }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const request = objectStore.get(url);
+
+        request.onsuccess = event => {
+          let result = event.target.result;
+          result.rootNode.content = newTopic;
+          dbOperations.saveConversationsData(result)
+            .then(() => dbOperations.initConversationData())
+            .then(information => {
+              controlPanelKit.updateCategorySelect();
+            })
+            .catch(error => {
+              console.error(error);
+            });
+        };
+        request.onerror = event => reject("Error loading data:", event.target.errorCode);
+      });
+    },
+    loadConversationsData: function (url) {
+      if (!url || (!urlOperations.isForLiveValidURL(url)) && (!urlOperations.isForDeletedValidURL(url))) {
+        return;
+      }
+      return new Promise((resolve, reject) => {
+        if (!db) {
+          console.error("加载数据:Database has not been initialized.");
+          return;
+        }
+        if (!url) {
+          reject("加载数据:No URL key specified.");
+          return;
+        }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const request = objectStore.get(url);
+
+        request.onsuccess = event => {
+          let result = event.target.result;
+          //this.log(" resultOfRequest:", result);
+          if (!result) {
+            let conversationData = DEFAULT_CONVERSATION_DATA;
+            conversationData.url = url;
+            //conversationData.uuid2nodeMap.set(conversationData.rootNode.uuid, conversationData.rootNode);
+            //conversationData.uuid2pathMap.set(conversationData.rootNode.uuid, []);
+            //conversationData.path2nodeMap.set('', conversationData.rootNode);
+            //log("在load中: data", conversationData);
+            resolve(conversationData);
+            // const addRequest = objectStore.add(conversationData);
+            // addRequest.onsuccess = () => {
+            //   log("返回data:", conversationData);
+            //   resolve(conversationData);
+            // }
+            // addRequest.onerror = event => reject("Error creating new data:", event.target.errorCode);
+          } else {
+            conversationData = result;
+            this.log("loaded conversationData:", conversationData);
+            if (!conversationData.bookMarked) {
+              conversationData.bookMarked = new Map();
+            }
+            if (!conversationData.commentMap) {
+              conversationData.commentMap = new Map();
+            }
+            if (!conversationData.participants) {
+              conversationData.participants = {
+                user: {
+                  name: "UserName",
+                  avatarURL: "UserAvatarURL",
+                  avatarHTML: "User",
+                },
+                gpt: {
+                  type: "GPT-3",
                 }
               }
             }
-            curRootDivChoice = curRootChoice;
-            hasRightButtonUnClicked = true;
-            //if(allChatDivs.length -1 > curRootChoice){
-            await treeOperation.initializeSubChatTree(curRootChoice + 1);
-            //}
-            break;
+            resolve(result);
           }
+        };
+        request.onerror = event => reject("Error loading data:", event.target.errorCode);
+      });
+    },
+
+    deleteConversationData: function (url) {
+      return new Promise((resolve, reject) => {
+        if (!url || !urlOperations.isForLiveValidURL(url)) {
+          reject('Invalid URL');
+          return;
         }
-        if (!hasRightButtonUnClicked) {
-          log("所有的节点都加进来了!")
-          log("准备保存的data:", conversationData);
-          if (states.url.url !== operatingURL || window.location.href !== operatingURL) {
-            log("监测到链接变化, 停止更新!");
-            states.treeUpdate.isDOMOperating = false;
-            return;
-          }
-          try {
-            await dbOperations.saveConversationsData(conversationData);
-            await dbOperations.loadConversationsData(operatingURL);
-          } catch (error) {
-            console.error("Error:", error);
-          }
-          log("重新读取到的data:", conversationData);
-          break;
+
+        if (!db) {
+          console.error('删除数据: Database has not been initialized.');
+          reject('Database not initialized');
+          return;
         }
-      }
-      states.treeUpdate.isDOMOperating = false;
-      dbOperations.initConversationData()
-        .then(information => {
-          controlPanelKit.renderConversations(chatHistory);
-        })
-        .catch(error => console.error(error));
-      let mainSvg = document.getElementById("mainSvg")
-      let mainSvgShown = mainSvg.getAttribute("visibility");
-      if (mainSvgShown === 'hidden') {
-        toggleSvgShow(1);
-      }
+        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], 'readwrite');
+        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
+        const deleteRequest = objectStore.delete(url);
+
+        deleteRequest.onsuccess = () => {
+          this.log(LogCategories.WARNING, `Data for URL ${url} has been deleted.`);
+          resolve();
+        };
+        deleteRequest.onerror = event => {
+          console.error('Error deleting data:', event.target.errorCode);
+          reject(event.target.errorCode);
+        };
+      });
+    },
+    addSearchRecord: function (records) {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([SEARCH_HISTORY_STORE_NAME], 'readwrite');
+        const store = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
+
+        const request = store.put({id: 'searchRecords', records: records});
+
+        request.onsuccess = () => {
+          this.log(LogCategories.SUCCESS, '搜索记录已成功更新');
+          resolve();
+        };
+
+        request.onerror = () => {
+          this.log(LogCategories.ERROR, '更新搜索记录时出错');
+          reject(new Error('更新搜索记录时出错'));
+        };
+      });
+    },
+    getSearchHistory: function () {
+      return new Promise((resolve, reject) => {
+        const transaction = db.transaction([SEARCH_HISTORY_STORE_NAME], 'readonly');
+        const store = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
+        const request = store.get('searchRecords');
+
+        request.onsuccess = event => {
+          const records = event.target.result?.records || [];
+          this.log(LogCategories.SUCCESS, '搜索历史记录:', records);
+          searchHistoryRecord = records;
+          resolve(records);
+        };
+
+        request.onerror = event => {
+          console.error('获取搜索历史记录失败');
+          reject(new Error('获取搜索历史记录失败'));
+        };
+      });
+    }
+  };
+  window.addEventListener('DOMContentLoaded', (event) => {
+    log(LogCategories.INFO, 'DOM fully loaded and parsed');
+    //let timeout;
+    //timeout = setTimeout(() => DOMOperations.setNavBarDiv(), 1000);
+    DOMOperations.setNavBarDiv()
+
+  });
+
+  const titleDiv = document.createElement('div');
+  const title = document.createElement('h3');
+  const stickyDiv = document.createElement('div');
+  let navPanelButton;
+  let navMainButton;
+  const DOMOperations = {
+    log(category, ...message) {
+      // 使用 Logger 实例的 log 方法
+      //console.log("moduleLog called.");
+      this.logger.log(category, ...message);
+    },
+    initDOMOperations: function () {
+
+      this.logger = new Logger('DOMOperations');
     },
     jumpToDialogueItem: async function (uuid) {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
       if (!states.url.isForLiveValidURL) {
         return;
       }
@@ -2933,922 +3543,53 @@
         }
 
         allDivs[path.length - 1].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'start'});
-        const htmlClass = document.documentElement.getAttribute('class');
-        if (htmlClass && htmlClass.includes('dark')) {
+        const dark = isDark();
+        if (dark) {
           highlightDiv1();
         } else {
           highlightDiv2();
         }
         setTimeout(() => {
           allDivs[path.length - 1].scrollIntoView({behavior: 'smooth', block: 'center', inline: 'start'});
-          const htmlClass = document.documentElement.getAttribute('class');
-          if (htmlClass && htmlClass.includes('dark')) {
+          const dark = isDark()
+          if (dark) {
             highlightDiv1();
           } else {
             highlightDiv2();
           }
         }, 1000);
-        log("成功转到!");
+        //log("成功转到!");
       }
     },
-
-  };
-
-  const urlOperations = {
-    getCurrentURL: function () {
-      return window.location.href;
-    },
-
-    isForLiveValidURL: function (url) {
-      const pattern = /^https:\/\/chat\.openai\.com\/c\/[a-z0-9\-]+\/?$/;
-      return pattern.test(url);
-    },
-
-    isForDeletedValidURL: function (url) {
-      const pattern = /^https:\/\/chat\.openai\.com\/chattree\/[a-z0-9\-]+\/?$/;
-      return pattern.test(url);
-    },
-
-    changeBetweenChattreeWithCAndOneMeansChattreeToC: function (chattreetoc, url) {
-      function replaceFirstChattreeWithC(url) {
-        return url.replace(/^https:\/\/chat\.openai\.com\/chattree/, "https://chat.openai.com/c");
-      }
-
-      function replaceFirstCWithChattree(url) {
-        return url.replace(/^https:\/\/chat\.openai\.com\/c/, "https://chat.openai.com/chattree");
-      }
-
-      if (chattreetoc) {
-        return replaceFirstChattreeWithC(url);
-      } else {
-        return replaceFirstCWithChattree(url);
-      }
-    },
-
-    isNonUniqueURL: function (url) {
-      const nonUniquePatterns = [
-        /^https:\/\/chat\.openai\.com\/?$/,
-        /^https:\/\/chat\.openai\.com\/\?model=.+$/
-      ];
-      return nonUniquePatterns.some(pattern => pattern.test(url));
-    },
-    getCurURLInfo: function () {
-      let curURL = window.location.href;
-      let validURL = this.isForLiveValidURL(curURL);
-      let nonUniqueURL = !this.isNonUniqueURL(curURL);
-      return {
-        curURL: curURL,
-        validURL: validURL,
-        nonUniqueURL: nonUniqueURL,
-      };
-    },
-    observeTargetChanges: function () {
-      let lastURL = window.location.href;
-      log("lastURL:", lastURL);
-      if (urlOperations.isForLiveValidURL(lastURL) || urlOperations.isForDeletedValidURL(lastURL)) {
-        log("is_anyKind_of_valid");
-        urlOperations.handleURLChange(lastURL);
-        states.url.url = lastURL;
-      }
-
-      function callback(mutationsList, observer) {
-        const currentURL = window.location.href;
-        log("currentURL:", currentURL);
-        if (urlOperations.isForLiveValidURL(currentURL)) {
-          if (currentURL !== lastURL) {
-            log("URL changed:", currentURL);
-            lastURL = currentURL;
-            urlOperations.handleURLChange(currentURL);
-            states.treeUpdate.isDOMOperating = false;
-          } else {
-            log("Current URL:", currentURL);
-          }
-        } else if (urlOperations.isForDeletedValidURL(currentURL)) {
-          log("URL changed:", currentURL, " detected. Please refresh the page.");
-          urlOperations.handleURLChange(currentURL);
-        } else if (urlOperations.isNonUniqueURL(currentURL)) {
-          log("Non-unique URL:", currentURL, " detected. Please refresh the page.");
-          urlOperations.handleURLChange(currentURL);
-        }
-
-      };
-
-
-      let outter_observer;
-      let inner_observer;
-      let curState = null;
-
-      const startObserving = (target, config, callback, observer) => {
-        if (observer) {
-          observer.disconnect();
-        }
-        observer = new MutationObserver(callback);
-        observer.observe(target, config);
-        log('Started observing:', target);
-        return observer;
-      };
-      window.addEventListener("resize", function () {
-        checkCurrentState();
-      });
-      const checkCurrentState = () => {
-        const flexDiv = document.querySelector('.flex-shrink-0.overflow-x-hidden.dark.bg-gray-900');
-        const htmlTag = document.querySelector('html');
-
-        if (flexDiv && curState !== 1) {
-          log('Switched to State 1.');
-          curState = 1;
-
-          const config = {attributes: true, attributeFilter: ['style']};
-
-          outter_observer = startObserving(htmlTag, config, (mutations) => {
-            if (mutations.some(m => m.type === 'attributes' && m.attributeName === 'style')) {
-              log('HTML style changed.');
-              checkCurrentState();
-            }
-          }, outter_observer);
-
-          const innerConfig = {childList: true, subtree: true};
-          inner_observer = startObserving(flexDiv, innerConfig, (mutations) => {
-            if (mutations.some(m => m.type === 'childList')) {
-              log('FlexDiv child list changed.');
-              callback();
-              checkCurrentState();
-            }
-          }, inner_observer);
-        } else if (!flexDiv && curState !== 2) {
-          log('Switched to State 2.');
-          curState = 2;
-          const config = {childList: true, subtree: true};
-          outter_observer = startObserving(document.body, config, (mutations) => {
-            if (mutations.some(m => m.type === 'childList')) {
-              log('Body child list changed.');
-
-              const conversationList = document.querySelector('#headlessui-portal-root');
-              if (conversationList) {
-                log('Conversation List Detected.');
-                inner_observer = startObserving(conversationList, config, (mutations) => {
-                  if (mutations.some(m => m.type === 'childList')) {
-                    log('Conversation List child list changed.');
-                    callback();
-                  }
-                }, inner_observer);
-              }
-
-              checkCurrentState();
-            }
-          }, outter_observer);
-        }
-      };
-      checkCurrentState();
-    },
-    handleURLChange: function (url) {
-      //log("In handleURLChange, Data:", conversationData);
-      if (urlOperations.isNonUniqueURL(url)) {
-        log("nonuniqueURL");
-        states.url.isForLiveValidURL = false;
-        states.url.isForDeletedValidURL = false;
-        states.url.url = '';
-        states.treeUpdate.isDOMOperating = false;
-        conversationData = DEFAULT_CONVERSATION_DATA;
-
-        root = d3.hierarchy(conversationData.rootNode);
-        const widthPerNode = 30;
-        const heightPerNode = 30;
-        treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-        treeLayout(root);
-        settingsKit.refreshTree();
-        log("请刷新页面或者转到具有对话信息的页面从而获取正确的链接");
-      } else if (urlOperations.isForDeletedValidURL(url)) {
-        log("DeletedValidURL");
-        states.url.isForLiveValidURL = false;
-        states.url.isForDeletedValidURL = true;
-        states.treeUpdate.isDOMOperating = false;
-        states.url.url = url;
-        document.documentElement.setAttribute('class', 'light');
-        // const htmlClass = document.documentElement.getAttribute('class');
-        // let wholeScreenDiv = document.getElementById("__next"); // 修正单词拼写
-        // if (wholeScreenDiv && htmlClass && htmlClass === 'black') {
-        //   wholeScreenDiv.style.background = 'rgb(51,53,65)';
-        // } else {
-        //   document.documentElement.className = 'light'; // 使用 className
-        // }
-
-        //rgb(51,53,65)
-        log("this_is_delete_url", url);
-        url = urlOperations.changeBetweenChattreeWithCAndOneMeansChattreeToC(1, url);
-        log("delete_url_to_new_url", url);
-        dbOperations.loadConversationsData(url).then(loadeddata => {
-          log("Loaded data for URL:", loadeddata);
-          let interval;
-          interval = setInterval(() => {
-            if (document.title === "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content) {
-              clearInterval(interval);
-            }
-            document.title = "查看模式(ChatTree提供支持): " + loadeddata.rootNode.content;
-          }, 1500);
-          conversationData = loadeddata;
-          root = d3.hierarchy(conversationData.rootNode);
-          const widthPerNode = 30;
-          const heightPerNode = 30;
-          treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-
-          treeLayout(root);
-          settingsKit.refreshTree();
-        }).catch(error => {
-          console.error("Error loading data:", error);
-        });
-      } else {
-        log("liveValidURL");
-
-        states.url.isForLiveValidURL = true;
-        states.url.isForDeletedValidURL = false;
-        states.treeUpdate.isDOMOperating = false;
-        states.url.url = url;
-
-        fetchRawChatMessages(url.slice(26)).then(data => {
-          dbOperations.loadConversationsData(url).then(loadeddata => {
-            log("Loaded data for URL:", loadeddata);
-            conversationData = loadeddata;
-            if (!conversationData.isNovemberSeventh) {
-              let result = conver_to_new_style();
-              conversationData.bookMarked = result.bookMarked;
-              conversationData.commentMap = result.commentMap;
-              //delete conversationData.uuid2pathMap;
-              delete conversationData.path2nodeMap;
-              dbOperations.saveConversationsData(conversationData).then(() => {
-                log("Convert To November_Type!");
-              });
-            }
-
-            log("RAW DATA:",data);
-            log("New URL Catched!");
-            let processResult = processChatMessage(data);
-            conversationData.rootNode = conversationRootNode;
-            conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
-            conversationData.uuid2pathMap = processResult.uuid2pathMap;
-            dbOperations.saveConversationsData(conversationData).then(()=>{
-
-              controlPanelKit.renderConversations(chatHistory);
-              controlPanelKit.updateCategorySelect();
-            });
-            log("to draw svg:", conversationData);
-            //conversationData = loadeddata;
-            root = d3.hierarchy(conversationData.rootNode);
-            const widthPerNode = 30;
-            const heightPerNode = 30;
-            treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-            treeLayout(root);
-            //drawMainSVG();
-            settingsKit.refreshTree();
-          }).catch(error => {
-            console.error("Error loading data:", error);
-          });
-
-        }).catch(error => {
-          log("error:", error);
-        })
-        // fetchRawChatMessages().then(data => {
-        //   log(data);  // 打印原始聊天数据
-        //   const timestamp = data.create_time * 1000;
-        //   // const timestamp2 = data.update_time * 1000; // 转换为毫秒
-        //   // const date2 = new Date(timestamp2);
-        //   // log("update_time:",timestamp2);
-        //   // log("update_time:",date2);
-        //   processChatMessage(data);
-        // }).catch(error => {
-        //   console.error(error);
-        // });
-        //return;
-
-
-      }
-    }
-  };
-
-  //const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(51, 230, 15, 0.74) 0%, rgba(250, 0, 187, 0.74) 100%)';
-  const DEFAULT_MAINSVG_BACKGROUND = 'linear-gradient(to top, rgba(117, 194, 102, 0.31) 0%, rgba(206, 44, 166, 0.31) 100%)';
-
-  //'linear-gradient(to top, rgba(210, 108, 196, 0.2) 0%, rgba(205, 209, 83, 0.2) 100%)'
-  const GlobalUserSettings = {
-    MainTreeBtnColorSettings: {},
-    MainTreeBtnPositionSettings: {},
-    MainSVGBackground: DEFAULT_MAINSVG_BACKGROUND,
-  };
-  const dbOperations = {
-    initDatabase: function () {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, 1);
-        request.onerror = event => {
-          console.error("Detailed Error:", event);
-          reject("Error opening database:", event);
-        };
-
-        request.onupgradeneeded = event => {
-          log("升级数据库!");
-          db = event.target.result;
-          if (!db.objectStoreNames.contains(CONVERSATIONS_STORE_NAME)) {
-            db.createObjectStore(CONVERSATIONS_STORE_NAME, {keyPath: "url"});
-          }
-          if (!db.objectStoreNames.contains(SEARCH_HISTORY_STORE_NAME)) {
-            db.createObjectStore(SEARCH_HISTORY_STORE_NAME, {keyPath: "id"});
-            const initSearchHistory = {id: 'searchHistory', records: []};
-            const transaction = event.target.transaction;
-            const historyStore = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
-            historyStore.add(initSearchHistory);
-          }
-          if (!db.objectStoreNames.contains(USER_SETTINGS_STORE_NAME)) {
-            db.createObjectStore(USER_SETTINGS_STORE_NAME, {keyPath: "id"});
-            const transaction = event.target.transaction;
-            const userSettingsStore = transaction.objectStore(USER_SETTINGS_STORE_NAME);
-            const mainTreeBtnColorSettings = {id: 'mainTreeBtn', color: '#0FD126', opacity: 0.9};
-            userSettingsStore.add(mainTreeBtnColorSettings);
-            const mainTreeBtnPosSettings = {id: 'mainTreeBtnPos', top: '20px', left: '20px'};
-            userSettingsStore.add(mainTreeBtnPosSettings);
-          }
-        };
-        request.onsuccess = event => {
-          db = event.target.result;
-          dbOperations.getSearchHistory()
-            .then(records => {
-              log('Got search history:', records);
-            })
-            .catch(error => console.error(error));
-          dbOperations.getUserSettings('mainTreeBtn')
-            .then(MainTreeBtnSettings => {
-              log('Got MainTreeBtnSettings:', MainTreeBtnSettings);
-              GlobalUserSettings.MainTreeBtnColorSettings = MainTreeBtnSettings;
-              treeMainBtn.style.background = GlobalUserSettings.MainTreeBtnColorSettings.color;
-              treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings.opacity;
-              navMainButton.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
-              navMainButton.style.opacity = '1';
-            })
-            .catch(error => console.error(error));
-          dbOperations.getUserSettings('mainTreeBtnPos')
-            .then(mainTreeBtnPos => {
-              log('Got mainTreeBtnPosSettings:', mainTreeBtnPos);
-              GlobalUserSettings.MainTreeBtnPositionSettings = mainTreeBtnPos;
-              treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top;
-              treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left;
-              if (mainTreeBtnPos.isInNavbar === true) {
-                navMainButton.style.display = 'block';
-                treeMainBtn.style.display = 'none';
-                states.mainButton.isMainTreeBtnInNavbar = true;
-              }
-            })
-            .catch(error => console.error(error));
-
-
-          dbOperations.getUserSettings('userLang')
-            .then(userLang => {
-
-              languageSelect.addEventListener('change', languageKits.init);
-              //setTimeout()
-              log('Got userLang:', userLang);
-              if (userLang && userLang.globalUserLang) {
-                globalUserLang = userLang.globalUserLang;
-                languageKits.init({
-                  target: {
-                    value: globalUserLang,
-                    shouldNotSave: true,
-                  }
-                })
-              }
-              ButtonOperations.showUserNotification(translate("chatTreeRunning"));
-
-              const options = languageSelect.querySelectorAll('option');
-              options.forEach(option => {
-                if (option.value === globalUserLang) {
-                  option.selected = true;
-                } else {
-                  option.selected = false;
-                }
-              });
-            })
-            .catch(error => console.error(error));
-
-          dbOperations.getUserSettings('mainSVG')
-            .then(mainSVGBackground => {
-              log('Got mainTreeBtnPosSettings:', mainSVGBackground);
-              if (mainSVGBackground && mainSVGBackground.background) {
-                GlobalUserSettings.MainSVGBackground = mainSVGBackground.background;
-                let mainSvg = document.getElementById('mainSvg');
-                if (mainSvg) {
-                  log("get mainSvg:", mainSvg);
-                  mainSvg.style.background = mainSVGBackground.background.toString();
-                  log("get mainSVGBackground:", mainSVGBackground);
-                }
-              }
-            })
-            .catch(error => console.error(error));
-
-          dbOperations.getUserSettings('userColor')
-            .then(userColor => {
-              log('Got userColor:', userColor);
-              if (userColor && userColor.state && userColor.state.is) {
-                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_USER_GRADIENT", userColor.state.bottom, userColor.state.top);
-                states.colorSetting.customUser = userColor.state;
-                states.colorSetting.customUser.url = 'url(#CUSTOM_USER_GRADIENT)';
-              }
-            })
-            .catch(error => console.error(error));
-
-          dbOperations.getUserSettings('chatGPTColor')
-            .then(chatGPTColor => {
-              log('Got chatGPTColor:', chatGPTColor);
-              if (chatGPTColor && chatGPTColor.state && chatGPTColor.state.is) {
-                initSvgAndGradient.createLinearGradient(defs, "CUSTOM_CHATGPT_GRADIENT", chatGPTColor.state.bottom, chatGPTColor.state.top);
-                states.colorSetting.customChatGPT = chatGPTColor.state;
-                states.colorSetting.customChatGPT.url = 'url(#CUSTOM_CHATGPT_GRADIENT)';
-              }
-            })
-            .catch(error => console.error(error));
-          drawMainSVG();
-
-          dbOperations.getUserSettings('mainTreeBtnSticky')
-            .then(canNotEnterNavbar => {
-              if (canNotEnterNavbar && typeof canNotEnterNavbar.canNotEnterNavbar !== 'undefined') {
-                log("canNotEnter?", canNotEnterNavbar);
-                states.mainButton.canNotEnterNavbar = canNotEnterNavbar.canNotEnterNavbar;
-
-                toggleMainBtnMovingAccessbility.innerHTML = canNotEnterNavbar.canNotEnterNavbar ? greenForNotEnter : redForEnterable;
-
-              } else {
-                throw new Error("Unexpected structure from getUserSettings");
-              }
-            })
-            .catch(error => {
-              console.error(error);
-              toggleMainBtnMovingAccessbility.innerHTML = redForEnterable;
-            });
-
-          dbOperations.initConversationData()
-            .then(information => {
-              log("information:", information);
-              log('initConversationData:', chatHistory);
-              controlPanelKit.init();
-              controlPanelKit.renderConversations(chatHistory);
-              controlPanelKit.updateCategorySelect();
-              filteredConversations = chatHistory;
-            })
-            .catch(error => console.error(error));
-          resolve();
-        };
-      });
-    },
-
-    initConversationData: function () {
-      if (!db) {
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        let information = {
-          conversations: []
-        };
-
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-
-        // 获取现有的 "conversations_information" 对象（如果存在）
-        const getRequest = objectStore.get("conversations_information");
-
-        getRequest.onsuccess = event => {
-          if (getRequest.result) {
-            objectStore.delete("conversations_information");
-          }
-
-          // 现在，我们可以遍历对象存储中的每个对象
-          objectStore.openCursor().onsuccess = event => {
-            const cursor = event.target.result;
-
-            if (cursor) {
-              const url = cursor.value.url;
-
-              if (url && !url.includes("conversations_information")) {
-
-                if (cursor.value.rootNode.children.length === 0) {
-                  dbOperations.deleteConversationData(url)
-                    .then(log("a conversation is deleted!"))
-                    .catch(error => {
-                      console.error(error);
-                    });
-                } else {
-
-                  const id = url.split('/').pop();
-                  const safeId = id.replace(/-/g, '');
-
-                  information.conversations.push({
-                    id: safeId,
-                    topic: cursor.value.rootNode.content,
-                    link: url,
-                    categories: cursor.value.categories || [], // 新增字段
-                    chatTreeTags: cursor.value.chatTreeTags || [], // 新增字段
-                    isWholeConversationBookMarked: cursor.value.isWholeConversationBookMarked || false,
-                    timestamp: cursor.value.timestamp
-                  });
-                }
-              }
-              cursor.continue();
-            } else {
-              const putRequest = objectStore.put({
-                url: "conversations_information",
-                data: information
-              });
-
-              putRequest.onsuccess = event => {
-                log("Information updated successfully.");
-                resolve(information);
-              };
-
-              putRequest.onerror = event => {
-                console.error("Failed to update information.", event.target.error);
-                reject(event.target.error);
-              };
-            }
-            chatHistory = information.conversations;
-            //log("information.conversations:",information.conversations);
-          };
-        };
-
-        getRequest.onerror = event => {
-          console.error("Failed to get information.", event.target.error);
-          reject(event.target.error);
-        };
-      });
-    },
-
-    changeWholeConversationBookMarked: function (url, shouldBeBookMarked) {
-      if (!url || !urlOperations.isForLiveValidURL(url)) {
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          console.error("加载数据:Database has not been initialized.");
-          return;
-        }
-        if (!url) {
-          reject("加载数据:No URL key specified.");
-          return;
-        }
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        const request = objectStore.get(url);
-
-        request.onsuccess = event => {
-          let result = event.target.result;
-          result.isWholeConversationBookMarked = shouldBeBookMarked;
-          dbOperations.saveConversationsData(result)
-            .then(() => dbOperations.initConversationData())
-            .then(information => {
-              //controlPanelKit.updateCategorySelect();
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        };
-        request.onerror = event => reject("Error loading data:", event.target.errorCode);
-      });
-
-    },
-
-    addOrDeleteTagOrClassToURL: async function (url, isTag, value, isAdd) {
-      log("In DBOper:", "url:", url, "isTag:", isTag, "value:", value, "isAdd:", isAdd);
-
-      if (!url || !urlOperations.isForLiveValidURL(url)) {
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          console.error("加载数据:Database has not been initialized.");
-          return;
-        }
-        if (!url) {
-          reject("加载数据:No URL key specified.");
-          return;
-        }
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        const request = objectStore.get(url);
-
-        request.onsuccess = event => {
-          let result = event.target.result;
-          log("result:", result);
-          if (isAdd) {
-            if (!result.chatTreeTags) {
-              result.chatTreeTags = [];
-            }
-            if (!result.categories) {
-              result.categories = [];
-            }
-            if (isTag && !result.chatTreeTags.includes(value)) {
-              result.chatTreeTags.push(value);
-              log("added!");
-            } else if (!isTag && !result.categories.includes(value)) {
-              result.categories.push(value);
-              log("added!");
-            }
-          } else {
-            if (isTag && result.chatTreeTags.includes(value)) {
-              result.chatTreeTags = result.chatTreeTags.filter(tag => tag != value);
-              log("deleted!");
-            } else if (!isTag && result.categories.includes(value)) {
-              result.categories = result.categories.filter(tag => tag != value);
-              log("deleted!");
-            }
-          }
-          dbOperations.saveConversationsData(result)
-            .then(() => dbOperations.initConversationData())
-            .then(information => {
-              controlPanelKit.updateCategorySelect();
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        };
-        request.onerror = event => reject("Error loading data:", event.target.errorCode);
-      });
-
-    },
-
-
-    saveConversationsData: function (data) {
-      if (data.url === null) {
-        log("保存数据:No URL key specified.");
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          console.error("保存数据:Database has not been initialized.");
-          return;
-        }
-        if (!data.url) {
-          reject("保存数据:No URL key specified.");
-          return;
-        }
-        data.timestamp = Date.now();
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        log("in save data, conversations:",objectStore);
-        const request = objectStore.put(data);
-        request.onsuccess = () => {
-          dbOperations.initConversationData().then(()=>{
-            log("update panel.");
-          })
-          resolve();
-        }
-        request.onerror = event => reject("Error saving data:", event.target.errorCode);
-      });
-    },
-    getUserSettings: function (key) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readonly');
-        const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
-        const request = store.get(key);
-        request.onsuccess = function (event) {
-          const settings = event.target.result;
-          log(settings);
-          resolve(settings);
-        };
-        request.onerror = function (event) {
-          console.error('读取设置失败', event.target.errorCode);
-          reject(event.target.errorCode);
-        };
-      });
-    },
-    updateUserSettings: function (newSettings) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction([USER_SETTINGS_STORE_NAME], 'readwrite');
-        const store = transaction.objectStore(USER_SETTINGS_STORE_NAME);
-        const request = store.put(newSettings);
-
-        request.onsuccess = function (event) {
-          log('设置更新成功');
-          resolve();
-        };
-        request.onerror = function (event) {
-          console.error('更新设置失败', event.target.errorCode);
-          reject(event.target.errorCode);
-        };
-      });
-    },
-
-    changeConversationDataTopic: async function (url, newTopic) {
-      if (!url || !urlOperations.isForLiveValidURL(url)) {
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          console.error("加载数据:Database has not been initialized.");
-          return;
-        }
-        if (!url) {
-          reject("加载数据:No URL key specified.");
-          return;
-        }
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        const request = objectStore.get(url);
-
-        request.onsuccess = event => {
-          let result = event.target.result;
-          result.rootNode.content = newTopic;
-          dbOperations.saveConversationsData(result)
-            .then(() => dbOperations.initConversationData())
-            .then(information => {
-              controlPanelKit.updateCategorySelect();
-            })
-            .catch(error => {
-              console.error(error);
-            });
-        };
-        request.onerror = event => reject("Error loading data:", event.target.errorCode);
-      });
-    },
-    loadConversationsData: function (url) {
-      if (!url || (!urlOperations.isForLiveValidURL(url)) && (!urlOperations.isForDeletedValidURL(url))) {
-        return;
-      }
-      return new Promise((resolve, reject) => {
-        if (!db) {
-          console.error("加载数据:Database has not been initialized.");
-          return;
-        }
-        if (!url) {
-          reject("加载数据:No URL key specified.");
-          return;
-        }
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], "readwrite");
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        const request = objectStore.get(url);
-
-        request.onsuccess = event => {
-          let result = event.target.result;
-          log(" resultOfRequest:", result);
-          if (!result) {
-            let conversationData = DEFAULT_CONVERSATION_DATA;
-            conversationData.url = url;
-            //conversationData.uuid2nodeMap.set(conversationData.rootNode.uuid, conversationData.rootNode);
-            //conversationData.uuid2pathMap.set(conversationData.rootNode.uuid, []);
-            //conversationData.path2nodeMap.set('', conversationData.rootNode);
-            //log("在load中: data", conversationData);
-            resolve(conversationData);
-            // const addRequest = objectStore.add(conversationData);
-            // addRequest.onsuccess = () => {
-            //   log("返回data:", conversationData);
-            //   resolve(conversationData);
-            // }
-            // addRequest.onerror = event => reject("Error creating new data:", event.target.errorCode);
-          } else {
-            log("dataExisting!");
-            conversationData = result;
-            log("loaded conversationData:", conversationData);
-            if (!conversationData.bookMarked) {
-              conversationData.bookMarked = new Map();
-            }
-            if (!conversationData.commentMap) {
-              conversationData.commentMap = new Map();
-            }
-            if (!conversationData.participants) {
-              conversationData.participants = {
-                user: {
-                  name: "UserName",
-                  avatarURL: "UserAvatarURL",
-                  avatarHTML: "User",
-                },
-                gpt: {
-                  type: "GPT-3",
-                }
-              }
-            }
-            // root = d3.hierarchy(conversationData.rootNode);
-            // const widthPerNode = 30;
-            // const heightPerNode = 30;
-            // treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-            // treeLayout(root);
-            //settingsKit.refreshTree();
-            resolve(result);
-          }
-        };
-        request.onerror = event => reject("Error loading data:", event.target.errorCode);
-      });
-    },
-
-    deleteConversationData: function (url) {
-      return new Promise((resolve, reject) => {
-        if (!url || !urlOperations.isForLiveValidURL(url)) {
-          reject('Invalid URL');
-          return;
-        }
-
-        if (!db) {
-          console.error('删除数据: Database has not been initialized.');
-          reject('Database not initialized');
-          return;
-        }
-        const transaction = db.transaction([CONVERSATIONS_STORE_NAME], 'readwrite');
-        const objectStore = transaction.objectStore(CONVERSATIONS_STORE_NAME);
-        const deleteRequest = objectStore.delete(url);
-
-        deleteRequest.onsuccess = () => {
-          log(`Data for URL ${url} has been deleted.`);
-          resolve();
-        };
-        deleteRequest.onerror = event => {
-          console.error('Error deleting data:', event.target.errorCode);
-          reject(event.target.errorCode);
-        };
-      });
-    },
-    addSearchRecord: function (records) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction([SEARCH_HISTORY_STORE_NAME], 'readwrite');
-        const store = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
-
-        const request = store.put({id: 'searchRecords', records: records});
-
-        request.onsuccess = () => {
-          log('搜索记录已成功更新');
-          resolve();
-        };
-
-        request.onerror = () => {
-          console.error('更新搜索记录时出错');
-          reject(new Error('更新搜索记录时出错'));
-        };
-      });
-    },
-    getSearchHistory: function () {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction([SEARCH_HISTORY_STORE_NAME], 'readonly');
-        const store = transaction.objectStore(SEARCH_HISTORY_STORE_NAME);
-        const request = store.get('searchRecords');
-
-        request.onsuccess = event => {
-          const records = event.target.result?.records || [];
-          log('搜索历史记录:', records);
-          searchHistoryRecord = records;
-          resolve(records);
-        };
-
-        request.onerror = event => {
-          console.error('获取搜索历史记录失败');
-          reject(new Error('获取搜索历史记录失败'));
-        };
-      });
-    }
-  };
-  window.addEventListener('DOMContentLoaded', (event) => {
-    log('DOM fully loaded and parsed');
-    // 在这里调用你的函数
-    let timeout;
-    timeout = setTimeout(() => DOMOperations.setNavBarDiv(), 1000);
-
-
-  });
-
-  const titleDiv = document.createElement('div');
-  const title = document.createElement('h3');
-  const stickyDiv = document.createElement('div');
-  const navPanelButton = document.createElement('button');
-  const navMainButton = document.createElement('button');
-  const DOMOperations = {
-
     setNavBarDiv: function () {
-      let HistoryDiv = document.querySelector('.flex-col.flex-1.transition-opacity.duration-500.-mr-2.pr-2.overflow-y-auto');
-      let NoHistoryDiv = document.querySelector('.absolute.left-0.top-14.z-20.overflow-hidden.transition-all.duration-500.invisible.max-h-0');
-//       let navbarHTML = `
-// <div class="sticky top-0 z-[16]" data-projection-id="6" style="opacity: 1;"><h3 class="h-9 pb-2 pt-3 px-3 gizmo:px-2 text-xs text-gray-500 font-medium text-ellipsis overflow-hidden break-all bg-gray-50 gizmo:bg-white dark:bg-gray-900 gizmo:dark:bg-black gizmo:text-gizmo-gray-600">ChatGPT_ChatTree</h3></div>
-//   <div style="display: flex; flex-direction: column; align-items: stretch;">
-// <button style="display: block; border-radius: 12px; opacity: 0.9; background: linear-gradient(to right, rgb(0, 123, 255), rgb(0, 198, 255)); color: white; padding: 4px; font-weight: bold; box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 5px; margin: 6px; ">管理面板</button>
-// </div>
-//   `
-      //let navbarDiv = document.createElement('div');
-      // navbarDiv.innerHTML = navbarHTML;
-
-
-      navPanelButton.addEventListener('click', controlPanelKit.toggleHistoryPanel);
-      // navbarDiv.appendChild(titleDiv);
-      // navbarDiv.appendChild(navPanelButton);
-
-      log('Searching for elements...');
-
-      let isAdded = false;
-      if (HistoryDiv || NoHistoryDiv) {
-        log('Elements found:', HistoryDiv, NoHistoryDiv);
-        if (HistoryDiv && HistoryDiv.parentNode) {
-          HistoryDiv.parentNode.insertBefore(stickyDiv, HistoryDiv);
-          navPanelButton.parentNode.insertBefore(navMainButton, navPanelButton);
-          HistoryDiv.parentNode.insertBefore(titleDiv, stickyDiv);
+      const tryLocateSidebar = () => {
+        let HistoryDiv = document.querySelector(selector.historyDiv);
+        if (HistoryDiv) {
+          // 如果找到侧边栏，则执行相应操作
+          if (HistoryDiv.parentNode) {
+            HistoryDiv.parentNode.insertBefore(stickyDiv, HistoryDiv);
+            navPanelButton.parentNode.insertBefore(navMainButton, navPanelButton);
+            HistoryDiv.parentNode.insertBefore(titleDiv, stickyDiv);
+          }
+          return true; // 返回 true 表示已经成功定位侧边栏
+        } else {
+          // 如果未找到侧边栏，则继续尝试
+          return false; // 返回 false 表示侧边栏未定位
         }
-        isAdded = true;
-      } else {
-        log('Elements not found');
-        treeMainBtn.style.display = 'block';
-        states.mainButton.isMainTreeBtnInNavbar = false;
-      }
+      };
 
-      return isAdded;
+      const intervalId = setInterval(() => {
+        const isAdded = tryLocateSidebar();
+        if (isAdded) {
+          clearInterval(intervalId); // 如果成功定位到侧边栏，则停止定时器
+        } else {
+          this.log("侧边栏尚未定位，继续尝试...");
+        }
+      }, 1000); // 每隔 1 秒尝试一次
+
+      // 返回 intervalId 以便在需要时能够停止定时器
+      return intervalId;
     },
-
 
     getAllDivs: function () {
       //log("allDivs:",document.querySelectorAll(selector.allDivs));
@@ -3865,15 +3606,14 @@
       //log("buttonInfo:",buttonInfoDiv);
       let buttons = buttonInfoDiv.querySelectorAll("button");
       if (buttons) {
-        log("In clickButtonAtDivLevel", "divLevel: ", divLevel, "buttons:", buttons);
+        //log("In clickButtonAtDivLevel", "divLevel: ", divLevel, "buttons:", buttons);
         buttons[buttonIndex].click();
       } else {
-        log("TargetDiv Not found!");
+        this.log(LogCategories.ERROR, "未能找到应点击的Div");
       }
-
     },
     getButtonInfo: function () {
-      log("In getButtonInfo!");
+      //this.log("In getButtonInfo!");
       let hasRightButtonUnClicked = false;
       let hasLeftButtonUnClicked = false;
       let allChatDivs = DOMOperations.getAllDivs();
@@ -3885,10 +3625,10 @@
         //text-xs flex items-center justify-center gap-1 self-center pt-2 visible
         const buttonInfoDiv = div.querySelector(selector.fowardBackwardButton);
         if (buttonInfoDiv) {
-          let span = buttonInfoDiv.querySelector("span");
+          let span = buttonInfoDiv.querySelector(selector.branchesInfo);
           if (span) {
             let spanText = span.innerText || span.textContent;
-            let match = spanText.match(/(\d+) \/ (\d+)/);
+            let match = spanText.match(/(\d+)\/(\d+)/);
             if (match) {
               let currentVersion = parseInt(match[1], 10);
               let totalVersions = parseInt(match[2], 10);
@@ -3903,7 +3643,6 @@
             childrenCountPath.push(1);
           }
         } else {
-          //log("!didNot find the targetDiv of buttons!");
           childIndicesPath.push(1);
           childrenCountPath.push(1);
         }
@@ -3959,8 +3698,9 @@
   function arrayToKey(arr) {
     return arr.join('|');
   }
+
   function keyToArray(str) {
-    const numArray = str.split('|').map(function(item) {
+    const numArray = str.split('|').map(function (item) {
       return parseInt(item, 10);
     });
   }
@@ -3972,21 +3712,6 @@
     });
   }
 
-
-  function start() {
-    //ButtonOperations.showUserNotification(translate("chatTreeRunning"));
-    dbOperations.initDatabase().then(() => {
-      if (!db) {
-        ButtonOperations.showUserNotification(translate("noDatabaseAndCreationFailed"));
-        return;
-      }
-      log("Database initialized successfully.");
-      log("database:", db);
-      urlOperations.observeTargetChanges();
-    }).catch(error => {
-      console.error("Error initializing database:", error);
-    });
-  }
 
   function toggleSvgShow(isShowSvgButton = 0) {
     let mainSvg = document.getElementById("mainSvg")
@@ -4047,24 +3772,40 @@
       toggleSvgShow();
     }
   });
-
-  let treeMainBtn = document.createElement("button");
+  let treeMainBtn;//= document.createElement("button");
 
   let isDragging = false;
   let isMouseOver = false;
+  let mainBtnColorPicking = false;
   let offsetX, offsetY;
   let menu;
   let mainBtnColorPicker, mainBtnOpacityPicker;
 
   const ButtonOperations = {
     createButton: function () {
-      treeMainBtn.style.display = 'none';
-      treeMainBtn.className = 'main-button'
-      treeMainBtn.id = "chatTreeBtn";
-      treeMainBtn.innerHTML = "🌳ChatTree🌳";
-      treeMainBtn.style.position = "fixed";
-      //treeMainBtn.style.right = '20px';
-      //treeMainBtn.style.top =   '20px';
+      treeMainBtn = ButtonCreator.createButton({
+        id: 'chatTreeBtn',
+        text: '🌳ChatTree🌳',
+        eventListeners: [
+          {type: 'mouseenter', handler: () => ButtonOperations.showMenu(0)},
+          {type: 'mouseleave', handler: ButtonOperations.hideMenuIfNotOver},
+          {type: 'mousedown', handler: ButtonOperations.onMouseDown},
+          {type: 'click', handler: ButtonOperations.onClick},
+        ],
+        additionalStyles: {
+          display: 'block',
+          position: 'fixed',
+          zIndex: '9999',
+          resize: 'both',
+          width: '150px',
+          color: 'white',
+          height: '30px',
+          backgroundColor: GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : 'rgb(16, 209, 38)',
+          opacity: GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.opacity : '0.9',
+          borderRadius: '12px',
+          // ... 添加其他样式
+        },
+      });
       try {
         treeMainBtn.style.left = GlobalUserSettings.MainTreeBtnPositionSettings.left ? GlobalUserSettings.MainTreeBtnPositionSettings.left : '300px';
         treeMainBtn.style.top = GlobalUserSettings.MainTreeBtnPositionSettings.top ? GlobalUserSettings.MainTreeBtnPositionSettings.top : '20px';
@@ -4072,32 +3813,12 @@
         treeMainBtn.style.right = '30%';
         treeMainBtn.style.top = '20px';
       }
-
-      treeMainBtn.style.zIndex = "9999";
-      treeMainBtn.style.resize = "both";
-      treeMainBtn.style.width = "150px";
-      treeMainBtn.style.color = "white";
-      treeMainBtn.style.height = "30px";
-      treeMainBtn.style.backgroundColor = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.color : "rgb(16,209,38)";
-      treeMainBtn.style.opacity = GlobalUserSettings.MainTreeBtnColorSettings ? GlobalUserSettings.MainTreeBtnColorSettings.opacity : "0.9";
-
-      treeMainBtn.style.borderRadius = "12px";
       document.body.appendChild(treeMainBtn);
-      treeMainBtn.style.display = 'block';
-
-
-      treeMainBtn.addEventListener("mouseenter", () => {
-        ButtonOperations.showMenu(0)
-      });
-      treeMainBtn.addEventListener("mouseleave", ButtonOperations.hideMenuIfNotOver);
-      treeMainBtn.addEventListener("mousedown", ButtonOperations.onMouseDown);
-      treeMainBtn.addEventListener("click", ButtonOperations.onClick);
-
 
       titleDiv.classList.add('sticky', 'top-0', 'z-[16]');
       titleDiv.setAttribute('data-projection-id', '6');
       titleDiv.style.opacity = '1';
-      title.classList.add('h-9', 'pb-2', 'pt-3', 'px-3', 'gizmo:px-2', 'text-xs', 'text-gray-500', 'font-medium', 'text-ellipsis', 'overflow-hidden', 'break-all', 'bg-gray-50', 'gizmo:bg-white', 'dark:bg-gray-900', 'gizmo:dark:bg-black', 'gizmo:text-gizmo-gray-600');
+      title.classList.add('h-9', 'pb-2', 'pt-3', 'px-2', 'text-xs', 'font-medium', 'text-ellipsis', 'overflow-hidden', 'break-all', 'bg-white', 'dark:bg-black', 'text-gizmo-gray-600');
       title.textContent = '🌳ChatGPT • ChatTree🌳';
       titleDiv.appendChild(title);
 
@@ -4105,44 +3826,53 @@
       stickyDiv.style.alignItems = 'stretch';
       stickyDiv.style.display = 'flex';
 
-
-      navPanelButton.style.display = 'block';
-      navPanelButton.style.borderRadius = '12px';
-      navPanelButton.style.opacity = '0.9';
-      navPanelButton.style.background = 'linear-gradient(to right, rgb(0, 123, 255), rgb(0, 198, 255))';
-      navPanelButton.style.color = 'white';
-      navPanelButton.style.padding = '4px';
-      navPanelButton.style.fontWeight = 'bold';
-      navPanelButton.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0px 3px 5px';
-      navPanelButton.style.margin = '6px';
-      navPanelButton.textContent = translate("openAdminPanel");
-      navPanelButton.style.height = '30px';
+      navPanelButton = ButtonCreator.createButton({
+        id: 'navPanelButton',
+        text: translate("openAdminPanel"),
+        additionalStyles: {
+          display: 'block',
+          borderRadius: '12px',
+          opacity: '0.9',
+          background: 'linear-gradient(to right, rgb(0, 123, 255), rgb(0, 198, 255))',
+          color: 'white',
+          padding: '4px',
+          fontWeight: 'bold',
+          boxShadow: 'rgba(0, 0, 0, 0.2) 0px 3px 5px',
+          margin: '6px',
+          height: '30px',
+          width: '230px',
+        },
+        eventListeners: [
+          {type: 'click', handler: controlPanelKit.toggleHistoryPanel},
+        ],
+      });
       stickyDiv.appendChild(navPanelButton);
 
-      navMainButton.classList.add('main-button');
-      navMainButton.className = 'main-button';
-      navMainButton.id = 'navChatTreeBtn';
-      navMainButton.style.display = 'block';
-      navMainButton.style.zIndex = '9999';
-      navMainButton.style.resize = 'both';
-      navMainButton.style.height = '30px';
-      navMainButton.style.borderRadius = '12px';
-      navMainButton.style.margin = '6px';
-      navMainButton.style.right = 'auto';
-      navMainButton.style.bottom = 'auto';
-      navMainButton.style.color = 'white';
-      navMainButton.style.padding = '4px';
-      navMainButton.style.fontWeight = 'bold';
-      navMainButton.style.boxShadow = 'rgba(0, 0, 0, 0.2) 0px 3px 5px';
-      navMainButton.style.display = 'none';
-      navMainButton.textContent = '🌳ChatTree🌳';
 
-      navMainButton.addEventListener("mouseenter", () => {
-        ButtonOperations.showMenu(1)
+      navMainButton = ButtonCreator.createButton({
+        id: 'navMainButton',
+        text: '🌳ChatTree🌳',
+        eventListeners: [
+          {type: 'mouseenter', handler: () => ButtonOperations.showMenu(1)},
+          {type: 'mouseleave', handler: ButtonOperations.hideMenuIfNotOver},
+          {type: 'mousedown', handler: ButtonOperations.onMouseDown},
+        ],
+        additionalStyles: {
+          display: 'none',
+          zIndex: '9999',
+          resize: 'both',
+          height: '30px',
+          borderRadius: '12px',
+          margin: '6px',
+          right: 'auto',
+          bottom: 'auto',
+          color: 'white',
+          padding: '4px',
+          fontWeight: 'bold',
+          boxShadow: 'rgba(0, 0, 0, 0.2) 0px 3px 5px',
+          width: '230px',
+        },
       });
-      navMainButton.addEventListener("mousedown", ButtonOperations.onMouseDown);
-      navMainButton.addEventListener("mouseleave", ButtonOperations.hideMenuIfNotOver);
-
     },
 
     toggleStickyMainBtn: function () {
@@ -4157,6 +3887,7 @@
         states.mainButton.canNotEnterNavbar = true;
         navMainButton.style.display = 'none';
         toggleMainBtnMovingAccessbility.innerHTML = greenForNotEnter;
+        states.mainButton.isMainTreeBtnInNavbar = false;
         if (treeMainBtn.style.display === 'none') {//如果此时不见了, 要先展示出来. 如果此时本来就block, 就不动
           treeMainBtn.style.left = window.innerWidth - 300 + 'px';
           treeMainBtn.style.top = '20px';
@@ -4170,21 +3901,11 @@
         console.error("Error saving Change:", error);
       });
       log("newSettings:", newSettings);
-      //log("log(\"Now Turns To:\", states.mainButton.isAlwaysMovable); Now Turns To:", states.mainButton.canNotEnterNavbar);
+      ButtonOperations.onMouseUp();
     },
-    // handleNavbarMouseEvent: function (event)  {
-    //   states.mainButton.isMouseInNavbar = event.type === 'mouseenter';
-    // },
 
     onMouseDown: function (e) {
-      // let navbar = document.querySelector('.flex.h-full.min-h-0.flex-col');
-      // states.mainButton.isThereNavbar = !!navbar;
-      // if(navbar){
-      //   navbar.addEventListener('mouseenter', ButtonOperations.handleNavbarMouseEvent);
-      //   navbar.addEventListener('mouseleave', ButtonOperations.handleNavbarMouseEvent);
-      // }
-
-
+      //console.log("target:",e.target);
       if (e.button !== 0) return;
       let rect = treeMainBtn.getBoundingClientRect();
       offsetX = e.clientX - rect.left;
@@ -4195,19 +3916,19 @@
     },
     onMouseMove: function (e) {
       if (!isDragging) return;
-      let navbar = document.querySelector('.flex.h-full.min-h-0.flex-col');
-      let mainNavBar = document.querySelector('.flex-shrink-0.overflow-x-hidden.dark.bg-gray-900')
+      //let navbar = document.querySelector(selector.mainNavbar);//这里原来使用的是selector.navbarSize, 但是貌似可以直接用mainNavbar来复用就好了
+      let mainNavBar = document.querySelector(selector.mainNavbar)
       // let mainNavBarVisible = "hidden";
       // if (mainNavBar){
       //   mainNavBarVisible = mainNavBar.style.visibility;
       //   //log("navbarVisible:",mainNavBarVisible, "navmain:",mainNavBar);
       // }
       let mainSvgDiv = document.getElementById("mainSvgDiv")
-      states.mainButton.isThereNavbar = !!navbar;
+      states.mainButton.isThereNavbar = !!mainNavBar;
       if (states.mainButton.isThereNavbar) {
         if (mainNavBar.style.visibility !== 'hidden' && mainSvgDiv.style.display === 'none') {
 
-          let navbarRect = navbar.getBoundingClientRect();
+          let navbarRect = mainNavBar.getBoundingClientRect();
           let mouseX = e.clientX;
           let mouseY = e.clientY;
 
@@ -4259,7 +3980,7 @@
     onMouseUp: function () {
       log("mouseup_in_treemainBtn!");
       isDragging = false;
-      if (states.mainButton.isMainTreeBtnInNavbar !== true) {
+      if (states.mainButton.isMainTreeBtnInNavbar === false) {
         const newSettings = {
           id: 'mainTreeBtnPos',
           left: treeMainBtn.style.left,
@@ -4291,9 +4012,13 @@
         e.preventDefault();
         ButtonOperations.hideMenu();
       }
+      if (menu) {
+
+        ButtonOperations.hideMenu();
+      }
     },
     showMenu: function (fromNavbar = 0) {
-      log("mouseEnter!, fromNavbar:", fromNavbar);
+      //log("mouseEnter!, fromNavbar:", fromNavbar);
       if (isDragging) return;
       isMouseOver = true;
       if (menu) return;
@@ -4433,6 +4158,9 @@
     },
 
     hideMenuIfNotOver: function () {
+      if (mainBtnColorPicking) {
+        return;
+      }
       isMouseOver = false;
       setTimeout(() => {
         if (!isMouseOver) ButtonOperations.hideMenu();
@@ -4450,6 +4178,8 @@
       if (e.target.id === 'adjustOption') {
         mainBtnColorPicker.style.display = 'block';
         mainBtnOpacityPicker.style.display = 'inline-block';
+        mainBtnColorPicking = true;
+
       }
       if (e.target.id === 'opt_updateTree') {
         let curURL = window.location.href;
@@ -4476,33 +4206,31 @@
             log("没有检测到Div!请刷新页面获取对话信息!");
             return;
           }
+          //console.log("states.url.url: ",states.url.url);
           setTimeout(() => {
-            fetchRawChatMessages(conversationData.url.slice(26)).then(data => {
+            fetchRawChatMessages(conversationData.url.slice(-36)).then(data => {
 
-                let processResult = processChatMessage(data);
-                conversationData.rootNode = conversationRootNode;
-                conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
-                conversationData.uuid2pathMap = processResult.uuid2pathMap;
-              dbOperations.saveConversationsData(conversationData).then(()=>{
+              let processResult = processChatMessage(data);
+              conversationData.rootNode = conversationRootNode;
+              conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
+              conversationData.uuid2pathMap = processResult.uuid2pathMap;
+              dbOperations.saveConversationsData(conversationData).then(() => {
 
                 controlPanelKit.renderConversations(chatHistory);
                 controlPanelKit.updateCategorySelect();
               });
               log("to draw svg:", conversationData);
-                //conversationData = loadeddata;
-                root = d3.hierarchy(conversationData.rootNode);
-                const widthPerNode = 30;
-                const heightPerNode = 30;
-                treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
-                treeLayout(root);
-                //drawMainSVG();
-                settingsKit.refreshTree();
+              //conversationData = loadeddata;
+              root = d3.hierarchy(conversationData.rootNode);
+              const widthPerNode = 30;
+              const heightPerNode = 30;
+              treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+              treeLayout(root);
+              //drawMainSVG();
+              settingsKit.refreshTree();
             }).catch(error => {
               log("error:", error);
             })
-            //if (confirm("This will delete previous comments!")) {
-            //treeOperation.initializeChatTree()
-            //}
           }, 100);
         } else {
           log("按钮点击而开始更新树!但是条件不允许!states:", states);
@@ -4564,7 +4292,7 @@
       message.style.opacity = '0';
 
       message.innerHTML = innerHtml;
-      log("message:", message);
+      //log("message:", message);
       document.body.appendChild(message);
 
       const leftPosition = (window.innerWidth - message.offsetWidth) / 2;
@@ -4646,10 +4374,6 @@
       });
     },
   };
-
-
-  start();
-  ButtonOperations.createButton();
 
 
   const initSvgAndGradient = {
@@ -4800,6 +4524,12 @@
     initialPageY: 0,
     initialTranslateX: 0,
     initialTranslateY: 0,
+
+    log(category, ...message) {
+      // 使用 Logger 实例的 log 方法
+      //console.log("moduleLog called.");
+      this.logger.log(category, ...message);
+    },
     nodeDragStarted: function (d) {
       nodesInAndOutKit.highlightDescendantsOnDrag(d);
       newOperation =
@@ -5008,6 +4738,9 @@
     },
     init: function (svgElement) {
 
+      this.logger = new Logger('DragAndZoomOperations');
+      //this.log(LogCategories.SUCCESS, 'DragAndZoomOperations!');
+
       nodeDrag = d3.drag()
         .on("start", dragAndZoomKits.nodeDragStarted)
         .on("drag", dragAndZoomKits.nodeDragged)
@@ -5039,8 +4772,6 @@
     const yRange = d3.extent(root.descendants(), d => d.y);
     const treeWidth = xRange[1] - xRange[0];
     const treeHeight = yRange[1] - yRange[0];
-
-
 
 
     const thumbScale = 0.2;
@@ -5188,9 +4919,9 @@
     d3.selectAll(".node circle.用户")
       .style("fill", userGradient);
 
-    log("root:", root);
-    log("conversationData.bookMarked:", conversationData.bookMarked);
-    log("Filtered Data:", nodesEnter.filter(d => conversationData.bookMarked.get(d.data.uuid)));
+    //log("root:", root);
+    //log("conversationData.bookMarked:", conversationData.bookMarked);
+    //log("Filtered Data:", nodesEnter.filter(d => conversationData.bookMarked.get(d.data.uuid)));
 
     nodesEnter.append("text")
       .attr("class", "emoji-tag")
@@ -5235,6 +4966,8 @@
 
   //nodesInAndOutKit
   const nodesInAndOutKit = {
+
+
     highlightDescendantsOnDrag: function (node) {
       gNodes.selectAll(".node")
         .classed("descendant-dragging", d => nodesInAndOutKit.isDescendant(node, d));
@@ -5286,11 +5019,11 @@
         log("nodeElement:", nodeElement);
         contentDiv.dataset.curDisplay = d.data.uuid;
         let selectedNodeContent = document.getElementById("nodeContent");
-        const htmlClass = document.documentElement.getAttribute('class');
-        contentDiv.style.backgroundColor = htmlClass === "dark" ?
+        const dark = isDark();
+        contentDiv.style.backgroundColor = dark ?
           d.data.type === "chatGPT" ? 'rgb(68,70,84)' : 'rgb(51,53,65)' :
           d.data.type === "chatGPT" ? 'rgb(247,247,248)' : 'rgb(256,256,256)';
-        contentDiv.style.boxShadow = htmlClass === "dark" ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
+        contentDiv.style.boxShadow = dark ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
         nodesInAndOutKit.updateSelectedNodeContentDiv(d, selectedNodeContent);
         selectedNodeContent.removeEventListener('click', nodesInAndOutKit.handleClick);
         selectedNodeContent.addEventListener('click', nodesInAndOutKit.handleClick);
@@ -5310,15 +5043,16 @@
         //talkingPerson1.innerHTML = conversationData.participants.user.avatarHTML;
         //talkingPerson1 = document.createElement('div');
         let url = conversationData.participants.user.avatarURL ? conversationData.participants.user.avatarURL : -1;
-        if(url === -1){
+        if (url === -1) {
           talkingPerson1.innerHTML = USER_Avatar_Config.USER_DEFAULT_HTML;
-        }else{
-        talkingPerson1.innerHTML = `
+        } else {
+          talkingPerson1.innerHTML = `
         <img alt="User" loading="lazy" width="36" height="36" decoding="async" data-nimg="1"
                                 class="rounded-sm"
                                 src="${conversationData.participants.user.avatarURL}"
                                 style="color: transparent;">
-`}
+`
+        }
         // const img = talkingPerson1.querySelector('img');
         // if (img) {
         //   img.style.display = 'block';
@@ -5391,8 +5125,8 @@
 
       let realContentDiv = document.createElement('div');
 
-      if(d.data.uuid === conversationData.rootNode.uuid){
-        log("rootNode:",d);
+      if (d.data.uuid === conversationData.rootNode.uuid) {
+        log("rootNode:", d);
         let contentSpan = document.createElement('span');
         contentSpan.innerText = conversationData.rootNode.content; // 如果只需要纯文本
         realContentDiv.appendChild(contentSpan);
@@ -5820,6 +5554,17 @@
 
   //temporaryWindowKit
   const temporaryWindowKit = {
+
+    log(category, ...message) {
+      // 使用 Logger 实例的 log 方法
+      //console.log("moduleLog called.");
+      this.logger.log(category, ...message);
+    },
+    initTemporaryWindowKit: function () {
+
+      this.logger = new Logger('temporaryWindowKit');
+      //this.log(LogCategories.SUCCESS, 'temporaryWindowKitLoggerCreated!');
+    },
     positionContentWindow: function (d, x, y) {
       let windowElem = document.getElementById(d.data.uuid + "-window");
       if (windowElem) {
@@ -5838,13 +5583,13 @@
       windowElem.style = `position: absolute; width: 600px; padding: 20px; font-size: 16px; lineHeight: 1.6; border: 1px solid #ccc; borderRadius: 5px; boxShadow: 0px 0px 10px rgba(0,0,0,0.2); overflow: auto; opacity: 0.8; max-Height: 500px;`;
       //fontFamily: Arial, sans-serif;
       nodesInAndOutKit.updateSelectedNodeContentDiv(d, windowElem);
-      const htmlClass = document.documentElement.getAttribute('class');
-      windowElem.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass === "gizmo dark" || htmlClass === "dark" ? "dark" : "light");
+      const dark = isDark();
+      windowElem.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', dark ? "dark" : "light");
 
-      windowElem.style.backgroundColor = htmlClass === "gizmo dark" || htmlClass === "dark" ?
+      windowElem.style.backgroundColor = dark ?
         d.data.type === "chatGPT" ? 'rgb(68,70,84)' : 'rgb(51,53,65)' :
         d.data.type === "chatGPT" ? 'rgb(247,247,248)' : 'rgb(256,256,256)';
-      windowElem.style.boxShadow = htmlClass === "dark" ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
+      windowElem.style.boxShadow = dark ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
       windowElem.addEventListener('click', nodesInAndOutKit.handleClick);
       document.body.appendChild(windowElem);
       windowElem.addEventListener('mouseenter', temporaryWindowKit.windowEnter);
@@ -5862,35 +5607,30 @@
       }, 300);
     },
   }
-
+  temporaryWindowKit.initTemporaryWindowKit();
 
   //---ContentKit---//
   const contentDiv = document.createElement('div');
   const selectedNodeContent = document.createElement('div');
   const contentHeader = document.createElement('div');
-  const copyButton = document.createElement('button');
-  const goToNodeButton = document.createElement('button');
+  let goToNodeButton;//注意gotoNode的逻辑!
   const talkingPerson = document.createElement('div');
-  const closeButton = document.createElement('button');
-  const commentButton = document.createElement('button');
-
-
   const commentForm = document.createElement('div');
   const commentLabel = document.createElement('label');
   const commentTextarea = document.createElement('textarea');
-  const submitButton = document.createElement('button');
-  const cancelButton = document.createElement('button');
-  const clearButton = document.createElement('button');
 
+  let submitButton = document.createElement('button');
+  let cancelButton = document.createElement('button');
+  let clearButton = document.createElement('button');
 
   function updateStylesBasedOnTheme() {
-    const htmlClass = document.documentElement.getAttribute('class');
-    contentDiv.style.backgroundColor = htmlClass === "dark" ?
+    const dark = isDark()
+    contentDiv.style.backgroundColor = dark ?
       'rgb(68,70,84)' : 'rgb(256,256,256)';
-    contentDiv.style.boxShadow = htmlClass === "dark" ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
+    contentDiv.style.boxShadow = dark ? '0px 4px 20px rgba(255, 255, 255, 0.1)' : '0px 4px 20px rgba(0, 0, 0, 0.1)';
     const links = gLinks.selectAll(".link");
 
-    if (htmlClass === "dark") {
+    if (dark) {
       links
         .attr("stroke", "white")
     } else {
@@ -5898,7 +5638,7 @@
         .attr("stroke", "black")
     }
 
-    commentTextarea.style.background = htmlClass === "dark" ?
+    commentTextarea.style.background = dark ?
       'rgb(68,70,84)' : 'rgb(256,256,256)';
   }
 
@@ -5908,7 +5648,6 @@
     for (let mutation of mutations) {
       if (mutation.attributeName === 'class') {
         updateStylesBasedOnTheme();
-
       }
     }
   });
@@ -5926,10 +5665,7 @@
 
     createContentDivs: function () {
       selectedNodeContent.id = 'nodeContent';
-      copyButton.id = 'copyButton';
-      goToNodeButton.id = 'goToNodeButton';
       contentHeader.id = 'contentHeader';
-      commentButton.id = 'commentButton';
 
       contentHeader.style.fontFamily = 'Times New Roman';
       contentHeader.textContent = translate("nodeDetails");
@@ -5944,7 +5680,7 @@
 
       contentDiv.style = `position :fixed; top: 10px; right: 10px; width: 400px; padding: 10px; border :8px solid #ddd; display :none; lineHeight :1.6; overflow :hidden; userSelect: text; font-size: 14px;`;
       contentDiv.id = 'contentDiv';
-      contentDiv.style.borderRadius= '8px';
+      contentDiv.style.borderRadius = '8px';
       let windowHeight = window.innerHeight;
       contentDiv.style.height = windowHeight - 20 + 'px';
 
@@ -5957,35 +5693,61 @@
       //selectedNodeContent.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert', htmlClass);
       selectedNodeContent.classList.add('markdown', 'prose', 'w-full', 'break-words', 'dark:prose-invert');
 
-      copyButton.innerHTML = `📋`;
-      copyButton.style.border = 'none';
-      copyButton.style.cursor = 'pointer';
-      copyButton.style.fontSize = '20px';
-      copyButton.style.position = 'absolute';
-      copyButton.style.top = '6px';
-      copyButton.style.right = '150px';
-      copyButton.style.background = 'none';
-      copyButton.style.border = 'none';
-      copyButton.style.cursor = 'pointer';
+      let copyButton = ButtonCreator.createButton({
+        id: 'copyButton',
+        innerHTML: '📋',
+        eventListeners: [
+          {
+            type: 'click', handler: () => {
+              ContentKit.copyToClipboard(selectedNodeContent.innerHTML.replace(/<[^>]*>/g, ' '));
+              ButtonOperations.showUserNotification(translate("contentCopied"));
+            }
+          },
+        ],
+        additionalStyles: {
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '20px',
+          position: 'absolute',
+          top: '6px',
+          right: '150px',
+          background: 'none',
+        },
+      });
 
-      goToNodeButton.textContent = '🚩';
-      goToNodeButton.style.position = 'absolute';
-      goToNodeButton.style.top = '7px';
-      goToNodeButton.style.right = '90px';
-      goToNodeButton.style.background = 'none';
-      goToNodeButton.style.border = 'none';
-      goToNodeButton.style.fontSize = '18px';
-      goToNodeButton.style.cursor = 'pointer';
+      goToNodeButton = ButtonCreator.createButton({
+        id: 'goToNodeButton',
+        text: '🚩',
+        eventListeners: [
+          {type: 'click', handler: () => DOMOperations.jumpToDialogueItem(contentDiv.dataset.curDisplay)},
+        ],
+        additionalStyles: {
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '18px',
+          position: 'absolute',
+          top: '7px',
+          right: '90px',
+          background: 'none',
+        },
+      });
 
-
-      commentButton.textContent = "🖊";
-      commentButton.style.position = 'absolute';
-      commentButton.style.top = '8px';
-      commentButton.style.right = '210px';
-      commentButton.style.background = 'none';
-      commentButton.style.border = 'none';
-      commentButton.style.fontSize = '18px';
-      commentButton.style.cursor = 'pointer';
+      let commentButton = ButtonCreator.createButton({
+        id: 'commentButton',
+        text: '🖊',
+        eventListeners: [
+          {type: 'click', handler: this.commentToSave},
+        ],
+        additionalStyles: {
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '18px',
+          position: 'absolute',
+          top: '8px',
+          right: '210px',
+          background: 'none',
+        },
+      });
 
       talkingPerson.id = 'talkingPerson';
       talkingPerson.style.position = 'absolute';
@@ -5993,16 +5755,29 @@
       talkingPerson.style.right = '240px';
       talkingPerson.style.background = 'none';
 
-      const closeIconSVG = '<svg stroke="black" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-      closeButton.innerHTML = closeIconSVG;
-      closeButton.style.position = 'absolute';
-      closeButton.style.top = '10px';
-      closeButton.style.right = '40px';
-      closeButton.style.backgroundColor = 'white';
-      closeButton.style.border = 'none';
-      closeButton.style.cursor = 'pointer';
-      closeButton.style.fontSize = '30px';
 
+      let closeButton = ButtonCreator.createButton({
+        id: 'closeButton',
+        innerHTML: '<svg stroke="black" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" height="20" width="20" xmlns="http://www.w3.org/2000/svg"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+        eventListeners: [
+          {
+            type: 'click', handler: () => {
+              contentDiv.style.display = 'none';
+              if (commentForm.style.display === 'block')
+                commentForm.style.display = 'none';
+            }
+          }
+        ],
+        additionalStyles: {
+          border: 'none',
+          cursor: 'pointer',
+          fontSize: '30px',
+          position: 'absolute',
+          top: '10px',
+          right: '40px',
+          backgroundColor: 'white',
+        },
+      });
       commentForm.id = 'commentForm';
       commentForm.style.position = 'fixed';
       ContentKit.positionCommentFormRelativeToContentDiv();
@@ -6011,19 +5786,20 @@
 
       commentLabel.setAttribute('for', 'comment');
       commentLabel.innerText = translate("enterComment") + ":";
-      commentForm.appendChild(commentLabel);
 
       commentTextarea.id = 'commentText';
       commentTextarea.rows = '5';
 
-      commentForm.appendChild(commentTextarea);
-      submitButton.id = 'submitComment';
-      submitButton.innerText = translate("userCommentSave");
       cancelButton.className = 'commentHoverEffect';
       clearButton.className = 'commentHoverEffect';
+
+      submitButton.id = 'submitComment';
+      submitButton.innerText = translate("userCommentSave");
       submitButton.className = 'commentHoverEffect';
 
 
+      commentForm.appendChild(commentLabel);
+      commentForm.appendChild(commentTextarea);
       commentForm.appendChild(submitButton);
       commentForm.appendChild(cancelButton);
       commentForm.appendChild(clearButton);
@@ -6141,20 +5917,6 @@
         }
       }
 
-      closeButton.addEventListener('click', function () {
-        contentDiv.style.display = 'none';
-        if (commentForm.style.display === 'block') {
-          commentForm.style.display = 'none';
-        }
-      });
-
-      copyButton.addEventListener("click", function () {
-        ContentKit.copyToClipboard(selectedNodeContent.innerHTML.replace(/<[^>]*>/g, ' '));
-        ButtonOperations.showUserNotification(translate("contentCopied"));
-      });
-
-      commentButton.addEventListener('click', this.commentToSave);
-      goToNodeButton.addEventListener('click', () => treeOperation.jumpToDialogueItem(contentDiv.dataset.curDisplay));
       contentDiv.addEventListener('mousemove', ContentKit.handleContentDivMouseMove);
       contentDiv.addEventListener('mousedown', ContentKit.handleContentDivMouseDown);
       contentDiv.onmouseleave = function () {
@@ -6353,6 +6115,7 @@
         commentForm.style.display = 'block';
       } else {
         commentForm.style.display = 'none';
+        return;
       }
       ContentKit.positionCommentFormRelativeToContentDiv();
       let selectedNode = gNodes.selectAll(".node")
@@ -6426,7 +6189,7 @@
             try {
               selectedNodeData.data.comment = commentValue;
               conversationData.commentMap.set(selectedNodeData.data.uuid, commentValue);
-              log("conversationData:",conversationData);
+              log("conversationData:", conversationData);
               log("renew selectedNodeData:", selectedNodeData);
               log("selectedNodeData.comment:", selectedNodeData.data.comment);
               //selectedMapNode.comment = commentValue;
@@ -6453,7 +6216,6 @@
       }
     },
   }
-  ContentKit.init();
   //___ContentKit___//
 
   //---settingsKit---//
@@ -6614,7 +6376,6 @@
 
       toggleMainBtnMovingAccessbility.id = "toggleMainBtnMovingAccessbility";
       toggleMainBtnMovingAccessbility.className = "rightAlwaysShownDiv";
-      //toggleMainBtnMovingAccessbility.innerHTML= states.mainButton.canNotEnterNavbar ?greenForNotEnter  : redForEnterable;
       toggleMainBtnMovingAccessbility.addEventListener('click', ButtonOperations.toggleStickyMainBtn)
       document.body.appendChild(toggleMainBtnMovingAccessbility);
 
@@ -6629,6 +6390,22 @@
       document.body.appendChild(settingsContainer);
       document.body.appendChild(rightMiddleContainer);
 
+    },
+
+    deletechatgptDB: function () {
+      const DB_NAME = 'ChatTreeDB';
+      console.log('try to delete:');
+
+      var req = indexedDB.deleteDatabase(DB_NAME);
+      req.onsuccess = function () {
+        console.log("Deleted database successfully");
+      };
+      req.onerror = function () {
+        console.log("Couldn't delete database");
+      };
+      req.onblocked = function () {
+        console.log("Couldn't delete database due to the operation being blocked");
+      };
     },
     toggleLanguageSelectShow: function () {
       if (languageContainer.style.display !== 'none') {
@@ -7247,7 +7024,6 @@
       redoStack.push(action);
     },
   };
-  settingsKit.init();
 
 
   let searchContainer = document.createElement('div');
@@ -7605,14 +7381,22 @@
       let results = [];
       while (queue.length > 0) {
         let current = queue.shift();
-        if(current.uuid === conversationRootNode.uuid){
+        if (current.uuid === conversationRootNode.uuid) {
           queue.push(...current.children);
           continue;
         }
         //log("In BFSSearch, current_content:",current.content);
         if (searchOption === translate("searchInContent") && current.content) {
           log("搜索内容");
+          if(!current.content.length){
+            if (!current.content.match(new RegExp(searchTerm, 'i'))){
+              results.push(current);
+            continue;
+          }
+          }
           for (let i = 0; i < current.content.length; i++) {
+
+            if(!current.content[i].parts) continue;
             for (let j = 0; j < current.content[i].parts.length; j++) {
               if (!current.content[i].parts[j].content_type && current.content[i].parts[j].match(new RegExp(searchTerm, 'i')))
                 results.push(current);
@@ -7624,7 +7408,18 @@
             results.push(current);
         } else if (searchOption === translate("searchInBoth") && (current.content)) {
           log("搜索两者");
+
+          if(!current.content.length){
+            if (!current.content.match(new RegExp(searchTerm, 'i'))){
+              results.push(current);
+            }
+            if (current.children) {
+              queue.push(...current.children);
+            }
+            continue;
+          }
           for (let i = 0; i < current.content.length; i++) {
+            if(!current.content[i].parts) continue;
             for (let j = 0; j < current.content[i].parts.length; j++) {
               if (!current.content[i].parts[j].content_type && current.content[i].parts[j].match(new RegExp(searchTerm, 'i')))
                 results.push(current);
@@ -7766,9 +7561,8 @@
     },
   };
 
-  searchKit.init();
 
-  let panelToggleButton = document.createElement('button');
+  let panelToggleButton;//= document.createElement('button');
   // Create the 'managePanel' div
   let managePanel = document.createElement('div');
   let topicSearchContainer = document.createElement('div');
@@ -7783,17 +7577,23 @@
   let filteredConversations = [];
   const controlPanelKit = {
     init: function () {
-      panelToggleButton.id = "panelToggleButtonSVGShow";
-      panelToggleButton.innerText = translate("openAdminPanel");
-      panelToggleButton.style.display = 'none';
-      panelToggleButton.style.borderRadius = '12px'; // 更大的圆角
-      panelToggleButton.style.opacity = '0.9'; // 轻微调整透明度
-      panelToggleButton.style.background = 'linear-gradient(to right, #007BFF, #00C6FF)'; // 线性渐变背景
-      panelToggleButton.style.color = 'white'; // 文字颜色设置为白色
-      panelToggleButton.style.padding = '10px 20px'; // 添加一些内边距
-      panelToggleButton.style.fontWeight = 'bold'; // 粗体字
-      panelToggleButton.style.boxShadow = '0px 3px 5px rgba(0,0,0,0.2)'; // 添加微小的阴影
-
+      panelToggleButton = ButtonCreator.createButton({
+        id: 'panelToggleButtonSVGShow',
+        text: translate("openAdminPanel"),
+        eventListeners: [
+          {type: 'click', handler: controlPanelKit.toggleHistoryPanel},
+        ],
+        additionalStyles: {
+          display: 'none',
+          borderRadius: '12px',
+          opacity: '0.9',
+          background: 'linear-gradient(to right, #007BFF, #00C6FF)',
+          color: 'white',
+          padding: '10px 20px',
+          fontWeight: 'bold',
+          boxShadow: '0px 3px 5px rgba(0,0,0,0.2)',
+        },
+      });
       document.body.appendChild(panelToggleButton);
 
 
@@ -7821,11 +7621,11 @@
       categorySelect.style.marginTop = '20px';
       categorySelect.style.marginLeft = '20px';
       // Add options to the select box
-      dbOperations.initConversationData()
-        .then(information => {
-          controlPanelKit.updateCategorySelect();
-        })
-        .catch(error => console.error(error));
+      // dbOperations.initConversationData()
+      //   .then(information => {
+      //     controlPanelKit.updateCategorySelect();
+      //   })
+      //   .catch(error => console.error(error));
       let allCategoriesString = translate("allCategoriesFilter");
       let categories = [allCategoriesString];
       for (let i = 0; i < chatHistory.length; i++) {
@@ -7931,7 +7731,6 @@
       });
     },
     addEventListeners: function () {
-      panelToggleButton.addEventListener('click', controlPanelKit.toggleHistoryPanel);
 
       searchTopicBox.addEventListener("input", controlPanelKit.executeFilter);
       categorySelect.addEventListener('change', controlPanelKit.executeFilter);
@@ -8024,14 +7823,14 @@
         optionsContainer.classList.add("optionsContainer");
 
         optionsContainer.innerHTML = conv.isWholeConversationBookMarked === false ?
-          `<div class="flex visible">   
+          `<div class="flex visible">
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-  </button>    
+  </button>
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-  </button>  
+  </button>
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z"/></svg>
-  </button>   
-  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>    
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>
   </button>
   <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9 4.45962C9.91153 4.16968 10.9104 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C3.75612 8.07914 4.32973 7.43025 5 6.82137" stroke-width="1.5" stroke-linecap="round"/>
     <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke-width="1.5"/>
@@ -8043,14 +7842,14 @@
 </div>
 ` :
           `
-<div class="flex visible">   
+<div class="flex visible">
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
-  </button>    
+  </button>
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-  </button>  
+  </button>
   <button class="p-1 hover:text-token-text-primary"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M14.851 11.923c-.179-.641-.521-1.246-1.025-1.749-1.562-1.562-4.095-1.563-5.657 0l-4.998 4.998c-1.562 1.563-1.563 4.095 0 5.657 1.562 1.563 4.096 1.561 5.656 0l3.842-3.841.333.009c.404 0 .802-.04 1.189-.117l-4.657 4.656c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-1.952-1.951-1.952-5.12 0-7.071l4.998-4.998c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464.493.493.861 1.063 1.105 1.672l-.787.784zm-5.703.147c.178.643.521 1.25 1.026 1.756 1.562 1.563 4.096 1.561 5.656 0l4.999-4.998c1.563-1.562 1.563-4.095 0-5.657-1.562-1.562-4.095-1.563-5.657 0l-3.841 3.841-.333-.009c-.404 0-.802.04-1.189.117l4.656-4.656c.975-.976 2.256-1.464 3.536-1.464 1.279 0 2.56.488 3.535 1.464 1.951 1.951 1.951 5.119 0 7.071l-4.999 4.998c-.975.976-2.255 1.464-3.535 1.464-1.28 0-2.56-.488-3.535-1.464-.494-.495-.863-1.067-1.107-1.678l.788-.785z"/></svg>
-  </button>   
-  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>    
+  </button>
+  <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 14H19C20.1046 14 21 13.1046 21 12V5C21 3.89543 20.1046 3 19 3H12C10.8954 3 10 3.89543 10 5V6.5M5 10H12C13.1046 10 14 10.8954 14 12V19C14 20.1046 13.1046 21 12 21H5C3.89543 21 3 20.1046 3 19V12C3 10.8954 3.89543 10 5 10Z"></path></svg>
   </button>
   <button class="p-1 hover:text-token-text-primary" style="cursor: pointer;"><svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="icon-sm" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M9 4.45962C9.91153 4.16968 10.9104 4 12 4C16.1819 4 19.028 6.49956 20.7251 8.70433C21.575 9.80853 22 10.3606 22 12C22 13.6394 21.575 14.1915 20.7251 15.2957C19.028 17.5004 16.1819 20 12 20C7.81811 20 4.97196 17.5004 3.27489 15.2957C2.42496 14.1915 2 13.6394 2 12C2 10.3606 2.42496 9.80853 3.27489 8.70433C3.75612 8.07914 4.32973 7.43025 5 6.82137" stroke-width="1.5" stroke-linecap="round"/>
     <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke-width="1.5"/>
@@ -8383,7 +8182,6 @@
       navPanelButton.textContent = translate("openAdminPanel");
       //contentHeader.textContent = translate("nodeDetails");
       commentLabel.innerText = translate("enterComment") + ":";
-      submitButton.innerText = translate("userCommentSave");
       cancelButton.innerText = translate("userCommentCancel");
       clearButton.innerText = translate("userCommentClear");
       searchBtn.innerText = translate("searchButton");
@@ -8486,43 +8284,35 @@
     }
   }
 
-//   function fetchRawChatDetails() {
-//     return new Promise((resolve, reject) => {
-//       chatgpt.getAccessToken().then(token => {
-//         log("get Token:",token);
-//         const xhr = new XMLHttpRequest();
-//         xhr.open('GET', endpoints.openAI.chats, true);  // `endpoints` object should be accessible from the original script
-//         xhr.setRequestHeader('Content-Type', 'application/json');
-//         xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-//         xhr.onload = () => {
-//           if (xhr.status !== 200) {
-//             reject('Request failed. Cannot retrieve chat details.');
-//           } else {
-//             resolve(JSON.parse(xhr.responseText));
-//           }
-//         };
-//         xhr.onerror = () => {
-//           reject('Request error.');
-//         };
-//         xhr.send();
-//       });
-//     });
-//   }
-//
-// // 使用上述函数
-//   fetchRawChatDetails().then(data => {
-//     log(data);  // 打印原始聊天数据
-//
-//   }).catch(error => {
-//     console.error(error);
-//   });
+  function fetchRawChatDetails() {
+    return new Promise((resolve, reject) => {
+      chatgpt.getAccessToken().then(token => {
+        log("get Token:",token);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', endpoints.openAI.chats, true);  // `endpoints` object should be accessible from the original script
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        xhr.onload = () => {
+          if (xhr.status !== 200) {
+            reject('Request failed. Cannot retrieve chat details.');
+          } else {
+            resolve(JSON.parse(xhr.responseText));
+          }
+        };
+        xhr.onerror = () => {
+          reject('Request error.');
+        };
+        xhr.send();
+      });
+    });
+  }
   function fetchRawChatMessages(chatId = "") {
-    if(chatId === ""){
+    if (chatId === "") {
       return;
     }
     return new Promise((resolve, reject) => {
       chatgpt.getAccessToken().then(token => {
-        //token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTRNMEZCTWpkQ05UZzVNRFUxUlRVd1FVSkRNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJwdGN5ZGRkbjl6QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctNlZoeUlReGlGQWlPbW1hVXg5WHlETGNHIiwidXNlcl9pZCI6InVzZXItdUd2M3FNZkU5emhHcndUdEJ1SGFheGszIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhcHBsZXwwMDAxMjMuNjQ4NjIzMDE5NmZlNDhiM2I4MTQxNTlmMmJmZDE3NTQuMTIyOSIsImF1ZCI6WyJodHRwczovL2FwaS5vcGVuYWkuY29tL3YxIiwiaHR0cHM6Ly9vcGVuYWkub3BlbmFpLmF1dGgwYXBwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2OTc4ODYyNTMsImV4cCI6MTY5ODc1MDI1MywiYXpwIjoiVGRKSWNiZTE2V29USHROOTVueXl3aDVFNHlPbzZJdEciLCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIG1vZGVsLnJlYWQgbW9kZWwucmVxdWVzdCBvcmdhbml6YXRpb24ucmVhZCBvcmdhbml6YXRpb24ud3JpdGUgb2ZmbGluZV9hY2Nlc3MifQ.KDeLRadnLd9vzMzbrhJC7u65mwQHY0E7Hd3wOTzJpnAN0qLvzKTGA_tDdmglcW4qIJcZddTFU2Hn7YJt1DC3MSXfZNdC1sqKk0Uj9ep-iodiNCmCo9O1V-9JTh0GcW75BmbSOe5L4hAguJYhAhz2xaGs1zfr6gFBXrqdNxjzKiN-mrKtm4hjkWTdWdf-KZC2ZPun81h2k30x2hsBDxIJIwv8PeAYIZKzQJJdAA9V6X1WXQZX1vI79rp3tnIk-WAJgtW-U1F_UgR8bKRivfgUYSa2NCpCPimnU_LDLvipE8jZMrSTxU8amdb_0Z22YiUvTL-wFWVg6m5IKg-82x-zBQ";
+        //token = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6Ik1UaEVOVUpHTkVNMVFURTFgoLYTsrmDFyiz9d6coNcS4YLMpkufWtaNRU13UmtGRVFrRXpSZyJ9.eyJodHRwczovL2FwaS5vcGVuYWkuY29tL3Byb2ZpbGUiOnsiZW1haWwiOiJwdGN5ZGRkbjl6QHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlfSwiaHR0cHM6Ly9hcGkub3BlbmFpLmNvbS9hdXRoIjp7InBvaWQiOiJvcmctNlZoeUlReGlGQWlPbW1hVXg5WHlETFgoLYTsrmDFyiz9d6coNcS4YLMpkufWtaFNZkU5emhHcndUdEJ1SGFheGszIn0sImlzcyI6Imh0dHBzOi8vYXV0aDAub3BlbmFpLmNvbS8iLCJzdWIiOiJhcHBsZXwwMDAxMjMuNjQ4NjIzMDE5NmZlNDhiM2I4MTFgoLYTsrmDFyiz9d6coNcS4YLMpkufWta6WyJodHRwczovL2FwaS5vcGVuYWkuY29tL3YxIiwiaHR0cHM6Ly9vcGVuYWkub3BlbmFpLmF1dGgwYXBwLmNvbS91c2VyaW5mbyJdLCJpYXQiOjE2OTc4ODYyNTFgoLYTsrmDFyiz9d6coNcS4YLMpkufWtaiVGRKSWNiZTFgoLYTsrmDFyiz9d6coNcS4YLMpkufWtaiLCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIG1vZGVsLnJlYWQgbW9kZWwucmVxdWVzdCBvcmdhbml6YXRpb24ucmVhZCBvcmdhbml6YXRpb24ud3JpdGUgb2ZmbGluZV9hY2Nlc3MifQ.KDeLRadnLd9vzMzbrhJC7u65mwQHY0E7Hd3wOTzJpnAN0qLvzKTGA_tDdmglcW4qIJcZddTFU2Hn7YJt1DC3MSXfZNdC1sqKk0Uj9ep-iodiNCmCo9O1V-9JTh0GcW75BmbSOe5L4hAguJYhAhz2xaGs1zfr6gFBXrqdNxjzKiN-mrKtm4hjkWTdWdf-KZC2ZPun81h2k30x2hsBDxIJIwv8PeAYIZKzQJJdAA9V6X1WXQZX1vI79rp3tnIk-WAJgtW-U1F_UgR8bKRivfgUYSa2NCpCPimnU_LDLvipE8jZMrSTxU8amdb_0Z22YiUvTL-wFWVg6m5IKg-82x-zBQ";
         const xhr = new XMLHttpRequest();
         xhr.open('GET', `${endpoints.openAI.chat}/${chatId}`, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -8541,13 +8331,14 @@
       });
     });
   }
+
   function fetchAccountDetails() {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', endpoints.openAI.session, true);
       xhr.setRequestHeader('Content-Type', 'application/json');
       xhr.onload = () => {
-        // if (xhr.status !== 200) return reject('🤖 chatgpt.js >> Request failed. Cannot retrieve access token.');
+        // if (xhr.status !== 200) return reject('? chatgpt.js >> Request failed. Cannot retrieve access token.');
         // console.info('Token expiration: ' + new Date(JSON.parse(xhr.responseText).expires).toLocaleString().replace(',', ' at'));
         // chatgpt.openAIaccessToken = {
         //   token: JSON.parse(xhr.responseText).accessToken,
@@ -8567,7 +8358,7 @@
     return new Promise((resolve, reject) => {
       chatgpt.getAccessToken().then(token => {
         const xhr = new XMLHttpRequest();
-        let requestURL = "https://chat.openai.com/backend-api/files/" + asset_pointer + "/download";
+        let requestURL = `${domain}/backend-api/files/` + asset_pointer + "/download";
         log("requestURL:", requestURL);
         xhr.open('GET', requestURL, true);
         xhr.setRequestHeader('Content-Type', 'application/json'); // 可以考虑删除此行
@@ -8589,32 +8380,9 @@
     });
   }
 
-  let fileHeader = "https://chat.openai.com/backend-api/files";
+  let fileHeader = `${domain}/backend-api/files`;
 
-  // function fetchPictureURL(asset_pointer = "file-P2IMiUABxJbug9oU8Vh3sBBZ") {
-  //   return new Promise((resolve, reject) => {
-  //     chatgpt.getAccessToken().then(token => {
-  //       const xhr = new XMLHttpRequest();
-  //       let requestURL = "https://chat.openai.com/backend-api/files/" + asset_pointer + "/download";
-  //       xhr.open('GET', requestURL, true);
-  //       xhr.setRequestHeader('Content-Type', 'application/json');
-  //
-  //
-  //       xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-  //       xhr.onload = () => {
-  //         if (xhr.status !== 200) {
-  //           reject('Request failed. Cannot retrieve chat messages.');
-  //         } else {
-  //           resolve(JSON.parse(xhr.responseText)); // 返回整个原始数据 //.download_url
-  //         }
-  //       };
-  //       xhr.onerror = () => {
-  //         reject('Request error.');
-  //       };
-  //       xhr.send();
-  //     });
-  //   });
-  // }
+
   fetchPictureURL().then(data => {
     log("fetchURL: ", data);  // 打印原始聊天数据
   }).catch(error => {
@@ -8635,70 +8403,267 @@
 //   });
   let conversationRootNode;
 
+  // function processChatMessage1(data) {
+  //   log("In ProcessChatMessage, mapping:", data.mapping);
+  //   const tokenMap = new Map(Object.entries(data.mapping));
+  //
+  //   let accessToken = chatgpt.getAccessToken();
+  //   log(tokenMap); // 这会显示一个 Map 对象，它的内容与原始的 mapping 对象相同
+  //   fetchAccountDetails().then(userData => {
+  //     log("user DATA:", userData);
+  //     conversationData.participants.user.name = userData.user.name;
+  //     conversationData.participants.user.avatarURL = userData.user.image;
+  //   })
+  //   conversationData.url = `${domain}/c/` + data.conversation_id;
+  //   let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
+  //   log("GPTINFOR:", gptInfoDiv);
+  //   //log(gptInfoDiv);
+  //   if (gptInfoDiv) {
+  //     conversationData.participants.gpt.type = gptInfoDiv.innerText;
+  //   }
+  //   log("conversationData.participants.gpt.type:", conversationData.participants.gpt.type);
+  //
+  //   let uuid2nodeMap = new Map();
+  //   let uuid2pathMap = new Map();
+  //   //我们实际上现在在做一个map到map的转换. 也就是说, 从服务器获取的map要先存储下来, 然后根据这个map来自己做一个新的map.
+  //   //所以说, 两个map的信息不能丢, 都要同时拿在手里.
+  //
+  //
+  //   for (let [key, value] of tokenMap) {
+  //     //log(`Key: ${key}, Value: ${value}`);
+  //     if (!value.parent) {
+  //       //log("got ParentNode:",key, value);
+  //       //得到了头节点/root节点
+  //       let tokenRootNode = tokenMap.get(value.children[0]);
+  //       // if(tokenRootNode.message && tokenRootNode.message.weight === 0){
+  //       //   tokenRootNode = tokenMap.get(tokenRootNode.children[0]);
+  //       // }
+  //       conversationData.title = data.title;
+  //       if (tokenRootNode) {
+  //         log("rootNode:", tokenRootNode);
+  //         conversationRootNode = new DialogueNode(data.title ? data.title : Default_RootNode_Content, "chatGPT", tokenRootNode.id, -1);
+  //         uuid2nodeMap.set(tokenRootNode.id, conversationRootNode)
+  //       } else {
+  //         log("Creating RootNode Wrong! Exit Updating Map!");
+  //         return;
+  //       }
+  //       // {
+  //       //   let testChild = tokenMap.get(tokenRootNode.children[0]);
+  //       //   if (testChild.message.author.role === 'system' && testChild.message.metadata.is_user_system_message) {
+  //       //     tokenRootNode = testChild;
+  //       //   }
+  //       // }
+  //
+  //       function DFSFilterFirstChildren(currentRootNodeId) {
+  //         let currentRootNode = tokenMap.get(currentRootNodeId);
+  //         console.log("currentRootNode: ", currentRootNode);
+  //
+  //         // 使用.slice()来复制数组，避免在遍历时修改原数组
+  //         currentRootNode.children.slice().forEach(childId => {
+  //           let child = tokenMap.get(childId);
+  //           if (child && child.message && child.message.author && child.message.author.role.toLowerCase() === "user") {
+  //             // 是用户, 直接跳过
+  //             //tokenRootNode.children.push(childId);
+  //             if (!tokenRootNode.children.includes(childId))
+  //               tokenRootNode.children.push(childId);
+  //             return;
+  //           }
+  //
+  //           // 不是用户, 处理其子节点
+  //           if (child && child.children) {
+  //             child.children.forEach(grandsonId => {
+  //               let grandson = tokenMap.get(grandsonId);
+  //               if (grandson && grandson.message && grandson.message.author && grandson.message.author.role.toLowerCase() === "user") {
+  //                 // 是用户, 直接跳过
+  //                 if (!tokenRootNode.children.includes(grandsonId))
+  //                   tokenRootNode.children.push(grandsonId);
+  //                 return;
+  //               }
+  //               DFSFilterFirstChildren(grandsonId);
+  //             });
+  //           }
+  //
+  //           // 从根节点的孩子数组中删除当前非用户节点
+  //           let index = tokenRootNode.children.indexOf(childId);
+  //           if (index > -1) {
+  //             tokenRootNode.children.splice(index, 1);
+  //           }
+  //         });
+  //       }
+  //
+  //       DFSFilterFirstChildren(tokenRootNode.id)
+  //       function DFSUpdateMap(tokenNode, curRootNode, parentID) {
+  //         // if(tokenNode.message.weight === 0 && tokenNode.id !== tokenRootNode.id){
+  //         //   tokenNode = tokenMap.get(tokenNode.children[0]);
+  //         // }
+  //
+  //         for (let i = 0; i < tokenNode.children.length; i++) {
+  //           let child = tokenMap.get(tokenNode.children[i]);
+  //           // if(child.message && child.message.metadata && child.message.metadata.is_visually_hidden_from_conversation){
+  //           //   continue;
+  //           // }
+  //
+  //           // if(tokenRootNode === tokenNode && child.message.author.role.toLowerCase() !== "user"){
+  //           //   //将这个空闲节点的孩子节点设置为父节点的孩子, 并且从父节点孩子数组中删除这个节点
+  //           //   child.children.forEach(grandson=>{
+  //           //     tokenRootNode.children.push(grandson.id)
+  //           //   })
+  //           //   tokenRootNode.children.filter(anychild=>anychild.id!=child.id);
+  //           //   DFSUpdateMap(tokenNode, curRootNode, parentID);
+  //           // }
+  //           let a_node_content = [];
+  //           let nodeID = child.id;
+  //           let parent = child.parent
+  //           if (child.message.author.role.toLowerCase() !== "user") {
+  //             updateChildContent(child);
+  //             a_node_content.push(child.message.content);
+  //             let grandSon;
+  //             while (child.message.author.role.toLowerCase() !== "user" && child.children.length > 0) {
+  //               grandSon = tokenMap.get(child.children[0]);
+  //               if (grandSon.message.author.role.toLowerCase() === "user")
+  //                 break;
+  //               updateChildContent(grandSon);
+  //               a_node_content.push(grandSon.message.content);
+  //               child = grandSon;
+  //             }
+  //             if (child.message.author.role.toLowerCase() === "user") {
+  //               child = tokenMap.get(child.parent);
+  //             }
+  //           } else {
+  //             updateChildContent(child);
+  //             a_node_content.push(child.message.content);
+  //           }
+  //           let type = child.message.author.role.toLowerCase() === "user" ? "用户" : "chatGPT";
+  //           let newDialogueNode = new DialogueNode(a_node_content, type, nodeID, parentID);
+  //           curRootNode.children.push(newDialogueNode);
+  //           uuid2nodeMap.set(child.id, newDialogueNode);
+  //           if (child.children.length > 0) {
+  //             DFSUpdateMap(child, newDialogueNode, nodeID);
+  //           }
+  //         }
+  //
+  //       }
+  //
+  //       function updateChildContent(child) {
+  //         child.message.content.author = child.message.author;
+  //         child.message.content.create_time = child.message.create_time;
+  //         child.message.content.metadata = child.message.metadata;
+  //         child.message.content.recipient = child.message.recipient;
+  //         child.message.content.status = child.message.status;
+  //         child.message.content.weight = child.message.weight;
+  //       }
+  //
+  //
+  //       DFSUpdateMap(tokenRootNode, conversationRootNode, tokenRootNode.id);
+  //
+  //
+  //       uuid2pathMap.set(conversationRootNode.uuid, "");
+  //       DFSUpdatePathMap(conversationRootNode, [], uuid2pathMap);
+  //
+  //
+  //       log("uuid2nodeMap:", uuid2nodeMap);
+  //       log("uuid2pathMap:", uuid2pathMap);
+  //       root = d3.hierarchy(conversationRootNode);
+  //       const widthPerNode = 30;
+  //       const heightPerNode = 30;
+  //       treeLayout = d3.tree().nodeSize([widthPerNode, heightPerNode]);
+  //       treeLayout(root);
+  //       drawMainSVG();
+  //       break;
+  //     }
+  //   }
+  //
+  //   //const arrayOfEntries = [...mappingMap];
+  //   //log("array:",arrayOfEntries);
+  //   return {
+  //     uuid2nodeMap: uuid2nodeMap,
+  //     uuid2pathMap: uuid2pathMap
+  //   };
+  //
+  // }
+  /**
+   * 主处理函数，用于处理聊天消息。
+   * @param {Object} data - 包含消息映射和其他聊天相关数据的对象。
+   */
   function processChatMessage(data) {
     log("In ProcessChatMessage, mapping:", data.mapping);
     const tokenMap = new Map(Object.entries(data.mapping));
 
     let accessToken = chatgpt.getAccessToken();
-    log(tokenMap); // 这会显示一个 Map 对象，它的内容与原始的 mapping 对象相同
+    log(tokenMap); // 显示映射对象，以便于调试
     fetchAccountDetails().then(userData => {
-      log("user DATA:",userData);
+      log("user DATA:", userData);
       conversationData.participants.user.name = userData.user.name;
       conversationData.participants.user.avatarURL = userData.user.image;
-    })
-    conversationData.url = "https://chat.openai.com/c/" + data.conversation_id;
+    });
+    conversationData.url = `${domain}/c/` + data.conversation_id;
     let gptInfoDiv = document.querySelector('.flex.flex-1.flex-grow.items-center.gap-1.px-2.py-1.text-gray-600');
-    log("GPTINFOR:",gptInfoDiv);
-    //log(gptInfoDiv);
+    log("GPTINFOR:", gptInfoDiv);
     if (gptInfoDiv) {
       conversationData.participants.gpt.type = gptInfoDiv.innerText;
     }
-    log("conversationData.participants.gpt.type:",conversationData.participants.gpt.type);
-    //conversationData.participants.gpt =
-    // url: conversationData.url,
-    //   timestamp: Date.now(),
-    //   participants: {
-    //   user: {
-    //     name: conversationData.participants.user.name,
-    //       avatarURL: conversationData.participants.user.avatarURL,
-    //       avatarHTML: conversationData.participants.user.avatarHTML,
-    //   },
-    //   gpt: {
-    //     type: conversationData.participants.gpt.type,
-    //   }
-    // },
+    log("conversationData.participants.gpt.type:", conversationData.participants.gpt.type);
+
     let uuid2nodeMap = new Map();
     let uuid2pathMap = new Map();
-    //我们实际上现在在做一个map到map的转换. 也就是说, 从服务器获取的map要先存储下来, 然后根据这个map来自己做一个新的map.
-    //所以说, 两个map的信息不能丢, 都要同时拿在手里.
 
     for (let [key, value] of tokenMap) {
-      //log(`Key: ${key}, Value: ${value}`);
       if (!value.parent) {
-        //log("got ParentNode:",key, value);
-        //得到了头节点/root节点
-        let tokenRootNode = tokenMap.get(tokenMap.get(key).children[0]);
-
+        let tokenRootNode = tokenMap.get(value.children[0]);
         conversationData.title = data.title;
         if (tokenRootNode) {
           log("rootNode:", tokenRootNode);
-          conversationRootNode = new DialogueNode(data.title? data.title : Default_RootNode_Content, "chatGPT", tokenRootNode.id, -1);
+          conversationRootNode = new DialogueNode(data.title ? data.title : Default_RootNode_Content, "chatGPT", tokenRootNode.id, -1);
           uuid2nodeMap.set(tokenRootNode.id, conversationRootNode)
         } else {
           log("Creating RootNode Wrong! Exit Updating Map!");
           return;
         }
 
-        function DFSUpdateMap(tokenNode, curRootNode, parentID) {
-          // if(tokenNode.message.weight === 0 && tokenNode.id !== tokenRootNode.id){
-          //   tokenNode = tokenMap.get(tokenNode.children[0]);
-          // }
+        /**
+         * 深度优先搜索，过滤出第一个子节点，特别关注用户节点。
+         * @param {string} currentRootNodeId - 当前根节点的 ID。
+         */
+        function DFSFilterFirstChildren(currentRootNodeId) {
+          let currentRootNode = tokenMap.get(currentRootNodeId);
+          console.log("currentRootNode: ", currentRootNode);
+          currentRootNode.children.slice().forEach(childId => {
+            let child = tokenMap.get(childId);
+            if (child && child.message && child.message.author && child.message.author.role.toLowerCase() === "user") {
+              if (!tokenRootNode.children.includes(childId))
+                tokenRootNode.children.push(childId);
+              return;
+            }
+            if (child && child.children) {
+              child.children.forEach(grandsonId => {
+                let grandson = tokenMap.get(grandsonId);
+                if (grandson && grandson.message && grandson.message.author && grandson.message.author.role.toLowerCase() === "user") {
+                  if (!tokenRootNode.children.includes(grandsonId))
+                    tokenRootNode.children.push(grandsonId);
+                  return;
+                }
+                DFSFilterFirstChildren(grandsonId);
+              });
+            }
+            let index = tokenRootNode.children.indexOf(childId);
+            if (index > -1) {
+              tokenRootNode.children.splice(index, 1);
+            }
+          });
+        }
 
+        /**
+         * 深度优先搜索更新映射，用于构建对话节点。
+         * @param {Object} tokenNode - 当前处理的token节点。
+         * @param {Object} curRootNode - 当前的根节点对象。
+         * @param {number} parentID - 父节点的ID。
+         */
+        function DFSUpdateMap(tokenNode, curRootNode, parentID) {
           for (let i = 0; i < tokenNode.children.length; i++) {
             let child = tokenMap.get(tokenNode.children[i]);
             let a_node_content = [];
             let nodeID = child.id;
-            let parent = child.parent
+            let parent = child.parent;
             if (child.message.author.role.toLowerCase() !== "user") {
               updateChildContent(child);
               a_node_content.push(child.message.content);
@@ -8726,9 +8691,12 @@
               DFSUpdateMap(child, newDialogueNode, nodeID);
             }
           }
-
         }
 
+        /**
+         * 更新子节点的内容。
+         * @param {Object} child - 子节点对象。
+         */
         function updateChildContent(child) {
           child.message.content.author = child.message.author;
           child.message.content.create_time = child.message.create_time;
@@ -8738,13 +8706,11 @@
           child.message.content.weight = child.message.weight;
         }
 
-
+        DFSFilterFirstChildren(tokenRootNode.id);
         DFSUpdateMap(tokenRootNode, conversationRootNode, tokenRootNode.id);
-
 
         uuid2pathMap.set(conversationRootNode.uuid, "");
         DFSUpdatePathMap(conversationRootNode, [], uuid2pathMap);
-
 
         log("uuid2nodeMap:", uuid2nodeMap);
         log("uuid2pathMap:", uuid2pathMap);
@@ -8758,13 +8724,10 @@
       }
     }
 
-    //const arrayOfEntries = [...mappingMap];
-    //log("array:",arrayOfEntries);
     return {
       uuid2nodeMap: uuid2nodeMap,
       uuid2pathMap: uuid2pathMap
     };
-
   }
 
   function DFSUpdatePathMap(conversationRootNode, fatherPath, uuid2pathMap) {
@@ -8840,11 +8803,12 @@
         }
       }
     }
+
     //console.log("OldRootNode:",conversationData.rootNode);
 
     transfer_comment(conversationData.rootNode);
     log("commentMap:", commentMap);
-    transfer_bookeMark (conversationData.rootNode);
+    transfer_bookeMark(conversationData.rootNode);
     log("bookMarkedMap:", bookMarkedMap);
 
 
@@ -8860,14 +8824,7 @@
         bookMarkedMap.set(newUUID, true);
       });
     }
-    // let uuid2path = new Map();
-    // path2uuid.bookMarked.forEach((value, key) => {
-    //   let path = keyToArray(value);
-    //   uuid2path.set(value, path);
-    // });
 
-
-    //conversationData.isNovemberSeventh = true;
     log("out conver_to_new_style");
     // conversationData.uuid2nodeMap
     conversationData.isNovemberSeventh = true;
@@ -8875,7 +8832,46 @@
       rootNode: conversationRootNode,
       bookMarked: bookMarkedMap,
       commentMap: commentMap,
-      //path2uuid: path2uuid
     }
   }
+
+
+  function init() {
+
+    ButtonOperations.createButton();
+    controlPanelKit.init();
+    ContentKit.init();
+    DOMOperations.initDOMOperations();
+    settingsKit.init();
+    searchKit.init();
+    languageKits.init({
+      target: {
+        value: globalUserLang,
+        shouldNotSave: true,
+      }
+    })
+  }
+
+
+  function main() {
+    //ButtonOperations.showUserNotification(translate("chatTreeRunning"));
+    if (db) {
+      db.close();
+    }
+    dbOperations.initDatabase().then(() => {
+      if (!db) {
+        ButtonOperations.showUserNotification(translate("noDatabaseAndCreationFailed"));
+        return;
+      }
+      dbOperations.usedatabase();
+      log(LogCategories.SUCCESS, "数据库加载成功!");
+      //console.log("database:", db);
+      urlOperations.observeTargetChanges();
+    }).catch(error => {
+      log(LogCategories.ERROR, "Error initializing database:", error);
+    });
+    init();
+  }
+
+  main();
 })();

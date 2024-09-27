@@ -1043,9 +1043,9 @@
     userContentDiv: "div[data-message-author-role='user']",
     fowardBackwardButton: ".flex.items-center.justify-center.rounded-lg.text-token-text-secondary",
     branchesInfo: ".text-sm.font-semibold.tabular-nums",
-    mainNavbar: ".flex-shrink-0.overflow-x-hidden",//侧边栏里有style属性的那个div, 用来确定是否有必要判断maintreebtn从移动到固定
+    mainNavbar: '.flex.h-full.w-full.flex-col.px-3',//".flex-shrink-0.overflow-x-hidden",//侧边栏里有style属性的那个div, 用来确定是否有必要判断maintreebtn从移动到固定
     navbarSize: '.flex.h-full.min-h-0.flex-col',//侧边栏的**实际大小和边缘监测**用的div,
-    historyDiv: '.flex-col.flex-1.transition-opacity.duration-500.-mr-2.pr-2.overflow-y-auto',
+    historyDiv: '.flex.flex-col.gap-2.pb-2.text-token-text-primary.text-sm.mt-5'//'.flex-col.flex-1.transition-opacity.duration-500.-mr-2.pr-2.overflow-y-auto',
   };
 
   const Default_RootNode_Content_2 = {
@@ -1875,13 +1875,13 @@
       });
     }
   };
-  window.addEventListener('DOMContentLoaded', (event) => {
-    log(LogCategories.INFO, 'DOM fully loaded and parsed');
-    //let timeout;
-    //timeout = setTimeout(() => DOMOperations.setNavBarDiv(), 1000);
-    DOMOperations.setNavBarDiv()
-
-  });
+  // window.addEventListener('DOMContentLoaded', (event) => {
+  //   log(LogCategories.INFO, 'DOM fully loaded and parsed');
+  //   //let timeout;
+  //   //timeout = setTimeout(() => DOMOperations.setNavBarDiv(), 1000);
+  //   setTimeout(()=>DOMOperations.setNavBarDiv(), 5000)
+  //
+  // });
 
   const titleDiv = document.createElement('div');
   const title = document.createElement('h3');
@@ -2007,6 +2007,7 @@
       }
     },
     setNavBarDiv: function () {
+      console.log("setNavBarDiv")
       const tryLocateSidebar = () => {
         let HistoryDiv = document.querySelector(selector.historyDiv);
         if (HistoryDiv) {
@@ -2016,8 +2017,10 @@
             navPanelButton.parentNode.insertBefore(navMainButton, navPanelButton);
             HistoryDiv.parentNode.insertBefore(titleDiv, stickyDiv);
           }
+          console.log("setNavBarDiv",HistoryDiv, stickyDiv, navMainButton, navPanelButton, titleDiv)
           return true; // 返回 true 表示已经成功定位侧边栏
         } else {
+          console.log("setNavBarDiv",HistoryDiv, stickyDiv, navMainButton, navPanelButton, titleDiv)
           // 如果未找到侧边栏，则继续尝试
           return false; // 返回 false 表示侧边栏未定位
         }
@@ -7317,6 +7320,7 @@
       log(LogCategories.ERROR, "Error initializing database:", error);
     });
     init();
+    DOMOperations.setNavBarDiv()
   }
 
   main();

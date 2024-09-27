@@ -4,7 +4,7 @@
 // @name:es   ChatGPT ChatTree 🌳
 // @name:ar   ChatGPT ChatTree 🌳
 // @namespace    https://czz9.top
-// @version      2024.06.29.01
+// @version      2024.09.27.01
 // @description ChatGPT ChatTree 🌳, 🚀permanent and unrestricted management of your interactions with ChatGPT🚀 🔄real-time updates and visualization of ChatGPT conversation tree🔄 💡ChatGPT conversation tips, custom annotations, bookmarks💡🔍Smart Search in ChatGPT: quickly locate specific conversations🔍 📋ChatGPT Interaction Management Panel, user-friendly interface, comprehensive ChatGPT interaction management options, categorization, tags, and more📋
 // @description:ar ChatGPT ChatTree 🌳، 🚀إدارة دائمة وغير محدودة لتفاعلاتك مع ChatGPT🚀 🔄تحديث شجرة المحادثة ChatGPT بالوقت الفعلي + مرئيات🔄 💡نصائح للمحادثة مع ChatGPT، تعليقات مخصصة، إشارات مرجعية💡🔍 بحث ذكي في ChatGPT: تحديد المواضع الدقيقة للمحادثات بسرعة🔍 📋لوحة إدارة التفاعل مع ChatGPT، واجهة سهلة الاستخدام، خيارات إدارة التفاعل الكاملة مع ChatGPT، التصنيف، والعلامات وأكثر📋
 // @description:bg ChatGPT ChatTree 🌳, 🚀постоянно и без ограничения управлявайте взаимодействията си с ChatGPT🚀 🔄реално време актуализации и визуализации на дървото на разговори с ChatGPT🔄 💡Съвети за разговори с ChatGPT, персонализирани коментари, отметки💡🔍 Интелигентно търсене в ChatGPT: бързо намиране на конкретни разговори🔍 📋Панел за управление на взаимодействията с ChatGPT, удобен интерфейс, пълни опции за управление на взаимодействията, категории, етикети и други📋
@@ -64,10 +64,18 @@
 // @updateURL https://update.greasyfork.org/scripts/476683/ChatGPT%20ChatTree%20%F0%9F%8C%B3.meta.js
 // ==/UserScript==
 
-(function (node) {
+(async function (node) {
 // @require             https://cdn.jsdelivr.net/gh/kudoai/chatgpt.js@516ad148b02335b98db82c89dec02e5fa28c7d56/dist/chatgpt-2.3.13.min.js
 
   "use strict";
+
+  function delay(duration){
+    return new Promise(resolve => {
+      setTimeout(resolve,duration*1000)
+    })
+  }
+
+  await delay(5)
   //chatgpt.logout();
   console.log("chatgpt chattree!");
   const isDevelopmentMode = true;
@@ -2468,7 +2476,8 @@
         "conversationCategory": "分类",
         "conversationTags": "标签"
     }
-}`;
+}`
+    ;
     lang = JSON.parse(lang);
 
     const userLang = selectLang ? lang[selectLang] ? selectLang : 'en' : navigator.languages.find(l => l in lang) || 'en';
@@ -2593,7 +2602,7 @@
     },
   };
   const selector = {
-    allDivs: "div.w-full.text-token-text-primary",
+    allDivs: "article.w-full.text-token-text-primary",
     gptContentDiv: "div[data-message-author-role='assistant']",
     userContentDiv: "div[data-message-author-role='user']",
     fowardBackwardButton: ".flex.items-center.justify-center.rounded-lg.text-token-text-secondary",
@@ -3592,7 +3601,8 @@
     },
 
     getAllDivs: function () {
-      //log("allDivs:",document.querySelectorAll(selector.allDivs));
+      log("allDivs:",document.querySelectorAll(selector.allDivs));
+
       return document.querySelectorAll(selector.allDivs);
 
     },
@@ -7391,8 +7401,8 @@
           if(!current.content.length){
             if (!current.content.match(new RegExp(searchTerm, 'i'))){
               results.push(current);
-            continue;
-          }
+              continue;
+            }
           }
           for (let i = 0; i < current.content.length; i++) {
 

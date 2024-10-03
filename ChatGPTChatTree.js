@@ -49,7 +49,8 @@
 // @match    *://chatgpt.com/*
 // @grant    GM_addStyle
 // @grant    GM_getResourceText
-// @resource     languagepackage https://cdn.jsdelivr.net/gh/cuizhenzhi/ChatTree/lang.json
+// @resource languagepackage https://cdn.jsdelivr.net/gh/cuizhenzhi/ChatTree/lang.json
+// @resource css https://cdn.jsdelivr.net/gh/cuizhenzhi/ChatTree/index.css
 // @require  https://cdnjs.cloudflare.com/ajax/libs/d3/5.16.0/d3.min.js
 // @require  https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js
 // @require  https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.11/interact.min.js
@@ -215,704 +216,7 @@
     return document.documentElement.classList.contains('dark');
   }
 
-  GM_addStyle(`
-
-        #searchTopicContainer {
-            margin-bottom: 20px;
-        }
-
-         .conversation {
-            border: 1px solid #ccc;
-            margin-bottom: 10px;
-            padding: 10px;
-            margin-top: 20px;
-            margin-left: 20px;
-            margin-right: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: border 0.1s ease-in-out; /* 添加过渡效果 */
-            border-radius: 4px; /* 添加边框圆角 */
-        }
-
-        .conversation:hover {
-            border: 2px solid black; /* 鼠标悬停时改变边框样式 */
-            box-shadow: 0px 0px 10px black; /* 添加外边框阴影效果 */
-        }
-
-
-        .category {
-            background-color: #f3f3f3;
-            display: inline-block;
-            padding: 2px 8px;
-            margin-right: 2px;
-            margin-bottom: 2px;
-
-        }
-
-        .chatTreeTag {
-            background-color: #e0e0e0;
-            display: inline-block;
-            padding: 2px 8px;
-            margin-right: 5px;
-            margin-bottom: 2px;
-
-        }
-
-        .delete-icon,
-        .add-icon {
-            cursor: pointer;
-            margin-left: 5px;
-        }
-
-        .delete-icon:hover,
-        .add-icon:hover {
-            background: #adb5bd;
-        }
-
-        .conversation h3 {
-            display: inline-block;
-            margin: 0; /* 移除默认边距 */
-        }
-
-        .conversation-actions {
-            margin-left: auto; /* 推到右侧 */
-        }
-
-
-
-
-        .topicContainer{
-          width: 35%;
-          overflow: hidden;
-        }
-
-        .optionsContainer{
-          width: 12%;
-          display: flex;
-          justify-content: center;
-        }
-
-        .tagContainers {
-            width: 26%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .categoriesContainer {
-            width: 26%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        #managePanel {
-            color: black;
-            overflow: hidden;
-            background: rgb(255,253,249);
-            position: fixed;
-            top: 0px;
-            left: 0px;
-            width: 100%;
-            height: 100%;
-            z-index: 999;  /* 根据需要设置，以确保该元素位于其他元素之上 */
-        }
-
-
-
-        #panelToggleButtonSVGShow {
-            position: fixed;
-            left: 0;
-            top: 40%;
-            z-index: 1000;
-            padding: 10px 20px;
-            border: none;
-            background: rgb(171, 104, 255);
-            color: white;
-            cursor: pointer;
-        }
-        .card-header{
-            height: 40px;
-            display: flex;
-            border: 1px solid #adb5bd;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 1.25rem;  /* Optional: for adding some space inside the card-header */
-
-        }
-        .card-body{
-            height: 40px;
-            display: flex;
-            border: 1px solid #adb5bd;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0.5rem 1.25rem;  /* Optional: for adding some space inside the card-header */
-            overflow: hidden;  /* Add this line to hide the overflow content */
-        }
-        .card-header h5 {
-            margin: 0;  /* Optional: to remove the default margin of the h5 element */
-        }
-        .btn.btn-link:hover {
-            cursor: pointer !important;
-            text-decoration: underline !important;
-            border: 1px solid #80bdff !important;
-            border-radius: 5px !important;
-            color: #005cbf !important;
-            margin-right: auto;  /* It pushes the link to the extreme right */
-        }
-        .btn.btn-sm.btn-primary{
-            background: #007bff;
-            color: white;
-            border-radius: 5px !important;
-            border: 1px solid #80bdff !important;
-            height: 30px;
-            cursor: pointer;
-        }
-        .btn.btn-sm.btn-danger{
-            background: #dc3545;
-            color: white;
-            border-radius: 5px !important;
-            border: 1px solid red !important;
-            height: 30px;
-            cursor: pointer;
-        }
-        .btn.btn-sm.btn-success{
-            background: #28a745;
-            color: white;
-            border-radius: 5px !important;
-            border: 1px solid green !important;
-            height: 30px;
-            cursor: pointer;
-        }
-
-        .collapse {
-            height: 0;
-            transition: height 0.5s ease-in-out;
-            overflow: hidden;
-        }
-
-
-
-
-    @keyframes textBlink {
-    0%, 100% {
-        color: black;
-    }
-    50% {
-        color: white;
-    }
-}
-
-.blinkText {
-    animation: textBlink 1s ease-in-out infinite;
-}
-
-    @keyframes highlight {
-    0% {
-        background-color: initial;
-    }
-    50% {
-        background-color: #ffffff;
-    }
-    100% {
-        background-color: initial;
-    }
-}
-.highlight {
-    animation: highlight 2s ease-in-out infinite;
-}
-
-  @keyframes highlightt {
-    0% {
-        background-color: initial;
-    }
-    50% {
-        background-color: #000000;
-
-    }
-    100% {
-        background-color: initial;
-    }
-}
-.highlightt {
-    animation: highlightt 2s ease-in-out infinite;
-}
-
-    .close-button {
-    margin-left: 5px;
-    color: red;
-    cursor: pointer;
-}
-
-    .suggestions-container {
-    position: absolute;
-
-    left: 40px;
-    width: 270px;
-    top: 100%; /* Place it below the search box */
-     max-height: 150px; /* Adjust as per your preference */
-    overflow-y: auto; /* Add scrollbar if content is too much */
-    border: 1px solid #ccc;
-    background-color: white;
-    z-index: 99; /* Make it appear on top of other elements */
-}
-
-.suggestion-item {
-    padding: 10px;
-    cursor: pointer;
-}
-
-.suggestion-item:hover {
-    background-color: #eee;
-}
-
-
-
-        .node-menu {
-            display: none;
-            position: absolute;
-            border: 1px solid black;
-            background-color: white;
-        }
-
-        #contentDiv {
-            box-sizing: border-box;
-        }
-
-        /* Cursor styles */
-        .node {
-            cursor: pointer;
-        }
-       .node circle {
-            fill: #e5e5e5;
-        }
-
-        .node circle.chatgpt {
-        }
-
-        .node circle.用户 {
-            fill: #1E90FF;
-        }
-
-
-        .node.descendant-dragging circle {
-            fill: #b0e0e6 !important;
-        }
-
-        .node.selectedNode circle {
-            fill: red !important;
-        }
-
-        .link.highlighted {
-            /*stroke: yellow;*/
-            stroke: #808080;
-            stroke-width: 4px;
-        }
-
-        .link.descendant-highlighted {
-            stroke: #d3d3d3; /* 选择你想要的颜色 */
-            stroke-width: 4px;
-        }
-
-
-        .content-text {
-            white-space: pre-line;
-        }
-
-        /* Menu styles */
-        .menu {
-            opacity: 0;
-            transition: opacity 300ms, transform 300ms;
-            transform: translateX(100%); /* Start from the right */
-            border: none; /* Remove border */
-        }
-
-        .menu.show {
-            opacity: 1;
-            transform: translateX(0); /* Move to its original position */
-        }
-
-        #commentForm {
-            width: 300px;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        #commentForm label, #commentForm textarea, #commentForm button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        #commentForm textarea {
-            resize: none; /* 禁止调整大小 */
-        }
-
-        .commentHoverEffect {
-    transition: all 0.3s ease-in-out;
-}
-
-.commentHoverEffect:hover {
-    font-weight: bold;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
-
-        /*这是显示对话内容的注释样式*/
-        .comment-text {
-            color: #ff5555;
-            font-style: italic;
-            margin-right: 10px;
-            display: block;
-            font-weight: bold;
-            border-bottom: 2px dashed #ff5555;
-        }
-
-        /* SVG background */
-        #thumbnailSvg {
-            /*background-color: rgba(128, 128, 128, 0.4); !* Gray with 0.4 opacity *!*/
-            /*background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);*/
-            background: linear-gradient(to top, rgba(250, 208, 196, 1) 0%, rgba(255, 209, 255, 0.9) 100%);
-           /*background-image: linear-gradient(to top, rgba(220,220,220, 1) 0%, rgba(220,220,220, 1) 100%);*/
-
-
-        }
-         #mainSvg {
-            /*background-color: rgba(128, 128, 128, 0.4); !* Gray with 0.4 opacity *!*/
-            /*background-image: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);*/
-            /*background-image: linear-gradient(to top, rgba(220,220,220, 0.2) 0%, rgba(220,220,220, 0.2) 100%);*/
-        }
-
-        #search-container {
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
-            position: fixed;
-            width: 50px;
-            height: 40px;
-            color: black;
-            /*overflow: hidden;*/
-
-            background: transparent;
-            /*flex-wrap: wrap;*/
-            /*z-index: 10000;*/
-
-        }
-
-        #search-icon {
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px; /* adjust as needed */
-            background: transparent;
-            /*background-color: #f1f1f1;*/
-        }
-
-        #search-box {
-
-            margin-top: 10px;
-            width: 300px;
-            height: 40px;
-            /*background-color: #f1f1f1;*/
-            border: none;
-            padding: 0 10px;
-            outline: none;
-            background: transparent;
-            opacity: 0;
-            pointer-events: none;
-            border-radius: 6px;
-        }
-
-        #search-btn {
-            padding: 5px 15px;
-            margin-left: 10px;
-            display: none;
-        }
-
-        #search-history {
-            position: absolute;
-            top: 50px;
-            left: 0;
-            /*display: none;*/
-            opacity: 0; /* 设置为 0 使其默认隐藏 */
-            /*display: ;*/
-            display: flex;
-            flex-direction: row; /* 横向排列 */
-            flex-wrap: wrap; /* 当空间不足时换行 */
-            width: 0px;
-            min-height: 0px; /* instead of height: 0px; */
-            align-content: flex-start;
-            height: 20px;
-            max-height: 200px;
-            /*align-items: center;  !* 确保每行的内容垂直居中对齐 *!*/
-            overflow-y: scroll;
-            overflow-x: hidden;
-            padding: 10px; /* 为了避免内容紧贴边缘，给予一些内边距 */
-            /*z-index: 10001;*/
-            /*border-radius: 6px;*/
-        }
-
-        #search-results-count {
-            box-sizing: border-box;
-            line-height: 26px; /* 重置行高 */
-            margin: 0;
-            padding: 3px 6px;
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center; /* 垂直居中 */
-        }
-
-        .history-item {
-            display: flex;
-            align-items: center;
-            width: auto; /* 根据内容自动调整宽度 */
-            max-width: 150px; /* 设置最大宽度 */
-            max-height: 30px;
-            overflow: hidden;
-            background-color: #f5f5f5;
-            border-radius: 15px;
-            padding: 5px 10px;
-            margin-top: 10px;
-            margin-right: 10px; /* 每个 history-item 之间的间距 */
-            /*gap: 10px;*/
-
-        }
-
-        .history-text {
-            /*max-width: 100px;  !* 设置最大宽度 *!*/
-            flex-shrink: 1;
-            min-width: 0;
-            white-space: nowrap; /* 防止文本换行 */
-            overflow: hidden;
-            text-overflow: ellipsis; /* 使用省略号 (...) 表示被裁切的文本 */
-            /*padding: 5px 10px;*/
-
-        }
-
-        .history-delete {
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: background-color 0.3s;
-            margin-left: auto; /* 这会将按钮推到其父元素的右边 */
-        }
-
-        .history-delete:hover {
-            background-color: rgba(200, 0, 0, 0.1);
-        }
-
-
-        #settingsDiv, .actionDiv, .rightMiddleDiv {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: fixed;
-            z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 50%; /* 让div成为圆形 */
-            /*box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);*/
-            box-shadow: none;
-            transition: background-color 0.3s; /* 平滑过渡效果 */
-            user-select: none;
-        }
-
-        .rightAlwaysShownDiv {
-
-            position: fixed;
-            bottom: 70%;
-            display: flex;
-            right: 10px;
-            cursor: pointer;
-            font-size: 1.5em;
-            width: 40px;
-            height: 40px;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            background-color: rgba(191,96,210,0.5);
-            border-radius: 50%; /* 让div成为圆形 */
-            /*box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);*/
-            box-shadow: none;
-            transition: background-color 0.3s; /* 平滑过渡效果 */
-            user-select: none;
-        }
-
-        #colorSelectDiv {
-            bottom: 64%;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 1.5em;
-        }
-       .language-container {
-          width: 200px;
-          margin: 20px auto;
-          position: relative;
-          bottom: 56%;
-          right: 60px;
-        }
-        #feedbackDiv {
-            bottom: 40%;
-            display: flex;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 1.5em;
-        }
-
-        #WeChatDiv {
-            bottom: 46%;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 1.5em;
-        }
-        #TencentDiv {
-            bottom: 52%;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 1.5em;
-        }
-       #languageSelectDiv {
-            bottom: 58%;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 12px;
-        }
-        .rightMiddleDiv:hover  {
-            background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
-        }
-        .rightAlwaysShownDiv:hover {
-            background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
-        }
-        #rightMiddleMenu {
-          position: fixed;
-          bottom: 52%;
-          right: 60px;
-          z-Index: 10000;
-        }
-
-       .actionDiv {
-            display: none;
-            right: 10px;
-            cursor: pointer;
-            color: deepskyblue;
-            font-size: 1.5em;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #settingsDiv {
-            animation: spin 4s linear infinite;
-        }
-
-        #settingsDiv {
-            right: 10px;
-            bottom: 10px;
-            color: rebeccapurple; /* 或你想要的任何颜色 */
-            cursor: pointer;
-            display: flex;
-            justify-content: center; /* 水平居中 */
-            align-items: center; /* 垂直居中 */
-        }
-
-        #plusDiv {
-            bottom: 60px;
-            right: 60px;
-        }
-
-        #minusDiv {
-            bottom: 60px;
-        }
-
-        #thumbNailDiv {
-            bottom: 10px;
-            right: 60px;
-        }
-
-        #refreshTree {
-            bottom: 10px;
-            right: 110px;
-        }
-
-        #undoDiv {
-            bottom: 60px;
-            right: 160px;
-        }
-
-        #redoDiv {
-            bottom: 60px;
-            right: 110px;
-        }
-
-        #deleteDiv {
-            bottom: 10px;
-            right: 160px;
-        }
-
-
-
-        #settingsDiv:hover, .actionDiv:hover {
-            background-color: rgba(200, 200, 255, 0.9); /* 悬停时的背景色 */
-        }
-
-
-
-
-
-
-.language-dropdown {
-    width: 100%;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: none;
-    appearance: none; /* 移除默认的外观 */
-    -webkit-appearance: none; /* 为了Safari */
-    -moz-appearance: none; /* 为了Firefox */
-    background-color: #f5f5f5;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: background-color 0.2s;
-    color: black;
-}
-
-.language-dropdown:focus {
-    outline: none;
-    background-color: #e9e9e9;
-}
-
-.language-container::after {
-
-
-    font-size: 14px;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    pointer-events: none; /* 这样它就不会干扰下拉列表的点击事件了 */
-}
-
-    `);
+  GM_addStyle(GM_getResourceText("css"));
 
   const getLang = function (selectLang = null) {
 
@@ -1112,7 +416,7 @@
     }
   };
   let conversationData = DEFAULT_CONVERSATION_DATA;
-
+  let rawConversationData = {};
   let root, treeLayout, svg, svgThumbnail, defs, gLinks, gNodes,
     nodeDrag, canvasDrag, zoom, searchHistoryRecord, chatHistory = [], curMouseOnUUID = null;
   const urlOperations = {
@@ -1290,6 +594,7 @@
             }
 
             this.log("RAW DATA FROM OPENAI:", data);
+            rawConversationData = data;
             //log("New URL Catched!");
             let processResult = processChatMessage(data);
             conversationData.rootNode = conversationRootNode;
@@ -2498,6 +1803,7 @@
     <button class='menu-option' id='opt_updateTree' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${updateCurrentConversationTreeText}</button>
     <button class='menu-option' id='adjustOption' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
     <button class='menu-option' id='showSvg' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
+    <button class='menu-option' id='downloadConversation' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>Click me to download</button>
     <input type='range' id='mainBtnOpacityPicker' style='display:none;' min='20' max='100' value=${opacity * 100}>
     <input type='color' id='mainBtnColorPicker' style='display:none;' value=${hexColor}>
 `
@@ -2659,6 +1965,7 @@
           setTimeout(() => {
             fetchRawChatMessages(conversationData.url.slice(-36)).then(data => {
 
+              rawConversationData = data;
               let processResult = processChatMessage(data);
               conversationData.rootNode = conversationRootNode;
               conversationData.uuid2nodeMap = processResult.uuid2nodeMap;
@@ -2689,7 +1996,11 @@
       if (e.target.id === 'showSvg') {
         toggleSvgShow(1);
       }
-      if (e.target.id === 'adjustOption' || e.target.id === 'opt_updateTree' || e.target.id === 'showSvg')
+      if (e.target.id === 'downloadConversation'){
+        // console.log('downloadConversation!')
+        ButtonOperations.processDownloadConversation();
+      }
+      if (e.target.id === 'adjustOption' || e.target.id === 'opt_updateTree' || e.target.id === 'showSvg' || e.target.id === 'downloadConversation')
         ButtonOperations.showUserNotification(translate("selectedItem").replace('{item}', e.target.innerText));
     },
 
@@ -2765,7 +2076,20 @@
         }, 400);
       }, duration);
     },
+    processDownloadConversation(){
+      let content = JSON.stringify(rawConversationData);
+      let blob = new Blob([content], { type: 'application/json' });
+      let fileURL = URL.createObjectURL(blob);
+      var downloadLink = document.createElement('a');
+      downloadLink.href = fileURL;
+      downloadLink.download =
+        downloadLink.download = `${conversationData.title}.json`;
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+      URL.revokeObjectURL(fileURL);  // 释放URL对象占用的资源
 
+    },
     positionMenu: function (fromNavbar = 0) {
       log("in_position:,fromNavbar", fromNavbar);
 

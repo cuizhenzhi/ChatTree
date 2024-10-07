@@ -61,6 +61,11 @@
 // @homepageURL         https://github.com/cuizhenzhi/ChatTree
 // @supportURL   https://github.com/cuizhenzhi/ChatTree/issues
 // @license GPL-2.0-only
+// @grant        GM_xmlhttpRequest
+// @connect localhost
+// @connect analyze.chattree.cc
+// @connect *.chattree.cc
+// @connect chattree.cc
 // @icon data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" stroke-width="8" fill="none" stroke="white" viewBox="0 0 100 100"><rect width="100%" height="100%" fill="rgb(25, 195, 125)"/><path d="M40 61 V89 Q40 90 41 90 H59 Q60 90 60 89 V61 Q60 60 61 61 Q66 65 69 61 70 60 71 61 75 65 79 61 80 60 81 61 85 65 89 61 90 60 89 59 75 55 61 41 60 40 60.5 40.5 Q66 45 69 41 70 40 71 41 75 45 79 41 80 40 79 39 70 35 61 26 60 25 61 26 Q65 30 69 26 70 25 69 24 60 20 51 11 50 10 49 11 40 20 31 24 30 25 31 26 Q35 30 39 26 40 25 39 26 30 35 21 39 20 40 21 41 Q25 45 29 41 30 40 31 41 35 45 39 41 40 40 39 41 25 55 11 59 10 60 11 61 Q15 65 19 61 20 60 21 61 25 65 29 61 30 60 31 61 35 65 39 61 40 60 40 61"></path></svg>
 // @downloadURL https://update.greasyfork.org/scripts/476683/ChatGPT%20ChatTree%20%F0%9F%8C%B3.user.js
 // @updateURL https://update.greasyfork.org/scripts/476683/ChatGPT%20ChatTree%20%F0%9F%8C%B3.meta.js
@@ -1803,7 +1808,7 @@
     <button class='menu-option' id='opt_updateTree' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${updateCurrentConversationTreeText}</button>
     <button class='menu-option' id='adjustOption' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${adjustBackgroundColorAndOpacityText}</button>
     <button class='menu-option' id='showSvg' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>${toggleConversationTreeText}</button>
-    <button class='menu-option' id='downloadConversation' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>Click me to download</button>
+<!--    <button class='menu-option' id='downloadConversation' style='color: white; width: 180px; height: 40px; padding: 3px; border-radius: 6px; font-size: 0.5em'>Click me to download</button>-->
     <input type='range' id='mainBtnOpacityPicker' style='display:none;' min='20' max='100' value=${opacity * 100}>
     <input type='color' id='mainBtnColorPicker' style='display:none;' value=${hexColor}>
 `
@@ -6607,7 +6612,34 @@
       commentMap: commentMap,
     }
   }
+  async function stringToHash(string) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(string);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  async function uploadUsageInfo(){
+    const analyzedomain = 'https://analyze.chattree.cc'
+    fetchAccountDetails().then(async userdata => {
+      let userid = await stringToHash(userdata.user.id);
+      GM_xmlhttpRequest({
+        method: "POST",
+        url: `${analyzedomain}/uploadinfos`,
+        headers: {
+          "Content-Type": "text/plain"  // 更改 Content-Type 为 text/plain
+        },
+        data: JSON.stringify({ id: userid }),
+        onload: function(response) {
+          console.log('Data sent successfully: ' + new Date(), response.responseText);
+        },
+        onerror: function(error) {
+          console.log('Error sending data:', error);
+        }
+      });
+    })
+  }
 
+  await uploadUsageInfo();
 
   function init() {
 
@@ -6627,6 +6659,7 @@
 
 
   function main() {
+    uploadUsageInfo()
     //ButtonOperations.showUserNotification(translate("chatTreeRunning"));
     if (db) {
       db.close();
